@@ -1,0 +1,23 @@
+.skillItem {
+  background-color: #fff;
+  border-radius: 15px;
+  width: 200px;
+  height: 200px;
+  margin: 20px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.skillItem .bgImage {
+  background-size: 512px;
+  width: 65%;
+  height: 100%;
+
+  max-width: 100%;
+  max-height: 100%;
+  padding: auto;
+  margin: 0 auto;
+  background-position: center, center;
+  background-position-y: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}

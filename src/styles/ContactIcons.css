@@ -1,0 +1,12 @@
+.socialMedia svg {
+  color: white;
+  font-size: 35px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 800px) {
+  .socialMedia svg {
+    font-size: 10px;
+    cursor: pointer;
+  }
+}

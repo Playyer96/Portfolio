@@ -1,0 +1,88 @@
+.home {
+  width: 100%;
+  align-items: center;
+  color: #f9004d;
+}
+
+.aboutme {
+  width: 100%;
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #191919;
+  color: #f0f0f0;
+}
+
+.aboutme h2 {
+  font-size: 65px;
+  color: #f9004d;
+  height: 50px;
+}
+
+.aboutme h2 span {
+  font-family: "Kaushan Script", cursive;
+  font-size: 80px;
+}
+
+.aboutme .prompt {
+  width: 40%;
+  font-size: 30px;
+}
+
+.prompt svg {
+  font-size: 60px;
+  margin: 5px;
+  color: white;
+}
+
+.skills h1 {
+  color: #f9004d;
+}
+
+.prompt button {
+  margin-bottom: 30px;
+}
+
+@media only screen and (max-width: 1024px) {
+  .aboutme .prompt {
+    width: 100%;
+    font-size: 26px;
+  }
+
+  .aboutme {
+    height: auto;
+  }
+
+  .aboutme h2 {
+    font-size: 28px;
+  }
+
+  .skills h1 {
+    font-size: 30px;
+  }
+}
+
+.skills-section h2 {
+  font-size: 80px;
+  color: #191919;
+  text-align: center;
+}
+
+.skills {
+  width: 100%;
+  height: auto;
+  display: flex;
+  margin-bottom: 65px;
+  align-items: center;
+  justify-content: center;
+}
+
+.skillList {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}

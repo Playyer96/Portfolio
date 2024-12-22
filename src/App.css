@@ -1,0 +1,69 @@
+@import url("https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap");
+
+.App {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  font-family: "Open Sans", sans-serif;
+  background-color: #f0f0f0;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  position: relative;
+  padding-bottom: 120px;
+  min-height: 100vh;
+}
+
+button {
+  background: #f9004d;
+  color: white;
+  text-decoration: none;
+  border: 2px solid transparent;
+  font-weight: bold;
+  padding: 13px 30px;
+  border-radius: 30px;
+  transition: 0.4s;
+}
+
+button:hover {
+  background: transparent;
+  border: 2px solid #f9004d;
+  cursor: pointer;
+}
+
+tool-tip {
+  background-color: #191919;
+  color: white;
+  border-color: #f0f0f0;
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+
+  box-shadow: 0 0 2px #191919;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 8px;
+
+  /* top: 30%; */
+  left: 50%;
+  transform: translate(-50%, -25%);
+
+  justify-content: center;
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  margin-top: 20px;
+  text-align: center;
+}
+
+:has(> tool-tip) {
+  position: relative;
+}
+
+:has(> tool-tip):hover tool-tip {
+  opacity: 1;
+}
