@@ -91,3 +91,4 @@ AUTHORS text
 *.pyc binary
 *.pdf binary
 *.mp4 filter=lfs diff=lfs merge=lfs -text
+*:Zone.Identifier -filter
