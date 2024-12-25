@@ -1,71 +1,102 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Kaushan+Script&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Open+Sans:wght@400;600;700&display=swap");
 
 .App {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  font-family: "Inter", sans-serif;
-  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-  color: #333;
-  box-sizing: border-box;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    color: #333;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  position: relative;
-  padding: 0 0 120px;
-  min-height: 100vh;
-  font-size: 16px;
-  line-height: 1.6;
-  /*color: #2c3e50;*/
-  background-color: #ffffff;
+    margin: 0;
+    position: relative;
+    padding: 0 0 120px;
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.6;
+    /*color: #2c3e50;*/
+    background-color: #ffffff;
 }
 
 button {
-  background: linear-gradient(135deg, #f9004d, #ff5d8f);
-  color: white;
-  text-decoration: none;
-  border: none;
-  font-weight: 600;
-  padding: 14px 32px;
-  border-radius: 50px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 10px rgba(249, 0, 77, 0.3);
+    background: linear-gradient(135deg, #f9004d, #ff5d8f);
+    color: white;
+    text-decoration: none;
+    border: none;
+    font-weight: 600;
+    padding: 14px 32px;
+    border-radius: 50px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(249, 0, 77, 0.3);
 }
 
 button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 15px rgba(249, 0, 77, 0.5);
-  cursor: pointer;
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(249, 0, 77, 0.5);
+    cursor: pointer;
 }
 
 tool-tip {
-  background-color: rgba(0, 0, 0, 0.85);
-  color: white;
-  border: none;
-  position: absolute;
-  z-index: 1;
-  pointer-events: none;
-  user-select: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  padding: 8px 12px;
-  font-size: 14px;
-  border-radius: 10px;
-  left: 50%;
-  transform: translate(-50%, -25%);
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  margin-top: 10px;
-  text-align: center;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    border: none;
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 10px;
+    left: 50%;
+    transform: translate(-50%, -25%);
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    margin-top: 10px;
+    text-align: center;
+}
+
+h1 {
+    font-family: "Kaushan Script", cursive;
+    font-size: 4rem;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 50px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1.2;
+    background: linear-gradient(90deg, #f9004d, #ff616f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+h1:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease, letter-spacing 0.3s ease;
+    letter-spacing: 2px;
+}
+
+h1 {
+    font-size: 4.5rem;
+    color: #f0f0f0;
+    background: linear-gradient(90deg, #f9004d, #ff616f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding-right: 1rem;
 }
 
 :has(> tool-tip) {
-  position: relative;
+    position: relative;
 }
 
 :has(> tool-tip):hover tool-tip {
-  opacity: 1;
-  transform: translate(-50%, 0);
+    opacity: 1;
+    transform: translate(-50%, 0);
 }
