@@ -1,80 +1,67 @@
-.projects {
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
+/* Grid container with spacing for the footer */
 .projectList {
-  width: 70vw;
-  height: auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  place-items: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Exactly 3 columns */
+    gap: 20px; /* Space between cards */
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box; /* Includes padding in the width/height */
+    margin-bottom: 50px; /* Add space to avoid footer overlap */
 }
 
-/* MENU ITEM STYLING */
-
+/* Card container */
 .projectItem {
-  border-radius: 15px;
-  width: 300px;
-  height: 300px;
-  margin: 40px;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  color: #191919;
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    width: 100%; /* Take full width of the grid cell */
+    height: 300px; /* Fixed height for cards */
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.7);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
 }
+
 .projectItem:hover {
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-  transition: 0.3s ease-in;
-  cursor: pointer;
+    transform: translateY(-10px);
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.2), -8px -8px 20px rgba(255, 255, 255, 0.8);
 }
 
+/* Background image */
 .projectItem .bgImage {
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  width: 100%;
-  /* height: auto; */
-  height: 200px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.projectItem h1 {
-  font-size: 25px;
-}
-
-@media only screen and (max-width: 1300px) {
-  .projectList {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media only screen and (max-width: 800px) {
-  .projectList {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media only screen and (max-width: 800px) {
-  .projectList {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-  }
-  .projectItem {
-    width: 300px;
-    height: 300px;
-  }
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.3s, filter 0.3s;
 }
 
-@media only screen and (max-width: 400px) {
-  .projectList {
-    grid-template-columns: 1fr;
-  }
-  .projectItem {
-    width: 100%;
-    height: auto;
-  }
+.projectItem:hover .bgImage {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+.projectItem:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 800px) {
+    .projectList {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 400px) {
+    .projectList {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .projectList {
+        margin-bottom: 80px;
+    }
 }
