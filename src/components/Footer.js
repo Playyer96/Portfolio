@@ -11,7 +11,7 @@ const Footer = () => {
                 <ContactIcons/>
                 <div className="footer-text">
                     <p>
-                        Made with ❤️ by <span className="footer-highlight">danidev.xyz</span>
+                        Made with ❤️ by <span className="footer-highlight">Danilo Vanegas - vanegasdanilo7@gmail.com</span>
                     </p>
                     <p>© {currentYear} All Rights Reserved.</p>
                 </div>
