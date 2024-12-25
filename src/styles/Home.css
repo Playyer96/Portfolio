@@ -13,7 +13,7 @@
 
 .aboutme {
     width: 100%;
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -49,37 +49,6 @@
     line-height: 1.8;
     margin: 20px 0;
     color: #f0f0f0;
-}
-
-.prompt svg {
-    font-size: 2.5rem;
-    margin: 5px;
-    color: #f0f0f0;
-    transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.prompt svg:hover {
-    transform: scale(1.2);
-    color: #f9004d;
-}
-
-.prompt button {
-    background: linear-gradient(90deg, #f9004d, #ff616f);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.prompt button:hover {
-    background: linear-gradient(90deg, #ff616f, #f9004d);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .skills-section h2 {
