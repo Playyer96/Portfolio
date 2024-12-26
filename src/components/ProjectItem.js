@@ -1,24 +1,18 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import "../styles/Projects.css";
 
-function ProjectItem({ image, name, id }) {
-  const navigate = useNavigate();
-  return (
-    <div
-      className="projectItem"
-      onClick={() => {
-        navigate("/project/" + id);
-      }}
-    >
-      <div
-        style={{ backgroundImage: `url(${image})` }}
-        className="bgImage"
-        loading="lazy"
-      />
-      {/* <img src={image} className="bgImage" alt="" /> */}
-      <h1>{name}</h1>
-    </div>
-  );
+function ProjectItem({image, name, id, onClick}) {
+    return (
+        <div className="projectItem" onClick={onClick}>
+            < div
+                className="bgImage"
+                style={{backgroundImage: `url(${image})`}}
+                aria-label={`Project: ${name}`}
+            />
+            <div className="tooltip">{name}
+            </div>
+        </div>
+    );
 }
 
 export default ProjectItem;

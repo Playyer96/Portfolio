@@ -25,11 +25,11 @@ export const SkillsList = [
     icon: UnityIcon,
   },
   {
-    text: "CSharp",
+    text: "C#",
     icon: CSharpIcon,
   },
   {
-    text: "CPlusPlus",
+    text: "C++",
     icon: CPlusPlusIcon,
   },
   {
