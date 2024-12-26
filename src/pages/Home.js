@@ -18,7 +18,7 @@ const Home = () => {
         <div className={`home ${isLoaded ? "fade-in" : ""}`}>
             <div className="aboutme">
                 <h2>
-                    Hi, I'm <span>Skills</span>
+                    Hi, I'm <span>Dani</span>
                 </h2>
                 <div className="prompt">
                     <p>Unreal And Unity developer with a passion to learn new stuff</p>
