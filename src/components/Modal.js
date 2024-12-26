@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "../styles/Modal.css";
 
 function Modal({isOpen, closeModal, project}) {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
 
     // Handle carousel navigation
     const nextItem = () => {
@@ -17,21 +18,32 @@ function Modal({isOpen, closeModal, project}) {
         );
     };
 
-    if (!isOpen) return null;
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden"; // Disable scrolling
+            setIsAnimating(true);
+        } else {
+            document.body.style.overflow = ""; // Re-enable scrolling when modal closes
+        }
+    }, [isOpen]);
+
+    const handleClose = () => {
+        setIsAnimating(false);
+        setTimeout(closeModal, 300); // Wait for animation duration before actually closing
+    };
+
+    if (!isOpen && !isAnimating) return null;
 
     return (
-        <div className="modalOverlay" onClick={closeModal}>
+        <div className={`modalOverlay ${isAnimating ? "fadeIn" : "fadeOut"}`} onClick={handleClose}>
             <div className="modalContent" onClick={(e) => e.stopPropagation()}>
                 <h1>{project.name}</h1>
                 <div className="modalCarousel">
-                    {/* Previous Button */}
                     <div className="carouselNavigation prev">
                         <button onClick={prevItem}>&lt;</button>
                     </div>
 
-                    {/* Carousel Content */}
                     <div className="carouselContent">
-                        {/* Display images or video based on the current index */}
                         {currentIndex < project.images.length && (
                             <img
                                 src={project.images[currentIndex].image}
@@ -44,7 +56,6 @@ function Modal({isOpen, closeModal, project}) {
                                 <iframe
                                     src={project.videoUrl}
                                     title={project.name}
-                                    frameBorder="0"
                                     allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
                                     className="carouselVideo"

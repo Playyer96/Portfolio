@@ -1,3 +1,8 @@
+body {
+    transition: overflow 0.3s ease;
+}
+
+/* The modal overlay (dark background) */
 .modalOverlay {
     position: fixed;
     top: 0;
@@ -9,6 +14,16 @@
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modalOverlay.fadeIn {
+    opacity: 1;
+}
+
+.modalOverlay.fadeOut {
+    opacity: 0;
 }
 
 .modalContent {
@@ -20,16 +35,25 @@
     overflow-y: auto;
     border-radius: 10px;
     position: relative;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-/* Carousel styles */
+.modalOverlay.fadeIn .modalContent {
+    opacity: 1;
+}
+
+.modalOverlay.fadeOut .modalContent {
+    opacity: 0;
+}
+
 .modalCarousel {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    height: 400px; /* You can adjust this height based on your needs */
-    overflow: hidden; /* Ensure no content overflows */
+    height: 400px;
+    overflow: hidden;
 }
 
 .carouselContent {
@@ -40,20 +64,20 @@
     flex-direction: column;
     overflow: hidden;
     width: 80%;
-    height: 100%; /* Ensures content is confined to the container */
+    height: 100%;
 }
 
 .carouselImage {
     max-width: 100%;
-    max-height: 100%; /* Prevents image from exceeding container height */
-    object-fit: cover; /* Ensures the image scales and remains contained without stretching */
-    border-radius: 10px; /* Optional, for rounded corners */
+    max-height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 .carouselVideo {
     width: 575px;
     height: 400px;
-    border-radius: 10px; /* Optional, for rounded corners */
+    border-radius: 10px;
 }
 
 .carouselNavigation {
@@ -95,6 +119,6 @@
     text-decoration: none;
 }
 
-.modalContent h1{
+.modalContent h1 {
     font-size: 2rem;
 }
