@@ -63,33 +63,17 @@ tool-tip {
 
 h1 {
     font-family: "Kaushan Script", cursive;
-    font-size: 4rem;
-    color: #2c3e50;
-    font-weight: 700;
-    margin-bottom: 50px;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    line-height: 1.2;
+    font-size: 4.5rem;
     background: linear-gradient(90deg, #f9004d, #ff616f);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: inline-block;
 }
 
-h1:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease, letter-spacing 0.3s ease;
-    letter-spacing: 2px;
-}
 
-h1 {
-    font-size: 4.5rem;
-    color: #f0f0f0;
-    background: linear-gradient(90deg, #f9004d, #ff616f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    padding-right: 1rem;
+.skills-section {
+    min-height: calc(100vh);
 }
 
 :has(> tool-tip) {
