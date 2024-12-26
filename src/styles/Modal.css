@@ -2,10 +2,9 @@ body {
     transition: overflow 0.3s ease;
 }
 
-/* The modal overlay (dark background) */
 .modalOverlay {
     position: fixed;
-    top: 0;
+    top: -60px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -13,7 +12,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
+    text-align: left;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -31,12 +30,13 @@ body {
     padding: 20px;
     max-width: 800px;
     width: 80%;
-    height: 80%;
+    height: 70%;
     overflow-y: auto;
     border-radius: 10px;
     position: relative;
     opacity: 0;
     transition: opacity 0.3s ease;
+    z-index: 10000;
 }
 
 .modalOverlay.fadeIn .modalContent {
@@ -121,4 +121,58 @@ body {
 
 .modalContent h1 {
     font-size: 2rem;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+
+.modal.open {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0s 0s;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    transform: translateY(-30px);
+    animation: modalIn 0.3s ease-out forwards;
+}
+
+@keyframes modalIn {
+    0% {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal.close {
+    animation: modalOut 0.3s ease-out forwards;
+}
+
+@keyframes modalOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }

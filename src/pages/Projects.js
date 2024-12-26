@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import ProjectItem from "../components/ProjectItem";
 import {ProjectList} from "../helpers/ProjectList";
-import Modal from "../components/Modal"; // Import the Modal component
+import Modal from "../components/Modal";
 
 import "../styles/Projects.css";
 
@@ -29,7 +29,7 @@ function Projects() {
                             key={project.id}
                             name={project.name}
                             image={project.image}
-                            onClick={() => openModal(project)} // Open modal on project click
+                            onClick={() => openModal(project)}
                         />
                     );
                 })}
@@ -37,7 +37,8 @@ function Projects() {
             <Modal
                 isOpen={isModalOpen}
                 closeModal={closeModal}
-                project={selectedProject} // Pass the whole project data to the Modal
+                project={selectedProject}
+                className={isModalOpen ? "open" : "close"}
             />
         </div>
     );

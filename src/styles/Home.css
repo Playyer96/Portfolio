@@ -88,3 +88,13 @@
         font-size: 2rem;
     }
 }
+
+/* In Home.css */
+.home {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.home.fade-in {
+    opacity: 1;
+}

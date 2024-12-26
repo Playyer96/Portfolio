@@ -24,23 +24,23 @@ function Modal({isOpen, closeModal, project}) {
     // Reset carousel to first item when modal is opened
     useEffect(() => {
         if (isOpen) {
-            setCurrentIndex(0); // Set carousel to first item when modal opens
-            document.body.style.overflow = "hidden"; // Disable scrolling
+            setCurrentIndex(0);
+            document.body.style.overflow = "hidden";
             setIsAnimating(true);
         } else {
-            document.body.style.overflow = ""; // Re-enable scrolling when modal closes
+            document.body.style.overflow = "";
         }
     }, [isOpen]);
 
     const handleClose = () => {
         setIsAnimating(false);
-        setTimeout(closeModal, 300); // Wait for animation duration before actually closing
+        setTimeout(closeModal, 300);
     };
 
     // Reset the transition effect after the animation ends
     useEffect(() => {
         if (!isTransitioning) return;
-        const timer = setTimeout(() => setIsTransitioning(false), 300); // Wait for animation duration
+        const timer = setTimeout(() => setIsTransitioning(false), 300);
         return () => clearTimeout(timer);
     }, [isTransitioning]);
 
@@ -78,7 +78,6 @@ function Modal({isOpen, closeModal, project}) {
                         </div>
                     </div>
 
-                    {/* Next Button */}
                     <div className="carouselNavigation next">
                         <button onClick={nextItem}>&gt;</button>
                     </div>
@@ -96,14 +95,14 @@ function Modal({isOpen, closeModal, project}) {
                                 <li key={index}>{task}</li>
                             ))}
                     </ul>
+                    {project.link && (
+                        <div className="projectLink">
+                            <a href={project.link} target="_blank" rel="noopener noreferrer">
+                                View Project
+                            </a>
+                        </div>
+                    )}
                 </div>
-                {project.link && (
-                    <div className="projectLink">
-                        <a href={project.link} target="_blank" rel="noopener noreferrer">
-                            View Project
-                        </a>
-                    </div>
-                )}
             </div>
         </div>
     );

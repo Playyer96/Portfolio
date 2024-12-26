@@ -67,7 +67,7 @@
 @media (max-width: 700px) {
     .Navbar > .nav-items {
         position: absolute;
-        top: 60px;
+        top: 0;
         left: 0;
         width: 100%;
         background: linear-gradient(180deg, #191919, #2a2a2a);
