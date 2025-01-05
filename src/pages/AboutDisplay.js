@@ -17,8 +17,7 @@ function AboutDisplay() {
                     <p>
                         With over six years of experience in game development, I specialize
                         in creating immersive, high-performance experiences across platforms
-                        like PC, mobile, and XR. Currently a Senior Game Developer at Optic
-                        Power, I bring expertise in Unity (C#) and Unreal Engine (C++/Blueprints), with a proven track
+                        like PC, mobile, and XR. I bring expertise in Unity (C#) and Unreal Engine (C++/Blueprints), with a proven track
                         record of leading multidisciplinary teams to deliver polished, performance-optimized projects.
                     </p>
                     <p>
