@@ -1,87 +1,114 @@
 .main {
-  background-color: #191919;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-flow: column;
-  /* background: #fff; */
-  position: absolute;
-  /* bottom: 0;
-  right: 0;
-  left: 0;
-  top: 0; */
+    background: linear-gradient(135deg, #191919, #2d2d2d);
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
 
 .about {
-  color: #f0f0f0;
-  background-color: #191919;
-  height: calc(100vh - 100px);
-  /* height: 100%; */
-  padding: 78px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-around;
+    color: #f0f0f0;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
 }
+
 .about img {
-  height: auto;
-  width: 420px;
-  max-width: 100%;
-  filter: grayscale(100%);
-  -webkit-filter: grayscale(100%);
+    width: 40%;
+    max-width: 420px;
+    height: auto;
+    filter: grayscale(100%);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.about img:hover {
+    filter: grayscale(0);
+    transform: scale(1.05);
 }
 
 .about-text {
-  width: 550px;
-  max-width: 100%;
-  padding: 0 10px;
+    max-width: 550px;
+    padding: 0 10px;
 }
 
 .about h1 {
-  color: white;
-  font-size: 80px;
-  text-transform: capitalize;
-  margin-bottom: 20px;
+    color: white;
+    font-size: 3.5rem;
+    text-transform: capitalize;
+    margin-bottom: 1rem;
 }
 
 .about h5 {
-  color: white;
-  font-size: 25px;
-  text-transform: capitalize;
-  margin-bottom: 25px;
-  letter-spacing: 2px;
+    color: white;
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
 }
 
 .about span {
-  font-family: "Kaushan Script", cursive;
-  color: #f9004d;
+    font-family: "Kaushan Script", cursive;
+    color: #f9004d;
 }
 
 .about-text p {
-  letter-spacing: 1px;
-  line-height: 28px;
-  margin-bottom: 45px;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    line-height: 1.8;
+    margin-bottom: 2rem;
 }
 
-@media only screen and (max-width: 600px) {
-  .about {
-    flex-direction: column; /* stack the elements vertically */
-  }
-  .about img {
-    width: 100%; /* make the image full width */
-  }
-  .about-text {
-    width: 100%; /* make the text container full width */
-  }
+@media only screen and (max-width: 768px) {
+    .about {
+        flex-direction: column;
+        text-align: center;
+    }
 
-  .about h1 {
-    font-size: 60px; /* reduce the font size of the heading */
-  }
-  .about h5 {
-    font-size: 20px; /* reduce the font size of the subheading */
-  }
-  .about-text p {
-    font-size: 16px; /* reduce the font size of the paragraph */
-  }
+    .about img {
+        width: 50%;
+        height: 50%;
+    }
+
+    .about-text {
+        width: 100%;
+    }
+
+    .about h1 {
+        font-size: 2.5rem;
+    }
+
+    .about h5 {
+        font-size: 1.25rem;
+    }
+
+    .about-text p {
+        font-size: 0.9rem;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .about img {
+        width: 50%;
+        height: 50%;
+    }
+
+    .about h1 {
+        font-size: 2rem;
+    }
+
+    .about h5 {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .about-text p {
+        font-size: 0.85rem;
+    }
 }
