@@ -1,5 +1,5 @@
 import React from "react";
-import MyCv from "../assets/cv/CV-Danilo-Vanegas-2024.pdf";
+import MyCv from "../assets/cv/CV-Danilo-Vanegas-2025.pdf";
 import "../styles/Cv.css";
 
 const Cv = () => (
