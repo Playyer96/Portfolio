@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Modal.css";
+// import { FaGithub, FaUnity, FaReact, FaNodeJs } from "react-icons/fa";
 
-function Modal({isOpen, closeModal, project}) {
+function Modal({ isOpen, closeModal, project }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
-    const [isTransitioning, setIsTransitioning] = useState(false); // Add this line
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
     // Handle carousel navigation
     const nextItem = () => {
@@ -29,6 +30,7 @@ function Modal({isOpen, closeModal, project}) {
             setIsAnimating(true);
         } else {
             document.body.style.overflow = "";
+            setIsAnimating(false);
         }
     }, [isOpen]);
 
@@ -87,6 +89,18 @@ function Modal({isOpen, closeModal, project}) {
                     <h3>Description</h3>
                     <p>{project.descriptions && project.descriptions.join(" ")}</p>
                 </div>
+
+                <div className="modalTechnologies">
+                    <h3>Technologies</h3>
+                    <div className="techIcons">
+                        {project.technologies && project.technologies.map((tech, index) => (
+                            <div className="techIcon" key={index} data-tooltip={tech.name}>
+                                {tech.icon}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 <div className="modalResponsabilities">
                     <h3>Responsibilities</h3>
                     <ul>

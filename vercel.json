@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://portfolio-backend-lilac.vercel.app/api/:path*"
+    }
+  ]
+}
