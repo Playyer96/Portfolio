@@ -21,6 +21,7 @@
     "react-transition-group": "^4.4.5",
     "react-vertical-timeline-component": "^3.5.2",
     "vercel": "^39.3.0"
+    "axios": "^1.7.9"
   },
   "scripts": {
     "start": "react-scripts start",
