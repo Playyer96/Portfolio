@@ -19,7 +19,8 @@
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
     "react-transition-group": "^4.4.5",
-    "react-vertical-timeline-component": "^3.5.2"
+    "react-vertical-timeline-component": "^3.5.2",
+    "vercel": "^39.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
