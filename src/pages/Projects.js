@@ -13,7 +13,7 @@ function Projects() {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const response = await fetch("danilovanegas.xyz/api/projects");
+                const response = await fetch("https://danilovanegas.xyz/projects/api/projects");
                 if (!response.ok) {
                     throw new Error(`HTTP Error! Status: ${response.status}`);
                 }
