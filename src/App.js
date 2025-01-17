@@ -6,7 +6,6 @@ import Projects from "./pages/Projects";
 import Experience from "./pages/Experience";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import ProjectDisplay from "./pages/ProjectDisplay";
 import AboutDisplay from "./pages/AboutDisplay";
 import Cv from "./pages/Cv";
 import ScrollToTop from "./components/ScrollToTop";
@@ -25,7 +24,6 @@ function App() {
                             <Route path="/" element={<Home/>}/>
                             <Route path="/about" element={<AboutDisplay/>}/>
                             <Route path="/projects" element={<Projects/>}/>
-                            <Route path="/project/:id" element={<ProjectDisplay/>}/>
                             <Route path="/experience" element={<Experience/>}/>
                             <Route path="/cv" element={<Cv/>}/>
                         </Routes>
