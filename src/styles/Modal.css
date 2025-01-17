@@ -4,7 +4,7 @@ body {
 
 .modalOverlay {
     position: fixed;
-    top: -60px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -15,14 +15,17 @@ body {
     text-align: left;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .modalOverlay.fadeIn {
     opacity: 1;
+    pointer-events: auto;
 }
 
 .modalOverlay.fadeOut {
     opacity: 0;
+    pointer-events: none;
 }
 
 .modalContent {
@@ -36,7 +39,6 @@ body {
     position: relative;
     opacity: 0;
     transition: opacity 0.3s ease;
-    z-index: 10000;
 }
 
 .modalOverlay.fadeIn .modalContent {
@@ -123,56 +125,41 @@ body {
     font-size: 2rem;
 }
 
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+.techIcons {
     display: flex;
     justify-content: center;
+    gap: 20px;
     align-items: center;
-    background: rgba(0, 0, 0, 0.7);
+}
+
+.techIcon {
+    font-size: 40px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.techIcon:hover {
+    transform: scale(1.2);
+}
+
+.techIcon::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    visibility: hidden;
     opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease, visibility 0s 0.3s;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.modal.open {
-    opacity: 1;
-    pointer-events: auto;
+.techIcon:hover::after {
     visibility: visible;
-    transition: opacity 0.3s ease, visibility 0s 0s;
-}
-
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    transform: translateY(-30px);
-    animation: modalIn 0.3s ease-out forwards;
-}
-
-@keyframes modalIn {
-    0% {
-        transform: translateY(-30px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.modal.close {
-    animation: modalOut 0.3s ease-out forwards;
-}
-
-@keyframes modalOut {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
+    opacity: 1;
 }
