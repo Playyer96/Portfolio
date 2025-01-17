@@ -1,7 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import ProjectItem from "../components/ProjectItem";
 import Modal from "../components/Modal";
 import "../styles/Projects.css";
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 function Projects() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,13 +12,15 @@ function Projects() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Fetch projects data
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const response = await fetch("https://danilovanegas.xyz/api/projects");
+                const response = await fetch(`${API_URL}/projects`);
                 if (!response.ok) {
                     throw new Error(`HTTP Error! Status: ${response.status}`);
                 }
+
                 const data = await response.json();
 
                 if (!Array.isArray(data) || data.length === 0 || !Array.isArray(data[0].projects)) {
@@ -29,7 +33,7 @@ function Projects() {
                 const updatedProjects = await Promise.all(
                     fetchedProjects.map(async (project) => {
                         const imageUrl = await fetchImage(project.images?.[0]?.image || "default.jpg");
-                        return {...project, imageUrl};  // Add the imageUrl to the project
+                        return { ...project, imageUrl };  // Add the imageUrl to the project
                     })
                 );
 
@@ -43,9 +47,9 @@ function Projects() {
         };
 
         fetchProjects();
-    }, []);
+    }, []);  // Empty dependency array ensures this runs once
 
-    // Function to fetch the image URL dynamically
+    // Fetch the image dynamically
     const fetchImage = async (url) => {
         try {
             const response = await fetch(url);
@@ -60,6 +64,7 @@ function Projects() {
         }
     };
 
+    // Modal related actions
     const openModal = (project) => {
         setSelectedProject(project);
         setIsModalOpen(true);
@@ -70,6 +75,7 @@ function Projects() {
         setSelectedProject(null);
     };
 
+    // Error and loading UI
     if (loading) {
         return <div className="loading">Loading...</div>;
     }
