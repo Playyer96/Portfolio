@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useMemo} from "react";
 import "../styles/Modal.css";
 import {FaGithub, FaUnity, FaReact, FaNodeJs} from "react-icons/fa";
-import {SiSlack, SiVisualstudio, SiUnrealengine} from "react-icons/si";
-import {VscAzure} from "react-icons/vsc";
+import {SiSlack, SiVisualstudio} from "react-icons/si";
+import {VscAzureDevops} from "react-icons/vsc";
 
 const techIconsMap = {
     "Unity": <FaUnity/>,
@@ -10,9 +10,7 @@ const techIconsMap = {
     "Github": <FaGithub/>,
     "Slack": <SiSlack/>,
     "Visual Studio": <SiVisualstudio/>,
-    "Dev Ops": <VscAzure/>,
-    "Unreal": <SiUnrealengine/>,
-    "Node Js": <FaNodeJs/>,
+    "Dev Ops": <VscAzureDevops/>,
 };
 
 function Modal({isOpen, closeModal, project}) {
@@ -25,6 +23,18 @@ function Modal({isOpen, closeModal, project}) {
             {techIconsMap[tech.name] || <span>{tech.name}</span>}
         </div>))), [project.technologies]);
 
+    // Handle carousel navigation
+    const nextItem = () => {
+        setIsTransitioning(true);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % (project.images.length + (project.videoUrl ? 1 : 0)));
+    };
+
+    const prevItem = () => {
+        setIsTransitioning(true);
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + (project.images.length + (project.videoUrl ? 1 : 0))) % (project.images.length + (project.videoUrl ? 1 : 0)));
+    };
+
+    // Reset carousel to first item when modal is opened
     useEffect(() => {
         if (isOpen) {
             setCurrentIndex(0);
@@ -36,6 +46,12 @@ function Modal({isOpen, closeModal, project}) {
         }
     }, [isOpen]);
 
+    const handleClose = () => {
+        setIsAnimating(false);
+        setTimeout(closeModal, 300);
+    };
+
+    // Reset the transition effect after the animation ends
     useEffect(() => {
         if (!isTransitioning) return;
         const timer = setTimeout(() => setIsTransitioning(false), 300);
@@ -44,42 +60,67 @@ function Modal({isOpen, closeModal, project}) {
 
     if (!isOpen && !isAnimating) return null;
 
-    return (<div className={`modal-overlay ${isAnimating ? "fade-in" : "fade-out"}`} onClick={closeModal}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    return (<div className={`modalOverlay ${isAnimating ? "fadeIn" : "fadeOut"}`} onClick={handleClose}>
+        <div className="modalContent" onClick={(e) => e.stopPropagation()}>
             <h1>{project.name}</h1>
-            <div className="modal-carousel">
-                <button className="carousel-btn prev"
-                        onClick={() => setIsTransitioning(true) || setCurrentIndex((prev) => (prev - 1 + project.images.length) % project.images.length)}>&lt;</button>
-                <div className={`carousel-item ${isTransitioning ? "fade-out" : "fade-in"}`}>
-                    {project.images.length > 0 && <img src={project.images[currentIndex]?.image} alt={project.name}
-                                                       className="carousel-image"/>}
-                    {currentIndex === project.images.length && project.videoUrl && (
-                        <iframe className="carousel-video" src={project.videoUrl} title={project.name}
-                                allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen></iframe>)}
+            <div className="modalCarousel">
+                <div className="carouselNavigation prev">
+                    <button onClick={prevItem}>&lt;</button>
                 </div>
-                <button className="carousel-btn next"
-                        onClick={() => setIsTransitioning(true) || setCurrentIndex((prev) => (prev + 1) % project.images.length)}>&gt;</button>
+
+                <div className="carouselContent">
+                    <div className={`carouselItem ${isTransitioning ? "fadeOut" : "fadeIn"}`}>
+                        {currentIndex < project.images.length && (<img
+                            src={project.images[currentIndex].image}
+                            alt={project.name}
+                            className="carouselImage"
+                        />)}
+                        {currentIndex === project.images.length && project.videoUrl && (<div className="videoWrapper">
+                            <iframe
+                                src={project.videoUrl}
+                                title={project.name}
+                                allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                className="carouselVideo"
+                            ></iframe>
+                        </div>)}
+                    </div>
+                </div>
+
+                <div className="carouselNavigation next">
+                    <button onClick={nextItem}>&gt;</button>
+                </div>
             </div>
-            <div className="modal-description">
+
+            <div className="modalDescription">
                 <h3>Description</h3>
-                <p>{project.descriptions?.join(" ")}</p>
+                <p>{project.descriptions && project.descriptions.join(" ")}</p>
             </div>
-            <div className="modal-technologies">
+
+            <div className="modalTechnologies">
                 <h3>Technologies</h3>
-                <div className="tech-icons">{techIcons}</div>
-            </div>
-            <div className="modal-responsibilities">
-                <h3>Responsibilities</h3>
-                <ul>
-                    {project.responsibilities?.map((task, index) => <li key={index}>{task}</li>)}
-                </ul>
-                {project.link &&
-                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">View
-                        Project</a>}
+                <div className="techIcons">
+                    {techIcons}
+                </div>
             </div>
         </div>
-    </div>);
+
+        <div className="modalResponsabilities">
+            <h3>Responsibilities</h3>
+            <ul>
+                {project.responsabilities && project.responsabilities.map((task, index) => (
+                    <li key={index}>{task}</li>))}
+            </ul>
+            {project.link && (<div className="projectLink">
+                <a href={project.link} target="_blank" rel="noopener noreferrer">
+                    View Project
+                </a>
+            </div>)}
+        </div>
+    </div>
+</div>
+)
+    ;
 }
 
 export default Modal;
