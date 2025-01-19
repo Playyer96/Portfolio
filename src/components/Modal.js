@@ -18,10 +18,10 @@ function Modal({isOpen, closeModal, project}) {
     const [isAnimating, setIsAnimating] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(false);
 
-    const techIcons = useMemo(() => (project.technologies?.map((tech, index) => (
-        <div className="techIcon" key={index} data-tooltip={tech.name}>
-            {techIconsMap[tech.name] || <span>{tech.name}</span>}
-        </div>))), [project.technologies]);
+    // const techIcons = useMemo(() => (project.technologies?.map((tech, index) => (
+    //     <div className="techIcon" key={index} data-tooltip={tech.name}>
+    //         {techIconsMap[tech.name] || <span>{tech.name}</span>}
+    //     </div>))), [project.technologies]);
 
     // Handle carousel navigation
     const nextItem = () => {
@@ -98,12 +98,12 @@ function Modal({isOpen, closeModal, project}) {
                     <p>{project.descriptions && project.descriptions.join(" ")}</p>
                 </div>
 
-                <div className="modalTechnologies">
-                    <h3>Technologies</h3>
-                    <div className="techIcons">
-                        {techIcons}
-                    </div>
-                </div>
+                {/*<div className="modalTechnologies">*/}
+                    {/*<h3>Technologies</h3>*/}
+                    {/*<div className="techIcons">*/}
+                    {/*    {techIcons}*/}
+                    {/*</div>*/}
+                {/*</div>*/}
 
                 <div className="modalResponsabilities">
                     <h3>Responsibilities</h3>
