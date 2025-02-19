@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "../styles/Modal.css";
-import { FaReact, FaNodeJs, FaPython, FaJava, FaHtml5, FaCss3Alt, FaJs, FaDocker, FaGithub, FaDatabase, FaSlack, FaMicrosoft } from "react-icons/fa";
+import { FaReact, FaNodeJs, FaPython, FaJira, FaJava, FaHtml5, FaCss3Alt, FaJs, FaDocker, FaGithub, FaDatabase, FaSlack, FaMicrosoft } from "react-icons/fa";
 import { SiTypescript, SiMongodb, SiPostgresql, SiSpring, SiExpress, SiDjango, SiTailwindcss, SiUnity, SiUnrealengine, SiCsharp, SiCplusplus, SiAzuredevops } from "react-icons/si";
 
 function Modal({ isOpen, closeModal, project }) {
@@ -21,6 +21,7 @@ function Modal({ isOpen, closeModal, project }) {
             'css3': FaCss3Alt,
             'javascript': FaJs,
             'js': FaJs,
+            'jira': FaJira,
             'typescript': SiTypescript,
             'ts': SiTypescript,
             'mongodb': SiMongodb,
@@ -148,7 +149,7 @@ function Modal({ isOpen, closeModal, project }) {
             <div className="modalResponsabilities">
                 <h3>Responsibilities</h3>
                 <ul>
-                    {project.responsabilities && project.responsabilities.map((task, index) => (
+                    {project.responsibilities.map((task, index) => (
                         <li key={index}>{task}</li>))}
                 </ul>
                 {project.link && (<div className="projectLink">
