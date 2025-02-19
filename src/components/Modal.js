@@ -42,7 +42,7 @@ function Modal({ isOpen, closeModal, project }) {
             'unity': SiUnity,
             'unreal': SiUnrealengine,
             'c#': SiCsharp,
-            'c ++': SiCplusplus,
+            'c++': SiCplusplus,
             'csharp': SiCsharp,
             'slack': FaSlack,
             'dev ops': SiAzuredevops,
@@ -56,10 +56,10 @@ function Modal({ isOpen, closeModal, project }) {
     const techIcons = useMemo(() => {
         if (!project?.technologies) return [];
         return project.technologies.map((tech) => {
-            const Icon = getIconComponent(tech.name);
+            const Icon = tech?.name ? getIconComponent(tech.name) : null;
             return (
-                <div className="techIcon" key={tech.name} data-tooltip={tech.name}>
-                    {Icon ? <Icon size={24} /> : <span>{tech.name}</span>}
+                <div className="techIcon" key={tech?.name || 'unknown'} data-tooltip={tech?.name || 'Unknown Technology'}>
+                    {Icon ? <Icon size={24} /> : <span>{tech?.name || 'Unknown Technology'}</span>}
                 </div>
             );
         });
