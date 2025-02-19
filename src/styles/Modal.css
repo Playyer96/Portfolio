@@ -128,17 +128,23 @@ body {
 .techIcons {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .techIcon {
-    font-size: 40px;
+    font-size: 24px;
     cursor: pointer;
     position: relative;
     transition: transform 0.2s ease;
 }
 
+.techIcon img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
 .techIcon:hover {
     transform: scale(1.2);
 }
