@@ -18,18 +18,24 @@
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
-.skillItem .bgImage {
-    background-size: contain;
-    width: 120px;
-    height: 120px;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+.icon-container {
+    width: 160px;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.skillItem:hover .bgImage {
+.tech-icon {
+    width: 120px;
+    height: 120px;
+    color: #333;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.skillItem:hover .tech-icon {
     transform: scale(1.15);
-    filter: brightness(1.2);
+    color: #f9004d;
 }
 
 /* Tooltip */
@@ -48,22 +54,6 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-}
-
-.tooltip {
-    background: #191919;
-    color: #f0f0f0;
-    font-size: 14px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    text-align: center;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
 }
 
 .skillItem:hover .tooltip {

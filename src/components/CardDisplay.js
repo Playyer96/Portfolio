@@ -5,7 +5,7 @@ function CardDisplay({ icon: Icon, tooltip }) {
     return (
         <div className="skillItem">
             <div className="icon-container">
-                <Icon className="tech-icon" />
+                <Icon className="tech-icon" size={80} />
             </div>
             <div className="tooltip">{tooltip}</div>
         </div>
