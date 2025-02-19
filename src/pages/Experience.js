@@ -18,7 +18,7 @@ const Experience = () => {
     useEffect(() => {
         const fetchExperiences = async () => {
             try {
-                const response = await fetch(`${API_URL}/api/experience`);
+                const response = await fetch(`${API_URL}/experience`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch experience data');
                 }
