@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CardDisplay from "../components/CardDisplay";
 import ContactIcons from "../components/ContactIcons";
-import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt } from "react-icons/fa";
-import { SiUnrealengine, SiCplusplus, SiCsharp } from "react-icons/si";
+import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGithub, FaGitlab, FaDocker, FaSlack, FaJira } from "react-icons/fa";
+import { SiUnrealengine, SiCplusplus, SiCsharp, SiPerforce } from "react-icons/si";
+
 import "../styles/Home.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -62,25 +63,32 @@ const Home = () => {
                     <div className="skillList">
                         {technologies.map((tech, index) => {
                             let IconComponent;
-                            switch ((tech?.name || '').toLowerCase()) {
+                            console.log('Technology text:', tech?.text);
+                            switch ((tech?.text || '').toLowerCase()) {
                                 case 'react': IconComponent = FaReact; break;
-                                case 'unity': IconComponent = FaUnity; break;
+                                case 'unity engine': IconComponent = FaUnity; break;
                                 case 'unreal engine': IconComponent = SiUnrealengine; break;
-                                case 'html': IconComponent = FaHtml5; break;
-                                case 'css': IconComponent = FaCss3Alt; break;
+                                case 'html5': IconComponent = FaHtml5; break;
+                                case 'css 3': IconComponent = FaCss3Alt; break;
                                 case 'javascript': IconComponent = FaJs; break;
-                                case 'node.js': IconComponent = FaNodeJs; break;
+                                case 'nodejs': IconComponent = FaNodeJs; break;
                                 case 'python': IconComponent = FaPython; break;
                                 case 'c++': IconComponent = SiCplusplus; break;
                                 case 'c#': IconComponent = SiCsharp; break;
                                 case 'git': IconComponent = FaGitAlt; break;
+                                case 'github': IconComponent = FaGithub; break;
+                                case 'gitlab': IconComponent = FaGitlab; break;
+                                case 'docker': IconComponent = FaDocker; break;
+                                case 'slack': IconComponent = FaSlack; break;
+                                case 'jira': IconComponent = FaJira; break;
+                                case 'perforce': IconComponent = SiPerforce; break;
                                 default: IconComponent = FaReact;
                             }
                             return (
                                 <CardDisplay
                                     key={index}
                                     icon={IconComponent}
-                                    tooltip={tech.name}
+                                    tooltip={tech.text}
                                 />
                             );
                         })}
