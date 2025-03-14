@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "../styles/Modal.css";
 import { FaReact, FaNodeJs, FaPython, FaJira, FaJava, FaHtml5, FaCss3Alt, FaJs, FaDocker, FaGithub, FaDatabase, FaSlack, FaMicrosoft } from "react-icons/fa";
-import { SiTypescript, SiMongodb, SiPostgresql, SiSpring, SiExpress, SiDjango, SiTailwindcss, SiUnity, SiUnrealengine, SiCsharp, SiCplusplus, SiAzuredevops } from "react-icons/si";
+import { SiTypescript, SiPerforce, SiMongodb, SiPostgresql, SiSpring, SiExpress, SiDjango, SiTailwindcss, SiUnity, SiUnrealengine, SiCsharp, SiCplusplus, SiAzuredevops } from "react-icons/si";
 
 function Modal({ isOpen, closeModal, project }) {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -48,7 +48,8 @@ function Modal({ isOpen, closeModal, project }) {
             'slack': FaSlack,
             'dev ops': SiAzuredevops,
             'devops': SiAzuredevops,
-            'visual studio': FaMicrosoft
+            'visual studio': FaMicrosoft,
+            'perforce': SiPerforce
         };
         const Icon = iconMap[normalizedTechName];
         return Icon || null;
