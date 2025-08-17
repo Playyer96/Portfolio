@@ -80,52 +80,68 @@ export const useApi = <T = any>(endpoint: string, options: ApiOptions = {}): Use
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  const fetchData = useCallback(async (): Promise<void> => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await fetch(`${API_URL}${endpoint}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          ...options.headers,
-        },
-        ...options,
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result: T = await response.json();
-      setData(result);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      console.warn('API Error, using fallback data:', err);
-      
-      // Use fallback data if available
-      const fallbackData = FALLBACK_DATA[endpoint];
-      if (fallbackData) {
-        setData(fallbackData as T);
-        setError(null); // Clear error since we have fallback data
-      } else {
-        setError(errorMessage);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [endpoint, options]);
+  const [refetchTrigger, setRefetchTrigger] = useState<number>(0);
 
   useEffect(() => {
-    if (endpoint) {
-      fetchData();
-    }
-  }, [fetchData, endpoint]);
+    if (!endpoint) return;
+
+    const abortController = new AbortController();
+    
+    const fetchData = async (): Promise<void> => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await fetch(`${API_URL}${endpoint}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            ...options.headers,
+          },
+          signal: abortController.signal,
+          ...options,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result: T = await response.json();
+        if (!abortController.signal.aborted) {
+          setData(result);
+        }
+      } catch (err) {
+        if (abortController.signal.aborted) {
+          return; // Request was cancelled, don't update state
+        }
+        
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+        console.warn('API Error, using fallback data:', err);
+        
+        // Use fallback data if available
+        const fallbackData = FALLBACK_DATA[endpoint];
+        if (fallbackData) {
+          setData(fallbackData as T);
+          setError(null); // Clear error since we have fallback data
+        } else {
+          setError(errorMessage);
+        }
+      } finally {
+        if (!abortController.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [endpoint, JSON.stringify(options), refetchTrigger]);
 
   const refetch = useCallback((): void => {
-    fetchData();
-  }, [fetchData]);
+    setRefetchTrigger(prev => prev + 1);
+  }, []);
 
   return { data, loading, error, refetch };
 };
