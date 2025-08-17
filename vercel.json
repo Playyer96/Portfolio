@@ -5,5 +5,6 @@
       "destination": "https://portfolio-backend-lilac.vercel.app/api/:path*"
     }
   ],
-  "buildCommand": "npm install --legacy-peer-deps && npm run build"
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "npm run build"
 }
