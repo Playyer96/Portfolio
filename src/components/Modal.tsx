@@ -221,7 +221,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, closeModal, project }) => {
                 {currentIndex < (project?.images?.length || 0) ? (
                   <img
                     src={project.images?.[currentIndex]?.image}
-                    alt={`${project.name} - Image ${currentIndex + 1}`}
+                    alt={`${project.name} - ${currentIndex + 1}`}
                     className="w-full h-full object-cover"
                   />
                 ) : (

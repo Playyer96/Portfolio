@@ -6,6 +6,9 @@ import Modal from '../components/Modal';
 import { useApi } from '../hooks/useApi';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
+// Utils
+import { createSafeImage } from '../utils/imageUtils';
+
 // Types
 interface Technology {
   name: string;
@@ -37,16 +40,13 @@ interface ProjectsErrorProps {
   error: string;
 }
 
-// Utility function to fetch and validate image URLs
-const fetchImageUrl = async (imageUrl: string | undefined): Promise<string | null> => {
-  if (!imageUrl) return null;
-  
-  try {
-    const response = await fetch(imageUrl, { method: 'HEAD' });
-    return response.ok ? imageUrl : null;
-  } catch {
-    return null;
+// Utility function to fetch and validate image URLs with fallback
+const fetchImageUrl = async (imageUrl: string | undefined): Promise<string> => {
+  if (!imageUrl) {
+    return await createSafeImage('', 'project');
   }
+  
+  return await createSafeImage(imageUrl, 'project');
 };
 
 // Loading component
@@ -118,8 +118,8 @@ const Projects: React.FC = () => {
       
       const updatedProjects = await Promise.all(
          processedProjects.map(async (project) => {
-           const imageUrl = await fetchImageUrl(project.images?.[0]?.image);
-           return { ...project, imageUrl: imageUrl || undefined };
+           const safeUrl = await fetchImageUrl(project.images?.[0]?.image);
+           return { ...project, imageUrl: safeUrl };
          })
        );
        

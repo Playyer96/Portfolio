@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { HiSun, HiMoon, HiMenu, HiX } from 'react-icons/hi';
@@ -24,11 +24,11 @@ const Navbar: React.FC = () => {
   };
 
   // Close menu when clicking outside
-  const handleClickOutside = (event: MouseEvent): void => {
+  const handleClickOutside = useCallback((event: MouseEvent): void => {
     if (navbarRef.current && !navbarRef.current.contains(event.target as Node)) {
       closeMenu();
     }
-  };
+  }, []);
 
   // Handle scroll effect
   const handleScroll = (): void => {
@@ -43,7 +43,7 @@ const Navbar: React.FC = () => {
       document.removeEventListener('click', handleClickOutside);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [handleClickOutside]);
 
   // Close mobile menu when route changes
   useEffect(() => {

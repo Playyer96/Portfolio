@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Analytics } from '@vercel/analytics/react';
@@ -22,22 +22,26 @@ import Cv from './pages/Cv';
 
 const AppRoutes: React.FC = () => {
   const location = useLocation();
+  const nodeRef = useRef(null);
 
   return (
     <TransitionGroup component={null}>
       <CSSTransition
         key={location.key}
+        nodeRef={nodeRef}
         timeout={500}
         classNames="page"
         unmountOnExit
       >
-        <Routes location={location}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<AboutDisplay />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/experience" element={<Experience />} />
-          <Route path="/cv" element={<Cv />} />
-        </Routes>
+        <div ref={nodeRef}>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<AboutDisplay />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/experience" element={<Experience />} />
+            <Route path="/cv" element={<Cv />} />
+          </Routes>
+        </div>
       </CSSTransition>
     </TransitionGroup>
   );
