@@ -2,8 +2,17 @@ import React, { useState, useEffect } from "react";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 import "../styles/ImageSlider.css";
 
-const ImageSlider = ({ cards }) => {
-  const [current, setCurrent] = useState(0);
+interface Card {
+  image: string;
+  alt: string;
+}
+
+interface ImageSliderProps {
+  cards: Card[];
+}
+
+const ImageSlider: React.FC<ImageSliderProps> = ({ cards }) => {
+  const [current, setCurrent] = useState<number>(0);
   const length = cards.length;
 
   useEffect(() => {
@@ -45,11 +54,9 @@ const ImageSlider = ({ cards }) => {
             <img
               src={card.image}
               alt={card.alt}
-              type="image/webp"
               className="image"
               loading="lazy"
               decoding="async"
-              fetchpriority="high"
             />
           )}
         </div>

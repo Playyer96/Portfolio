@@ -1,137 +1,26 @@
-@import url("https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Open+Sans:wght@400;600;700&display=swap");
+/* App.css - Minimal styles for compatibility with Tailwind CSS */
 
 .App {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    font-family: "Inter", sans-serif;
-    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-    color: #333;
-    box-sizing: border-box;
+  @apply w-full min-h-screen flex flex-col;
 }
 
+/* Override any conflicting styles */
 body {
-    margin: 0;
-    position: relative;
-    padding: 0 0 120px;
-    min-height: 100vh;
-    font-size: 16px;
-    line-height: 1.6;
-    /*color: #2c3e50;*/
-    background-color: #ffffff;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-button {
-    background: linear-gradient(135deg, #f9004d, #ff5d8f);
-    color: white;
-    text-decoration: none;
-    border: none;
-    font-weight: 600;
-    padding: 14px 32px;
-    border-radius: 50px;
-    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 10px rgba(249, 0, 77, 0.3);
+/* Ensure Tailwind utilities take precedence */
+* {
+  box-sizing: border-box;
 }
 
-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 15px rgba(249, 0, 77, 0.5);
-    cursor: pointer;
-    background: linear-gradient(135deg, #ff5d8f, #f9004d);
-}
-
-tool-tip {
-    background-color: rgba(0, 0, 0, 0.85);
-    color: white;
-    border: none;
-    position: absolute;
-    z-index: 1;
-    pointer-events: none;
-    user-select: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    padding: 8px 12px;
-    font-size: 14px;
-    border-radius: 10px;
-    left: 50%;
-    transform: translate(-50%, -25%);
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    margin-top: 10px;
-    text-align: center;
-}
-
-h1 {
-    font-family: "Kaushan Script", cursive;
-    font-size: 4.5rem;
-    background: linear-gradient(90deg, #f9004d, #ff616f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    display: inline-block;
-    padding-right: 1rem;
-}
-
-
+/* Minimal compatibility styles */
 .skills-section {
-    min-height: calc(100vh);
+  min-height: calc(100vh);
 }
 
-:has(> tool-tip) {
-    position: relative;
-}
-
-:has(> tool-tip):hover tool-tip {
-    opacity: 1;
-    transform: translate(-50%, 0);
-}
-
-.page {
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-}
-
-.page-enter {
-    opacity: 0;
-}
-
-.page-enter-active {
-    opacity: 1;
-    transition: opacity 1s ease-in-out;
-}
-
-.page-exit {
-    opacity: 1;
-}
-
-.page-exit-active {
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-}
-
-
-.skeleton-loader {
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-
-.skeleton-content {
-    background: #ddd;
-    padding: 20px;
-    border-radius: 4px;
-}
-
-.skeleton-title {
-    width: 80%;
-    height: 30px;
-    margin-bottom: 10px;
-    background: #ccc;
-}
-
-.skeleton-paragraph {
-    width: 100%;
-    height: 15px;
-    background: #ccc;
-    margin-bottom: 10px;
+/* Tooltip positioning helper */
+:has(> .tooltip) {
+  position: relative;
 }

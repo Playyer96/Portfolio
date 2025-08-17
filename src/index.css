@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Kaushan+Script&display=swap");
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply m-0 p-0 font-sans text-gray-900 dark:text-gray-100 antialiased;
+    @apply bg-gradient-to-br from-gray-50 via-white to-gray-100;
+    @apply dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900;
+    @apply min-h-screen;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/20 dark:bg-black/20;
+    @apply border border-white/30 dark:border-white/10;
+    @apply shadow-xl shadow-black/5 dark:shadow-black/20;
+  }
+  
+  .glass-card {
+    @apply glass-effect rounded-2xl p-6;
+    @apply hover:bg-white/30 dark:hover:bg-black/30;
+    @apply transition-all duration-300 ease-out;
+    @apply hover:scale-[1.02] hover:shadow-2xl;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-500 to-primary-600;
+    @apply hover:from-primary-600 hover:to-primary-700;
+    @apply text-white font-semibold py-3 px-6 rounded-full;
+    @apply transition-all duration-300 ease-out;
+    @apply hover:scale-105 hover:shadow-lg hover:shadow-primary-500/25;
+    @apply active:scale-95;
+  }
+  
+  .nav-link {
+    @apply relative text-gray-700 dark:text-gray-300;
+    @apply hover:text-primary-500 dark:hover:text-primary-400;
+    @apply transition-colors duration-300;
+    @apply after:absolute after:bottom-0 after:left-0;
+    @apply after:w-0 after:h-0.5 after:bg-primary-500;
+    @apply after:transition-all after:duration-300;
+    @apply hover:after:w-full;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-500 to-primary-600;
+    @apply bg-clip-text text-transparent;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary-400 rounded-full;
+  @apply hover:bg-primary-500;
+}
+
+/* Page transitions */
+.page-enter {
+  @apply opacity-0 translate-y-4;
+}
+
+.page-enter-active {
+  @apply opacity-100 translate-y-0;
+  @apply transition-all duration-500 ease-out;
+}
+
+.page-exit {
+  @apply opacity-100 translate-y-0;
+}
+
+.page-exit-active {
+  @apply opacity-0 -translate-y-4;
+  @apply transition-all duration-300 ease-in;
+}
