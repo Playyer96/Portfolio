@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CardDisplay from "../components/CardDisplay";
 import ContactIcons from "../components/ContactIcons";
 import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGithub, FaGitlab, FaDocker, FaSlack, FaJira } from "react-icons/fa";
-import { SiUnrealengine, SiCplusplus, SiCsharp, SiPerforce } from "react-icons/si";
+import { SiUnrealengine, SiCplusplus, SiSharp, SiPerforce } from "react-icons/si";
 
 import "../styles/Home.css";
 
@@ -74,7 +74,7 @@ const Home = () => {
                                 case 'nodejs': IconComponent = FaNodeJs; break;
                                 case 'python': IconComponent = FaPython; break;
                                 case 'c++': IconComponent = SiCplusplus; break;
-                                case 'c#': IconComponent = SiCsharp; break;
+                                case 'c#': IconComponent = SiSharp; break;
                                 case 'git': IconComponent = FaGitAlt; break;
                                 case 'github': IconComponent = FaGithub; break;
                                 case 'gitlab': IconComponent = FaGitlab; break;

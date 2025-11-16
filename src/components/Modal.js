@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "../styles/Modal.css";
 import { FaReact, FaNodeJs, FaPython, FaJira, FaJava, FaHtml5, FaCss3Alt, FaJs, FaDocker, FaGithub, FaDatabase, FaSlack, FaMicrosoft } from "react-icons/fa";
-import { SiTypescript, SiPerforce, SiMongodb, SiPostgresql, SiSpring, SiExpress, SiDjango, SiTailwindcss, SiUnity, SiUnrealengine, SiCsharp, SiCplusplus, SiAzuredevops } from "react-icons/si";
+import { SiTypescript, SiPerforce, SiMongodb, SiPostgresql, SiSpring, SiExpress, SiDjango, SiTailwindcss, SiUnity, SiUnrealengine, SiSharp, SiCplusplus } from "react-icons/si";
 
 function Modal({ isOpen, closeModal, project }) {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -42,12 +42,12 @@ function Modal({ isOpen, closeModal, project }) {
             'tailwindcss': SiTailwindcss,
             'unity': SiUnity,
             'unreal': SiUnrealengine,
-            'c#': SiCsharp,
+            'c#': SiSharp,
             'c++': SiCplusplus,
-            'csharp': SiCsharp,
+            'csharp': SiSharp,
             'slack': FaSlack,
-            'dev ops': SiAzuredevops,
-            'devops': SiAzuredevops,
+            'dev ops': FaMicrosoft,
+            'devops': FaMicrosoft,
             'visual studio': FaMicrosoft,
             'perforce': SiPerforce
         };
