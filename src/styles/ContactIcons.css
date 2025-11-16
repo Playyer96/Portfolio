@@ -1,0 +1,93 @@
+.socialMedia {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.socialMedia svg {
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.socialMedia svg:hover {
+    transform: scale(1.2) translateY(-2px);
+    color: var(--accent-blue);
+    filter: drop-shadow(0 4px 12px rgba(0, 122, 255, 0.3));
+}
+
+.socialMedia svg:active {
+    transform: scale(1.1);
+}
+
+.socialMedia button {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: var(--radius-full);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
+    letter-spacing: -0.2px;
+}
+
+.socialMedia button:hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4);
+}
+
+.socialMedia button:active {
+    transform: scale(0.98);
+}
+
+.socialMedia button.glass-button {
+    background: var(--glass-white-strong);
+    backdrop-filter: blur(var(--blur-md)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(180%);
+    color: var(--accent-blue);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+        0 4px 16px var(--glass-shadow),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
+}
+
+.socialMedia button.glass-button:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow:
+        0 8px 24px var(--glass-shadow-strong),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 768px) {
+    .socialMedia {
+        gap: var(--spacing-sm);
+    }
+
+    .socialMedia svg {
+        font-size: 2rem;
+    }
+
+    .socialMedia button {
+        padding: 10px 24px;
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .socialMedia svg {
+        font-size: 1.8rem;
+    }
+
+    .socialMedia button {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+}

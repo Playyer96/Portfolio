@@ -1,0 +1,11 @@
+.glass-container {
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 768px) {
+    .glass-container {
+        padding: var(--spacing-lg);
+    }
+}

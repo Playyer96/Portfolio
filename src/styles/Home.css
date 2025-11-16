@@ -1,0 +1,131 @@
+.home {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-2xl) var(--spacing-md);
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home.fade-in {
+    opacity: 1;
+}
+
+.aboutme {
+    width: 100%;
+    max-width: 1200px;
+    min-height: calc(100vh - 128px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-2xl);
+}
+
+.aboutme h2 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+}
+
+.aboutme h2 span {
+    display: inline-block;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 800;
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding-right: 0.5rem;
+    letter-spacing: -2px;
+}
+
+.aboutme .prompt {
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    align-items: center;
+}
+
+.aboutme .prompt p {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: 500;
+}
+
+.skills-section {
+    width: 100%;
+    max-width: 1400px;
+    padding: var(--spacing-2xl) var(--spacing-md);
+    text-align: center;
+}
+
+.skills-section h1 {
+    margin-bottom: var(--spacing-2xl);
+    text-align: center;
+}
+
+.skillList {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-md);
+}
+
+/* Loading and Error States */
+.home .skills-section h2 {
+    color: var(--text-primary);
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin: var(--spacing-2xl) 0;
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 1024px) {
+    .home {
+        padding: var(--spacing-xl) var(--spacing-md);
+    }
+
+    .aboutme {
+        padding: var(--spacing-xl) var(--spacing-md);
+        min-height: calc(100vh - 100px);
+    }
+
+    .aboutme .prompt {
+        width: 100%;
+        padding: 0 var(--spacing-md);
+    }
+
+    .skillList {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: var(--spacing-md);
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .home {
+        padding: var(--spacing-lg) var(--spacing-sm);
+    }
+
+    .aboutme {
+        gap: var(--spacing-lg);
+        padding: var(--spacing-lg) var(--spacing-sm);
+    }
+
+    .skillList {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: var(--spacing-sm);
+    }
+}
