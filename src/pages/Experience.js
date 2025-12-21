@@ -5,7 +5,7 @@ import ParticleBackground from "../components/effects/ParticleBackground";
 import TimelineItem from "../components/TimelineItem";
 import "./Experience.scss";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lilac.vercel.app/api';
 
 const Experience = () => {
   const [experiences, setExperiences] = useState([]);

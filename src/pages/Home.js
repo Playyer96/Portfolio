@@ -9,7 +9,7 @@ import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAl
 import { SiUnrealengine, SiCplusplus, SiSharp, SiPerforce } from "react-icons/si";
 import "./Home.scss";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lilac.vercel.app/api';
 
 const Home = () => {
   const [technologies, setTechnologies] = useState([]);
