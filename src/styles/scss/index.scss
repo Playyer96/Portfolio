@@ -1,0 +1,22 @@
+// ============================================
+// MAIN SCSS INDEX
+// Import order matters!
+// ============================================
+
+// 1. Variables first (colors, spacing, etc.)
+@import './variables';
+
+// 2. Mixins (reusable patterns)
+@import './mixins';
+
+// 3. Animations (keyframes)
+@import './animations';
+
+// 4. Base styles & resets
+@import './base';
+
+// 5. Utilities (helper classes)
+@import './utilities';
+
+// 6. Components (will be added as we build them)
+// Components will import this file to access variables and mixins
