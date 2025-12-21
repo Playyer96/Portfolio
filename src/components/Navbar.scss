@@ -1,0 +1,228 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: $z-fixed;
+  background: rgba($color-bg-darker, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba($color-primary, 0.1);
+  transition: all $transition-base;
+
+  &.scrolled {
+    background: rgba($color-bg-darker, 0.95);
+    border-bottom-color: rgba($color-primary, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  &__container {
+    @include flex-between;
+    max-width: $container-2xl;
+    margin: 0 auto;
+    padding: $spacing-md $spacing-lg;
+
+    @include respond-to(lg) {
+      padding: $spacing-lg $spacing-2xl;
+    }
+  }
+
+  &__logo {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    text-decoration: none;
+    position: relative;
+    z-index: 2;
+
+    @include respond-to(md) {
+      font-size: $font-size-2xl;
+    }
+
+    &-text {
+      display: inline-block;
+      transition: all $transition-base;
+    }
+
+    &-bracket {
+      @include text-gradient($gradient-primary);
+      font-weight: $font-weight-black;
+    }
+
+    &:hover &-text {
+      @include neon-text($color-primary);
+    }
+  }
+
+  // Desktop Navigation
+  &__desktop {
+    display: none;
+
+    @include respond-to(md) {
+      @include flex-center;
+      gap: $spacing-xl;
+    }
+  }
+
+  &__link {
+    position: relative;
+    font-family: $font-heading;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-decoration: none;
+    padding: $spacing-sm 0;
+    transition: color $transition-base;
+
+    &:hover {
+      color: $color-primary;
+    }
+
+    &.active {
+      color: $color-primary;
+    }
+
+    &-active {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: $gradient-primary;
+      border-radius: $radius-full;
+      @include glow($color-primary, 0.6);
+    }
+  }
+
+  // Mobile Toggle Button
+  &__toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: $z-modal + 1;
+
+    @include respond-to(md) {
+      display: none;
+    }
+
+    &-bar {
+      width: 100%;
+      height: 3px;
+      background: $color-primary;
+      border-radius: $radius-full;
+      transition: all $transition-base;
+      @include glow($color-primary, 0.4);
+
+      &:nth-child(2) {
+        width: 70%;
+      }
+    }
+
+    &.open &-bar {
+      &:nth-child(1) {
+        transform: translateY(8.5px) rotate(45deg);
+      }
+
+      &:nth-child(2) {
+        opacity: 0;
+        width: 0;
+      }
+
+      &:nth-child(3) {
+        transform: translateY(-8.5px) rotate(-45deg);
+      }
+    }
+
+    &:hover &-bar {
+      @include glow-hover($color-primary);
+    }
+  }
+
+  // Mobile Overlay
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba($color-bg-darker, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: $z-modal - 1;
+
+    @include respond-to(md) {
+      display: none;
+    }
+  }
+
+  // Mobile Menu
+  &__mobile {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background: $color-bg-card;
+    border-left: 1px solid rgba($color-primary, 0.2);
+    @include glow($color-primary, 0.2);
+    z-index: $z-modal;
+    overflow-y: auto;
+
+    @include respond-to(md) {
+      display: none;
+    }
+
+    &-content {
+      @include flex-column;
+      gap: $spacing-xs;
+      padding: $spacing-4xl $spacing-lg $spacing-2xl;
+    }
+
+    &-link {
+      @include flex-between;
+      padding: $spacing-md $spacing-lg;
+      font-family: $font-heading;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $color-text-secondary;
+      text-decoration: none;
+      border-radius: $radius-md;
+      transition: all $transition-base;
+      border: 1px solid transparent;
+
+      &:hover {
+        background: rgba($color-primary, 0.05);
+        color: $color-primary;
+        border-color: rgba($color-primary, 0.2);
+      }
+
+      &.active {
+        background: rgba($color-primary, 0.1);
+        color: $color-primary;
+        border-color: rgba($color-primary, 0.3);
+        @include glow($color-primary, 0.2);
+      }
+
+      &-text {
+        display: flex;
+        align-items: center;
+      }
+
+      &-indicator {
+        @include text-gradient($gradient-primary);
+        font-size: $font-size-xl;
+        font-weight: $font-weight-bold;
+      }
+    }
+  }
+}

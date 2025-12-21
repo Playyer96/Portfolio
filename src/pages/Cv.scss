@@ -1,0 +1,294 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.cv {
+  min-height: 100vh;
+  padding: $spacing-4xl $spacing-lg $spacing-5xl;
+  position: relative;
+  background: $color-bg-darker;
+
+  @include respond-to(md) {
+    padding: $spacing-5xl $spacing-2xl;
+  }
+
+  &__header {
+    margin-bottom: $spacing-3xl;
+    text-align: center;
+
+    @include respond-to(md) {
+      margin-bottom: $spacing-4xl;
+    }
+  }
+
+  &__title-wrapper {
+    @include flex-center;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-md;
+  }
+
+  &__title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-black;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    white-space: nowrap;
+
+    @include respond-to(md) {
+      font-size: $font-size-5xl;
+    }
+  }
+
+  &__title-number {
+    font-family: $font-mono;
+    @include text-gradient($gradient-primary);
+    font-size: $font-size-2xl;
+
+    @include respond-to(md) {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  &__title-line {
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(
+      90deg,
+      rgba($color-primary, 0.5) 0%,
+      transparent 100%
+    );
+    display: none;
+
+    @include respond-to(md) {
+      display: block;
+    }
+  }
+
+  &__subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    max-width: 600px;
+    margin: 0 auto;
+
+    @include respond-to(md) {
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__actions {
+    margin-bottom: $spacing-3xl;
+  }
+
+  &__buttons {
+    @include flex-center;
+    gap: $spacing-lg;
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    @include flex-center;
+    gap: $spacing-sm;
+    padding: $spacing-md $spacing-2xl;
+    font-family: $font-heading;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    border-radius: $radius-lg;
+    cursor: pointer;
+    transition: all $transition-base;
+    border: none;
+
+    @include respond-to(md) {
+      padding: $spacing-lg $spacing-3xl;
+      font-size: $font-size-lg;
+    }
+
+    svg {
+      font-size: $font-size-xl;
+    }
+
+    &--primary {
+      background: $gradient-primary;
+      color: $color-bg-dark;
+      @include glow($color-primary, 0.4);
+
+      &:hover {
+        @include glow-hover($color-primary, 0.8);
+      }
+    }
+
+    &--secondary {
+      background: rgba($color-primary, 0.1);
+      color: $color-primary;
+      border: 2px solid rgba($color-primary, 0.3);
+
+      &:hover {
+        background: rgba($color-primary, 0.2);
+        border-color: $color-primary;
+        @include glow($color-primary, 0.3);
+      }
+    }
+  }
+
+  &__viewer {
+    margin-bottom: $spacing-4xl;
+  }
+
+  &__iframe {
+    width: 100%;
+    height: 80vh;
+    min-height: 600px;
+    border: none;
+    border-radius: $radius-xl;
+    background: white;
+    @include glow($color-primary, 0.2);
+  }
+
+  &__overview {
+    margin-bottom: $spacing-4xl;
+  }
+
+  &__section-title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-black;
+    text-align: center;
+    margin: 0 0 $spacing-3xl;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__skills-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+
+    @include respond-to(sm) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to(lg) {
+      grid-template-columns: repeat(4, 1fr);
+      gap: $spacing-xl;
+    }
+  }
+
+  &__skill-card {
+    @include card($spacing-lg);
+    transition: all $transition-base;
+
+    &:hover {
+      @include card-hover;
+    }
+  }
+
+  &__skill-category {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    margin: 0 0 $spacing-md;
+    padding-bottom: $spacing-sm;
+    border-bottom: 2px solid rgba($color-primary, 0.2);
+
+    @include respond-to(md) {
+      font-size: $font-size-xl;
+    }
+  }
+
+  &__skill-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__skill-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+    }
+  }
+
+  &__skill-bullet {
+    color: $color-primary;
+    font-weight: $font-weight-bold;
+  }
+
+  &__cta {
+    margin-top: $spacing-5xl;
+  }
+
+  &__cta-card {
+    @include card($spacing-2xl);
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    background: $gradient-card;
+    border: 1px solid rgba($color-primary, 0.3);
+    @include glow($color-primary, 0.3);
+
+    @include respond-to(md) {
+      padding: $spacing-3xl;
+    }
+  }
+
+  &__cta-title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-black;
+    @include text-gradient($gradient-primary);
+    margin: 0 0 $spacing-md;
+
+    @include respond-to(md) {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  &__cta-text {
+    font-size: $font-size-base;
+    line-height: 1.6;
+    color: $color-text-secondary;
+    margin: 0 0 $spacing-xl;
+
+    @include respond-to(md) {
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__cta-links {
+    @include flex-center;
+    gap: $spacing-lg;
+    flex-wrap: wrap;
+  }
+
+  &__cta-link {
+    @include flex-center;
+    gap: $spacing-sm;
+    padding: $spacing-md $spacing-xl;
+    background: rgba($color-primary, 0.1);
+    border: 1px solid rgba($color-primary, 0.3);
+    border-radius: $radius-md;
+    color: $color-primary;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    text-decoration: none;
+    transition: all $transition-base;
+
+    svg {
+      font-size: $font-size-xl;
+    }
+
+    &:hover {
+      background: rgba($color-primary, 0.2);
+      border-color: $color-primary;
+      @include glow($color-primary, 0.3);
+      transform: translateY(-2px);
+    }
+  }
+}

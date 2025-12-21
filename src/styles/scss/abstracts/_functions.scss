@@ -1,0 +1,23 @@
+// ========================================
+// SCSS UTILITY FUNCTIONS
+// ========================================
+
+// Convert pixels to rem
+@function rem($pixels, $base: 16px) {
+  @return ($pixels / $base) * 1rem;
+}
+
+// Lighten color with opacity
+@function alpha-lighten($color, $amount) {
+  @return rgba($color, $amount);
+}
+
+// Generate unique ID for dynamic keyframe names
+@function unique-id() {
+  @return random(100000);
+}
+
+// Clamp value between min and max
+@function clamp-value($value, $min, $max) {
+  @return max($min, min($value, $max));
+}

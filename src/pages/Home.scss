@@ -1,0 +1,414 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.home {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: $color-bg-darker;
+
+  &__cursor-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba($color-primary, 0.05) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+    z-index: 1;
+    will-change: transform;
+  }
+
+  // Loading State
+  &__loading {
+    @include flex-column-center;
+    min-height: 100vh;
+    gap: $spacing-lg;
+
+    &-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba($color-primary, 0.2);
+      border-top-color: $color-primary;
+      border-radius: 50%;
+      @include glow($color-primary);
+    }
+
+    p {
+      font-family: $font-heading;
+      font-size: $font-size-lg;
+      color: $color-primary;
+    }
+  }
+
+  &__error {
+    @include flex-column-center;
+    min-height: 100vh;
+    padding: $spacing-lg;
+
+    h2 {
+      color: $color-secondary;
+    }
+  }
+
+  // Hero Section
+  &__hero {
+    position: relative;
+    min-height: 100vh;
+    @include flex-center;
+    padding: $spacing-4xl $spacing-lg;
+    z-index: 2;
+
+    @include respond-to(md) {
+      padding: $spacing-5xl $spacing-2xl;
+    }
+
+    &-content {
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+    }
+
+    &-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-sm;
+      padding: $spacing-sm $spacing-lg;
+      background: rgba($color-primary, 0.1);
+      border: 1px solid rgba($color-primary, 0.3);
+      border-radius: $radius-full;
+      color: $color-primary;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-semibold;
+      margin-bottom: $spacing-2xl;
+
+      &-dot {
+        width: 8px;
+        height: 8px;
+        background: $color-primary;
+        border-radius: 50%;
+        animation: pulse 2s ease-in-out infinite;
+        @include glow($color-primary);
+      }
+    }
+
+    &-title {
+      margin-bottom: $spacing-xl;
+
+      h1 {
+        font-size: $font-size-4xl;
+        font-weight: $font-weight-black;
+        margin-bottom: $spacing-md;
+
+        @include respond-to(md) {
+          font-size: $font-size-6xl;
+        }
+
+        @include respond-to(lg) {
+          font-size: 5rem;
+        }
+      }
+    }
+
+    &-subtitle {
+      h2 {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-medium;
+        color: $color-text-secondary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $spacing-md;
+        flex-wrap: wrap;
+
+        @include respond-to(md) {
+          font-size: $font-size-3xl;
+        }
+      }
+    }
+
+    &-role {
+      @include text-gradient($gradient-primary);
+      font-weight: $font-weight-bold;
+    }
+
+    &-separator {
+      color: $color-primary;
+      opacity: 0.5;
+    }
+
+    &-engines {
+      color: $color-text-secondary;
+    }
+
+    &-description {
+      font-size: $font-size-base;
+      line-height: 1.8;
+      color: $color-text-secondary;
+      max-width: 700px;
+      margin: 0 auto $spacing-2xl;
+
+      @include respond-to(md) {
+        font-size: $font-size-lg;
+      }
+    }
+
+    &-actions {
+      display: flex;
+      gap: $spacing-lg;
+      justify-content: center;
+      margin-bottom: $spacing-2xl;
+      flex-wrap: wrap;
+    }
+
+    &-socials {
+      margin-top: $spacing-2xl;
+    }
+
+    &-decoration {
+      pointer-events: none;
+    }
+  }
+
+  &__bracket {
+    position: absolute;
+    font-family: $font-mono;
+    font-size: 20rem;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    opacity: 0.05;
+    user-select: none;
+
+    &--left {
+      top: 20%;
+      left: -5%;
+    }
+
+    &--right {
+      bottom: 20%;
+      right: -5%;
+    }
+
+    @include respond-to(md) {
+      font-size: 30rem;
+    }
+  }
+
+  // CTA Buttons
+  &__cta-primary {
+    @include button-primary;
+    padding: $spacing-md $spacing-2xl;
+    font-size: $font-size-base;
+
+    @include respond-to(md) {
+      padding: $spacing-lg $spacing-3xl;
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__cta-secondary {
+    @include button-outline;
+    padding: $spacing-md $spacing-2xl;
+    font-size: $font-size-base;
+
+    @include respond-to(md) {
+      padding: $spacing-lg $spacing-3xl;
+      font-size: $font-size-lg;
+    }
+  }
+
+  // Technologies Section
+  &__technologies {
+    position: relative;
+    padding: $spacing-4xl $spacing-lg;
+    z-index: 2;
+
+    @include respond-to(md) {
+      padding: $spacing-5xl $spacing-2xl;
+    }
+  }
+
+  &__section-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__section-title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    white-space: nowrap;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__section-number {
+    font-family: $font-mono;
+    @include text-gradient($gradient-primary);
+    font-size: $font-size-2xl;
+
+    @include respond-to(md) {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  &__section-line {
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(
+      90deg,
+      rgba($color-primary, 0.5) 0%,
+      transparent 100%
+    );
+  }
+
+  &__section-description {
+    color: $color-text-secondary;
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-3xl;
+    max-width: 600px;
+  }
+
+  &__tech-grid {
+    @include grid(2, $spacing-lg);
+
+    @include respond-to(sm) {
+      @include grid(3, $spacing-lg);
+    }
+
+    @include respond-to(md) {
+      @include grid(4, $spacing-xl);
+    }
+
+    @include respond-to(lg) {
+      @include grid(6, $spacing-xl);
+    }
+
+    @include respond-to(xl) {
+      @include grid(8, $spacing-xl);
+    }
+  }
+
+  &__tech-card {
+    position: relative;
+    @include card($spacing-lg);
+    @include flex-column-center;
+    aspect-ratio: 1;
+    cursor: pointer;
+    overflow: hidden;
+
+    &:hover {
+      @include card-hover;
+
+      .home__tech-glow {
+        opacity: 1;
+      }
+
+      .home__tech-icon {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 10px currentColor);
+      }
+    }
+  }
+
+  &__tech-icon-wrapper {
+    margin-bottom: $spacing-sm;
+  }
+
+  &__tech-icon {
+    font-size: $font-size-4xl;
+    color: $color-primary;
+    transition: all $transition-base;
+
+    @include respond-to(md) {
+      font-size: $font-size-5xl;
+    }
+  }
+
+  &__tech-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle,
+      rgba($color-primary, 0.2) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity $transition-base;
+    pointer-events: none;
+  }
+
+  &__tech-name {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-align: center;
+
+    @include respond-to(md) {
+      font-size: $font-size-sm;
+    }
+  }
+
+  // Stats Section
+  &__stats {
+    position: relative;
+    padding: $spacing-4xl $spacing-lg;
+    z-index: 2;
+
+    @include respond-to(md) {
+      padding: $spacing-5xl $spacing-2xl;
+    }
+  }
+
+  &__stats-grid {
+    @include grid(1, $spacing-lg);
+
+    @include respond-to(sm) {
+      @include grid(3, $spacing-xl);
+    }
+  }
+
+  &__stat-card {
+    @include card($spacing-xl);
+    @include flex-column-center;
+    text-align: center;
+    transition: all $transition-base;
+
+    &:hover {
+      @include card-hover;
+    }
+  }
+
+  &__stat-number {
+    font-size: $font-size-5xl;
+    font-weight: $font-weight-black;
+    margin-bottom: $spacing-sm;
+
+    @include respond-to(md) {
+      font-size: $font-size-6xl;
+    }
+  }
+
+  &__stat-label {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    margin: 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-lg;
+    }
+  }
+}

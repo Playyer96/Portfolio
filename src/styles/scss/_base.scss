@@ -1,0 +1,325 @@
+// ============================================
+// BASE - Global Styles & Resets
+// ============================================
+
+@import './variables';
+@import './mixins';
+
+// Import Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+// CSS Reset & Base Styles
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-primary;
+  font-size: $font-size-base;
+  font-weight: $font-weight-regular;
+  line-height: 1.6;
+  color: $color-text-primary;
+  background: $color-bg-darker;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+  margin: 0;
+  color: $color-text-primary;
+}
+
+h1 {
+  font-size: $font-size-5xl;
+
+  @include respond-to(md) {
+    font-size: $font-size-6xl;
+  }
+}
+
+h2 {
+  font-size: $font-size-4xl;
+
+  @include respond-to(md) {
+    font-size: $font-size-5xl;
+  }
+}
+
+h3 {
+  font-size: $font-size-3xl;
+
+  @include respond-to(md) {
+    font-size: $font-size-4xl;
+  }
+}
+
+h4 {
+  font-size: $font-size-2xl;
+
+  @include respond-to(md) {
+    font-size: $font-size-3xl;
+  }
+}
+
+h5 {
+  font-size: $font-size-xl;
+
+  @include respond-to(md) {
+    font-size: $font-size-2xl;
+  }
+}
+
+h6 {
+  font-size: $font-size-lg;
+
+  @include respond-to(md) {
+    font-size: $font-size-xl;
+  }
+}
+
+p {
+  margin: 0 0 $spacing-md 0;
+  color: $color-text-secondary;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Links
+a {
+  color: $color-primary;
+  text-decoration: none;
+  transition: color $transition-base;
+
+  &:hover {
+    color: $color-primary-light;
+  }
+
+  &:focus {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+// Lists
+ul, ol {
+  list-style: none;
+}
+
+// Images
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// Buttons
+button {
+  font-family: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+
+  &:focus {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+// Inputs
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: $color-bg-card;
+  border: 1px solid rgba($color-primary, 0.2);
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  transition: all $transition-base;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    @include glow($color-primary, 0.3);
+  }
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+}
+
+// Code blocks
+code {
+  font-family: $font-mono;
+  font-size: 0.9em;
+  background: rgba($color-primary, 0.1);
+  padding: 2px 6px;
+  border-radius: $radius-sm;
+  color: $color-primary;
+}
+
+pre {
+  font-family: $font-mono;
+  background: $color-bg-card;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  overflow-x: auto;
+  border: 1px solid rgba($color-primary, 0.2);
+
+  code {
+    background: none;
+    padding: 0;
+  }
+}
+
+// Selection
+::selection {
+  background: rgba($color-primary, 0.3);
+  color: $color-text-primary;
+}
+
+::-moz-selection {
+  background: rgba($color-primary, 0.3);
+  color: $color-text-primary;
+}
+
+// Scrollbar
+body {
+  @include custom-scrollbar(10px, $color-bg-darker, $color-primary);
+}
+
+// Focus visible
+:focus-visible {
+  outline: 2px solid $color-primary;
+  outline-offset: 2px;
+}
+
+// Disabled state
+[disabled],
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// Loading state
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    $color-bg-card 0%,
+    lighten($color-bg-card, 5%) 50%,
+    $color-bg-card 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+  border-radius: $radius-md;
+}
+
+// Page transitions
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity $transition-slow, transform $transition-slow;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transition: opacity $transition-base;
+}
+
+// Grid backgrounds
+.grid-background {
+  position: relative;
+
+  &::before {
+    content: '';
+    @include absolute-cover;
+    background-image:
+      linear-gradient(rgba($color-primary, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba($color-primary, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+// Particle effects
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: $color-primary;
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat 10s linear infinite;
+
+  &:nth-child(2n) {
+    background: $color-secondary;
+    animation-duration: 12s;
+  }
+
+  &:nth-child(3n) {
+    background: $color-accent;
+    animation-duration: 15s;
+  }
+}
