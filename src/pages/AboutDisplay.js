@@ -5,7 +5,7 @@ import ParticleBackground from "../components/effects/ParticleBackground";
 import SkillBar from "../components/SkillBar";
 import "./AboutDisplay.scss";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lilac.vercel.app/api';
 
 const AboutDisplay = () => {
   const [aboutData, setAboutData] = useState(null);

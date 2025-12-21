@@ -57,13 +57,13 @@
   // Hero Section
   &__hero {
     position: relative;
-    min-height: 100vh;
+    min-height: calc(100vh - 80px);
     @include flex-center;
-    padding: $spacing-4xl $spacing-lg;
+    padding: $spacing-3xl $spacing-lg;
     z-index: 2;
 
     @include respond-to(md) {
-      padding: $spacing-5xl $spacing-2xl;
+      padding: $spacing-4xl $spacing-2xl;
     }
 
     &-content {
@@ -223,11 +223,11 @@
   // Technologies Section
   &__technologies {
     position: relative;
-    padding: $spacing-4xl $spacing-lg;
+    padding: $spacing-3xl $spacing-lg;
     z-index: 2;
 
     @include respond-to(md) {
-      padding: $spacing-5xl $spacing-2xl;
+      padding: $spacing-4xl $spacing-2xl;
     }
   }
 
@@ -365,11 +365,11 @@
   // Stats Section
   &__stats {
     position: relative;
-    padding: $spacing-4xl $spacing-lg;
+    padding: $spacing-3xl $spacing-lg $spacing-4xl;
     z-index: 2;
 
     @include respond-to(md) {
-      padding: $spacing-5xl $spacing-2xl;
+      padding: $spacing-4xl $spacing-2xl $spacing-5xl;
     }
   }
 

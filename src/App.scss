@@ -1,0 +1,14 @@
+@import './styles/scss/variables';
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: $color-bg-darker;
+
+  &__main {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+}

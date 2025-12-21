@@ -4,8 +4,8 @@
 .footer {
   position: relative;
   background: $color-bg-darker;
-  padding: $spacing-4xl $spacing-lg $spacing-2xl;
-  margin-top: $spacing-5xl;
+  padding: $spacing-3xl $spacing-lg $spacing-2xl;
+  margin-top: 0;
   overflow: hidden;
 
   @include respond-to(md) {
