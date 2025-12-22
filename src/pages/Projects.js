@@ -5,6 +5,7 @@ import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import ProjectCard from "../components/ProjectCard";
 import ProjectModal from "../components/ProjectModal";
+import SEO from "../components/SEO";
 import "./Projects.scss";
 
 const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lilac.vercel.app/api';
@@ -142,6 +143,12 @@ const Projects = () => {
 
   return (
     <PageTransition>
+      <SEO
+        title="Projects - Danilo Vanegas | Game Development Portfolio"
+        description="Browse through my Unity and Unreal game development projects. From multiplayer systems to immersive 3D experiences, explore my technical skills and creative solutions."
+        keywords="Game Development Projects, Unity Projects, Unreal Projects, Multiplayer Games, 3D Game Development, Portfolio Projects"
+        canonicalUrl="https://danidev.xyz/projects"
+      />
       <div className="projects">
         <ParticleBackground particleCount={40} />
 

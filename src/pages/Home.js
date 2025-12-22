@@ -6,6 +6,7 @@ import PageTransition from "../components/PageTransition";
 import ContactIcons from "../components/ContactIcons";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import TechBento from "../components/TechBento";
+import SEO from "../components/SEO";
 import useMousePosition from "../hooks/useMousePosition";
 import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGithub, FaGitlab, FaDocker, FaSlack, FaJira } from "react-icons/fa";
 import { SiUnrealengine, SiCplusplus, SiSharp, SiPerforce } from "react-icons/si";
@@ -110,6 +111,12 @@ const Home = () => {
 
   return (
     <PageTransition>
+      <SEO
+        title="Danilo Vanegas - Unity & Unreal Game Developer Portfolio"
+        description="Explore the portfolio of Danilo Vanegas, a skilled Unity and Unreal game developer. View projects, experience, and technical expertise in game development, multiplayer systems, and immersive gameplay."
+        keywords="Unity Developer, Unreal Engine, Game Developer, Portfolio, C#, C++, Game Programming, Multiplayer Games, 3D Games, Game Development Portfolio"
+        canonicalUrl="https://danidev.xyz/"
+      />
       <div className="home">
         <ParticleBackground particleCount={50} />
 
