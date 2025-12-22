@@ -69,26 +69,27 @@ const ProjectCard = ({ project, onClick, index }) => {
         <h3 className="project-card__title">{project.name}</h3>
 
         <p className="project-card__description">
-          {project.description?.substring(0, 100)}
-          {project.description?.length > 100 ? '...' : ''}
+          {project.descriptions?.[0]?.substring(0, 100) || project.description?.substring(0, 100) || ''}
+          {(project.descriptions?.[0]?.length > 100 || project.description?.length > 100) ? '...' : ''}
         </p>
 
         {/* Technologies */}
         {project.technologies && project.technologies.length > 0 && (
           <div className="project-card__tech">
             {project.technologies.slice(0, 4).map((tech, idx) => {
-              const IconComponent = getIconComponent(tech.text);
+              const techName = tech.name || tech.text || '';
+              const IconComponent = getIconComponent(techName);
               return (
                 <motion.div
                   key={idx}
                   className="project-card__tech-item"
                   whileHover={{ scale: 1.2, rotate: 10 }}
-                  title={tech.text}
+                  title={techName}
                 >
                   {IconComponent ? (
                     <IconComponent />
                   ) : (
-                    <span className="project-card__tech-text">{tech.text.substring(0, 2)}</span>
+                    <span className="project-card__tech-text">{techName.substring(0, 2)}</span>
                   )}
                 </motion.div>
               );

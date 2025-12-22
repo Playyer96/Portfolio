@@ -36,8 +36,8 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
   if (!project) return null;
 
   const images = project.images || [];
-  const hasVideo = project.video;
-  const media = hasVideo ? [{type: 'video', url: project.video}, ...images.map(img => ({type: 'image', ...img}))] : images.map(img => ({type: 'image', ...img}));
+  const hasVideo = project.videoUrl || project.video;
+  const media = hasVideo ? [{type: 'video', url: project.videoUrl || project.video}, ...images.map(img => ({type: 'image', ...img}))] : images.map(img => ({type: 'image', ...img}));
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % media.length);
@@ -193,12 +193,22 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
               </div>
 
               {/* Description */}
-              <div className="project-modal__section">
-                <h3 className="project-modal__section-title">About</h3>
-                <p className="project-modal__description">
-                  {project.description || "No description available."}
-                </p>
-              </div>
+              {(project.descriptions || project.description) && (
+                <div className="project-modal__section">
+                  <h3 className="project-modal__section-title">About</h3>
+                  {project.descriptions ? (
+                    project.descriptions.map((desc, idx) => (
+                      <p key={idx} className="project-modal__description">
+                        {desc}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="project-modal__description">
+                      {project.description || "No description available."}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* Technologies */}
               {project.technologies && project.technologies.length > 0 && (
@@ -206,7 +216,8 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                   <h3 className="project-modal__section-title">Technologies</h3>
                   <div className="project-modal__tech-grid">
                     {project.technologies.map((tech, index) => {
-                      const IconComponent = getIconComponent(tech.text);
+                      const techName = tech.name || tech.text || '';
+                      const IconComponent = getIconComponent(techName);
                       return (
                         <motion.div
                           key={index}
@@ -217,7 +228,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                           whileHover={{ scale: 1.05, y: -2 }}
                         >
                           {IconComponent && <IconComponent className="project-modal__tech-icon" />}
-                          <span>{tech.text}</span>
+                          <span>{techName}</span>
                         </motion.div>
                       );
                     })}

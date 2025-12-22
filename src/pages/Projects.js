@@ -67,7 +67,7 @@ const Projects = () => {
 
   // Get unique categories from projects
   const categories = ["all", ...new Set(projects.flatMap(p =>
-    p.technologies?.map(t => t.text.toLowerCase()) || []
+    p.technologies?.map(t => (t.name || t.text || '').toLowerCase()) || []
   ))];
 
   // Filter projects
@@ -78,7 +78,7 @@ const Projects = () => {
     if (activeFilter !== "all") {
       filtered = filtered.filter(project =>
         project.technologies?.some(tech =>
-          tech.text.toLowerCase() === activeFilter.toLowerCase()
+          (tech.name || tech.text || '').toLowerCase() === activeFilter.toLowerCase()
         )
       );
     }
@@ -87,9 +87,9 @@ const Projects = () => {
     if (searchQuery) {
       filtered = filtered.filter(project =>
         project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        project.descriptions?.some(desc => desc.toLowerCase().includes(searchQuery.toLowerCase())) ||
         project.technologies?.some(tech =>
-          tech.text.toLowerCase().includes(searchQuery.toLowerCase())
+          (tech.name || tech.text || '').toLowerCase().includes(searchQuery.toLowerCase())
         )
       );
     }
