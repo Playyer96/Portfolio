@@ -10,7 +10,8 @@
       "Bash(del \"D:\\\\Projects\\\\Web\\\\Portfolio\\\\src\\\\styles\\\\*.css\")",
       "Bash(dir:*)",
       "Bash(cat:*)",
-      "Bash(npx kill-port:*)"
+      "Bash(npx kill-port:*)",
+      "Bash(curl -s \"https://portfolio-backend-lilac.vercel.app/api/projects\")"
     ]
   }
 }
