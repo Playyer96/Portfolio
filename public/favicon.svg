@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00d9ff;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" fill="#0a0e27" rx="90"/>
+
+  <!-- Stylized letter D with neon glow -->
+  <g filter="url(#glow)">
+    <path d="M 150 120 L 260 120 C 340 120 390 170 390 256 C 390 342 340 392 260 392 L 150 392 L 150 120 Z
+             M 210 180 L 210 332 L 260 332 C 300 332 330 302 330 256 C 330 210 300 180 260 180 Z"
+          fill="url(#neonGradient)"
+          stroke="#00ff88"
+          stroke-width="8"
+          stroke-linejoin="round"/>
+  </g>
+
+  <!-- Corner accents for cyberpunk feel -->
+  <g opacity="0.6">
+    <path d="M 80 80 L 120 80 L 120 85 L 85 85 L 85 120 L 80 120 Z" fill="#00ff88"/>
+    <path d="M 432 80 L 432 120 L 427 120 L 427 85 L 392 85 L 392 80 Z" fill="#00d9ff"/>
+    <path d="M 80 432 L 80 392 L 85 392 L 85 427 L 120 427 L 120 432 Z" fill="#00d9ff"/>
+    <path d="M 432 432 L 392 432 L 392 427 L 427 427 L 427 392 L 432 392 Z" fill="#00ff88"/>
+  </g>
+</svg>

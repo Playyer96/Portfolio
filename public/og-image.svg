@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e27;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#141a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0e27;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00d9ff;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0, 255, 136, 0.1)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+
+  <!-- Grid pattern -->
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.5"/>
+
+  <!-- Accent lines -->
+  <line x1="0" y1="80" x2="1200" y2="80" stroke="#00ff88" stroke-width="2" opacity="0.3"/>
+  <line x1="0" y1="550" x2="1200" y2="550" stroke="#00d9ff" stroke-width="2" opacity="0.3"/>
+
+  <!-- Corner brackets -->
+  <g stroke="#00ff88" stroke-width="4" fill="none" opacity="0.8">
+    <path d="M 60 60 L 60 100 M 60 60 L 100 60"/>
+    <path d="M 1140 60 L 1100 60 M 1140 60 L 1140 100"/>
+    <path d="M 60 570 L 60 530 M 60 570 L 100 570"/>
+    <path d="M 1140 570 L 1100 570 M 1140 570 L 1140 530"/>
+  </g>
+
+  <!-- Logo D -->
+  <g transform="translate(100, 180)" filter="url(#glow)">
+    <path d="M 0 0 L 60 0 C 110 0 140 30 140 80 C 140 130 110 160 60 160 L 0 160 L 0 0 Z
+             M 25 25 L 25 135 L 60 135 C 90 135 115 110 115 80 C 115 50 90 25 60 25 Z"
+          fill="url(#textGradient)"
+          stroke="#00ff88"
+          stroke-width="2"/>
+  </g>
+
+  <!-- Main Title -->
+  <text x="280" y="280" font-family="'Orbitron', 'Rajdhani', sans-serif" font-size="72" font-weight="700" fill="url(#textGradient)" filter="url(#glow)">
+    Danilo Vanegas
+  </text>
+
+  <!-- Subtitle -->
+  <text x="280" y="340" font-family="'Inter', sans-serif" font-size="36" fill="#a0aec0">
+    Unity &amp; Unreal Game Developer
+  </text>
+
+  <!-- Tech stack tags -->
+  <g transform="translate(280, 400)">
+    <!-- Unity tag -->
+    <rect x="0" y="0" width="120" height="45" rx="8" fill="rgba(0, 255, 136, 0.15)" stroke="#00ff88" stroke-width="2"/>
+    <text x="60" y="28" font-family="'Inter', sans-serif" font-size="20" font-weight="600" fill="#00ff88" text-anchor="middle">Unity</text>
+
+    <!-- Unreal tag -->
+    <rect x="140" y="0" width="130" height="45" rx="8" fill="rgba(0, 217, 255, 0.15)" stroke="#00d9ff" stroke-width="2"/>
+    <text x="205" y="28" font-family="'Inter', sans-serif" font-size="20" font-weight="600" fill="#00d9ff" text-anchor="middle">Unreal</text>
+
+    <!-- C# tag -->
+    <rect x="290" y="0" width="80" height="45" rx="8" fill="rgba(0, 255, 136, 0.15)" stroke="#00ff88" stroke-width="2"/>
+    <text x="330" y="28" font-family="'Inter', sans-serif" font-size="20" font-weight="600" fill="#00ff88" text-anchor="middle">C#</text>
+
+    <!-- C++ tag -->
+    <rect x="390" y="0" width="90" height="45" rx="8" fill="rgba(0, 217, 255, 0.15)" stroke="#00d9ff" stroke-width="2"/>
+    <text x="435" y="28" font-family="'Inter', sans-serif" font-size="20" font-weight="600" fill="#00d9ff" text-anchor="middle">C++</text>
+  </g>
+
+  <!-- Website URL -->
+  <text x="280" y="520" font-family="'Fira Code', monospace" font-size="28" fill="#6b7b8c">
+    danidev.xyz
+  </text>
+
+  <!-- Code brackets decoration -->
+  <g font-family="'Fira Code', monospace" font-size="140" fill="#00ff88" opacity="0.1">
+    <text x="900" y="400">&lt;/&gt;</text>
+  </g>
+</svg>
