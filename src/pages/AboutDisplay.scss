@@ -1,0 +1,359 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.about {
+  min-height: 100vh;
+  position: relative;
+  background: $color-bg-darker;
+  overflow-x: hidden;
+
+  &__loading,
+  &__error {
+    @include flex-column-center;
+    min-height: 100vh;
+    gap: $spacing-lg;
+  }
+
+  &__loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba($color-primary, 0.2);
+    border-top-color: $color-primary;
+    border-radius: 50%;
+    @include glow($color-primary);
+  }
+
+  &__error h2 {
+    color: $color-secondary;
+  }
+
+  // Hero Section
+  &__hero {
+    padding: $spacing-4xl $spacing-lg;
+    position: relative;
+    z-index: 2;
+
+    @include respond-to(md) {
+      padding: $spacing-5xl $spacing-2xl;
+      min-height: 100vh;
+      @include flex-center;
+    }
+  }
+
+  &__hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-3xl;
+    align-items: center;
+
+    @include respond-to(lg) {
+      grid-template-columns: 1fr 1.2fr;
+      gap: $spacing-4xl;
+    }
+  }
+
+  &__image-wrapper {
+    @include flex-center;
+  }
+
+  &__image-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1;
+    border-radius: $radius-2xl;
+    overflow: hidden;
+    border: 2px solid rgba($color-primary, 0.3);
+    @include glow($color-primary, 0.3);
+    transition: all $transition-base;
+
+    &:hover {
+      border-color: $color-primary;
+      @include glow-hover($color-primary, 0.6);
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__image-glow {
+    @include absolute-cover;
+    background: radial-gradient(
+      circle at center,
+      rgba($color-primary, 0.2) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__title-wrapper {
+    @include flex-center;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-md;
+
+    @include respond-to(lg) {
+      justify-content: flex-start;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-black;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    white-space: nowrap;
+    margin: 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__title-line {
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(
+      90deg,
+      rgba($color-primary, 0.5) 0%,
+      transparent 100%
+    );
+    display: none;
+
+    @include respond-to(lg) {
+      display: block;
+    }
+  }
+
+  &__subtitle {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    @include text-gradient($gradient-primary);
+    margin: 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  &__role {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+    margin: 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__engines {
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__separator {
+    color: $color-primary;
+    opacity: 0.5;
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    p {
+      font-size: $font-size-base;
+      line-height: 1.8;
+      color: $color-text-secondary;
+      margin: 0;
+
+      @include respond-to(md) {
+        font-size: $font-size-lg;
+      }
+    }
+  }
+
+  // Skills Section
+  &__skills-section {
+    padding: $spacing-4xl $spacing-lg;
+    position: relative;
+    z-index: 2;
+
+    @include respond-to(md) {
+      padding: $spacing-5xl $spacing-2xl;
+    }
+  }
+
+  &__section-title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-black;
+    text-align: center;
+    margin: 0 0 $spacing-sm;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__section-subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    text-align: center;
+    margin: 0 0 $spacing-3xl;
+
+    @include respond-to(md) {
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__skills-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-xl;
+    max-width: 900px;
+    margin: 0 auto;
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-2xl;
+    }
+  }
+
+  // Services Section
+  &__services-section {
+    padding: $spacing-4xl $spacing-lg;
+    position: relative;
+    z-index: 2;
+
+    @include respond-to(md) {
+      padding: $spacing-5xl $spacing-2xl;
+    }
+  }
+
+  &__services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-xl;
+
+    @include respond-to(sm) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to(lg) {
+      grid-template-columns: repeat(4, 1fr);
+      gap: $spacing-2xl;
+    }
+  }
+
+  &__service-card {
+    @include card($spacing-xl);
+    @include flex-column-center;
+    text-align: center;
+    gap: $spacing-md;
+    transition: all $transition-base;
+
+    &:hover {
+      @include card-hover;
+    }
+  }
+
+  &__service-icon {
+    font-size: 4rem;
+    margin-bottom: $spacing-sm;
+    filter: drop-shadow(0 0 10px rgba($color-primary, 0.5));
+  }
+
+  &__service-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-xl;
+    }
+  }
+
+  &__service-description {
+    font-size: $font-size-sm;
+    line-height: 1.6;
+    color: $color-text-secondary;
+    margin: 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+    }
+  }
+
+  // Stats Section
+  &__stats-section {
+    padding: $spacing-4xl $spacing-lg $spacing-5xl;
+    position: relative;
+    z-index: 2;
+
+    @include respond-to(md) {
+      padding: $spacing-5xl $spacing-2xl;
+    }
+  }
+
+  &__stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+
+    @include respond-to(sm) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to(lg) {
+      grid-template-columns: repeat(4, 1fr);
+      gap: $spacing-xl;
+    }
+  }
+
+  &__stat-card {
+    @include card($spacing-xl);
+    @include flex-column-center;
+    text-align: center;
+    transition: all $transition-base;
+
+    &:hover {
+      @include card-hover;
+    }
+  }
+
+  &__stat-number {
+    font-size: $font-size-5xl;
+    font-weight: $font-weight-black;
+    @include text-gradient($gradient-primary);
+    margin: 0 0 $spacing-sm;
+
+    @include respond-to(md) {
+      font-size: $font-size-6xl;
+    }
+  }
+
+  &__stat-label {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+    }
+  }
+}

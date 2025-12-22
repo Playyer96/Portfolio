@@ -1,0 +1,474 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.home {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: $color-bg-darker;
+
+  &__cursor-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba($color-primary, 0.05) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+    z-index: 1;
+    will-change: transform;
+  }
+
+  // Loading State
+  &__loading {
+    @include flex-column-center;
+    min-height: 100vh;
+    gap: $spacing-lg;
+
+    &-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba($color-primary, 0.2);
+      border-top-color: $color-primary;
+      border-radius: 50%;
+      @include glow($color-primary);
+    }
+
+    p {
+      font-family: $font-heading;
+      font-size: $font-size-lg;
+      color: $color-primary;
+    }
+  }
+
+  &__error {
+    @include flex-column-center;
+    min-height: 100vh;
+    padding: $spacing-lg;
+
+    h2 {
+      color: $color-secondary;
+    }
+  }
+
+  // Hero Section
+  &__hero {
+    position: relative;
+    min-height: calc(100vh - 80px);
+    @include flex-center;
+    padding: $spacing-3xl $spacing-lg;
+    z-index: 2;
+
+    @include respond-to(md) {
+      padding: $spacing-4xl $spacing-2xl;
+    }
+
+    &-content {
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+    }
+
+    &-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-sm;
+      padding: $spacing-sm $spacing-lg;
+      background: linear-gradient(
+        90deg,
+        rgba($color-primary, 0.15),
+        rgba($color-secondary, 0.15),
+        rgba($color-primary, 0.15)
+      );
+      background-size: 200% 100%;
+      border: 1px solid transparent;
+      border-radius: $radius-md;
+      color: $color-text-primary;
+      font-family: $font-mono;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-bold;
+      margin-bottom: $spacing-2xl;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: $radius-md;
+        padding: 1px;
+        background: linear-gradient(
+          90deg,
+          $color-primary,
+          $color-secondary,
+          $color-primary
+        );
+        background-size: 200% 100%;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: border-flow 3s linear infinite;
+      }
+
+      &-icon {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-black;
+        @include text-gradient($gradient-primary);
+      }
+    }
+
+    &-title {
+      margin-bottom: $spacing-xl;
+
+      h1 {
+        font-size: $font-size-4xl;
+        font-weight: $font-weight-black;
+        margin-bottom: $spacing-md;
+
+        @include respond-to(md) {
+          font-size: $font-size-6xl;
+        }
+
+        @include respond-to(lg) {
+          font-size: 5rem;
+        }
+      }
+    }
+
+    &-subtitle {
+      h2 {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-medium;
+        color: $color-text-secondary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $spacing-md;
+        flex-wrap: wrap;
+
+        @include respond-to(md) {
+          font-size: $font-size-3xl;
+        }
+      }
+    }
+
+    &-role {
+      @include text-gradient($gradient-primary);
+      font-weight: $font-weight-bold;
+    }
+
+    &-separator {
+      color: $color-primary;
+      opacity: 0.5;
+    }
+
+    &-engines {
+      color: $color-text-secondary;
+    }
+
+    &-description {
+      font-size: $font-size-base;
+      line-height: 1.8;
+      color: $color-text-secondary;
+      max-width: 700px;
+      margin: 0 auto $spacing-2xl;
+
+      @include respond-to(md) {
+        font-size: $font-size-lg;
+      }
+    }
+
+    &-actions {
+      display: flex;
+      gap: $spacing-lg;
+      justify-content: center;
+      margin-bottom: $spacing-2xl;
+      flex-wrap: wrap;
+    }
+
+    &-socials {
+      margin-top: $spacing-2xl;
+    }
+  }
+
+  // CTA Buttons
+  &__cta-primary {
+    @include liquid-glass-button;
+    padding: $spacing-md $spacing-2xl;
+    font-size: $font-size-base;
+    background: linear-gradient(135deg, rgba($color-primary, 0.2), rgba($color-accent, 0.2));
+    border: 2px solid rgba($color-primary, 0.5);
+    color: $color-primary;
+    font-weight: $font-weight-bold;
+    box-shadow:
+      0 0 20px rgba($color-primary, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba($color-primary, 0.1), transparent);
+      border-radius: $radius-lg;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    &:hover {
+      border-color: $color-primary;
+      box-shadow:
+        0 0 30px rgba($color-primary, 0.5),
+        0 0 60px rgba($color-primary, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-lg $spacing-3xl;
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__cta-secondary {
+    @include liquid-glass-button;
+    padding: $spacing-md $spacing-2xl;
+    font-size: $font-size-base;
+    background: linear-gradient(135deg, rgba($color-secondary, 0.15), rgba($color-accent, 0.15));
+    border: 2px solid rgba($color-secondary, 0.4);
+    color: $color-secondary;
+    font-weight: $font-weight-bold;
+    box-shadow:
+      0 0 20px rgba($color-secondary, 0.2),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba($color-secondary, 0.1), transparent);
+      border-radius: $radius-lg;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    &:hover {
+      border-color: $color-secondary;
+      box-shadow:
+        0 0 30px rgba($color-secondary, 0.5),
+        0 0 60px rgba($color-secondary, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-lg $spacing-3xl;
+      font-size: $font-size-lg;
+    }
+  }
+
+  // Technologies Section
+  &__technologies {
+    position: relative;
+    padding: $spacing-3xl $spacing-lg;
+    z-index: 2;
+
+    @include respond-to(md) {
+      padding: $spacing-4xl $spacing-2xl;
+    }
+  }
+
+  &__section-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__section-title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    white-space: nowrap;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__section-line {
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(
+      90deg,
+      rgba($color-primary, 0.5) 0%,
+      transparent 100%
+    );
+  }
+
+  &__section-description {
+    color: $color-text-secondary;
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-3xl;
+    max-width: 600px;
+  }
+
+  &__tech-grid {
+    @include grid(2, $spacing-lg);
+
+    @include respond-to(sm) {
+      @include grid(3, $spacing-lg);
+    }
+
+    @include respond-to(md) {
+      @include grid(4, $spacing-xl);
+    }
+
+    @include respond-to(lg) {
+      @include grid(6, $spacing-xl);
+    }
+
+    @include respond-to(xl) {
+      @include grid(8, $spacing-xl);
+    }
+  }
+
+  &__tech-card {
+    position: relative;
+    @include card($spacing-lg);
+    @include flex-column-center;
+    aspect-ratio: 1;
+    cursor: pointer;
+    overflow: hidden;
+
+    &:hover {
+      @include card-hover;
+
+      .home__tech-glow {
+        opacity: 1;
+      }
+
+      .home__tech-icon {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 10px currentColor);
+      }
+    }
+  }
+
+  &__tech-icon-wrapper {
+    margin-bottom: $spacing-sm;
+  }
+
+  &__tech-icon {
+    font-size: $font-size-4xl;
+    color: $color-primary;
+    transition: all $transition-base;
+
+    @include respond-to(md) {
+      font-size: $font-size-5xl;
+    }
+  }
+
+  &__tech-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle,
+      rgba($color-primary, 0.2) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity $transition-base;
+    pointer-events: none;
+  }
+
+  &__tech-name {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-align: center;
+
+    @include respond-to(md) {
+      font-size: $font-size-sm;
+    }
+  }
+
+  // Stats Section
+  &__stats {
+    position: relative;
+    padding: $spacing-3xl $spacing-lg $spacing-4xl;
+    z-index: 2;
+
+    @include respond-to(md) {
+      padding: $spacing-4xl $spacing-2xl $spacing-5xl;
+    }
+  }
+
+  &__stats-grid {
+    @include grid(1, $spacing-lg);
+
+    @include respond-to(sm) {
+      @include grid(3, $spacing-xl);
+    }
+  }
+
+  &__stat-card {
+    padding: $spacing-xl;
+    @include liquid-glass(15px, 0.55, 0.12);
+    @include flex-column-center;
+    text-align: center;
+    border-radius: $radius-lg;
+    transition: all $transition-base;
+
+    &:hover {
+      transform: translateY(-5px);
+      @include liquid-glass-glow(15px, 0.65, $color-primary);
+    }
+  }
+
+  &__stat-number {
+    font-size: $font-size-5xl;
+    font-weight: $font-weight-black;
+    margin-bottom: $spacing-sm;
+
+    @include respond-to(md) {
+      font-size: $font-size-6xl;
+    }
+  }
+
+  &__stat-label {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    margin: 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+@keyframes border-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}

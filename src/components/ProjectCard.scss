@@ -1,0 +1,191 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.project-card {
+  position: relative;
+  @include liquid-glass(12px, 0.5, 0.15);
+  border-radius: $radius-xl;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all $transition-base;
+  transform-style: preserve-3d;
+  will-change: transform;
+
+  &:hover {
+    @include liquid-glass-glow(15px, 0.65, $color-primary);
+
+    .project-card__image {
+      transform: scale(1.1);
+    }
+
+    .project-card__overlay {
+      opacity: 1;
+    }
+
+    .project-card__glow {
+      opacity: 1;
+    }
+  }
+
+  &__image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: $color-bg-darker;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform $transition-slow;
+  }
+
+  &__overlay {
+    @include absolute-cover;
+    @include flex-center;
+    background: rgba($color-bg-darker, 0.9);
+    opacity: 0;
+    transition: opacity $transition-base;
+    z-index: 2;
+  }
+
+  &__view-btn {
+    padding: $spacing-md $spacing-xl;
+    background: $gradient-primary;
+    color: $color-bg-dark;
+    font-family: $font-heading;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-base;
+    border-radius: $radius-md;
+    @include glow($color-primary, 0.6);
+  }
+
+  &__content {
+    padding: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+    @include truncate;
+
+    @include respond-to(md) {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__description {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: 1.6;
+    margin: 0;
+    @include line-clamp(4);
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+      @include line-clamp(5);
+    }
+  }
+
+  &__tech {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    margin-top: $spacing-md;
+  }
+
+  &__tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+  }
+
+  &__tech-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-sm;
+    background: rgba($color-primary, 0.1);
+    border: 1px solid rgba($color-primary, 0.25);
+    border-radius: $radius-full;
+    color: $color-text-secondary;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    transition: all $transition-base;
+    cursor: default;
+
+    &:hover {
+      background: rgba($color-primary, 0.15);
+      border-color: rgba($color-primary, 0.4);
+      color: $color-primary;
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-xs $spacing-md;
+      font-size: $font-size-sm;
+    }
+  }
+
+  &__tech-tag-icon {
+    font-size: $font-size-sm;
+    color: $color-primary;
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+    }
+  }
+
+  &__tech-tag-text {
+    white-space: nowrap;
+  }
+
+  &__tech-more-btn {
+    align-self: flex-start;
+    padding: $spacing-xs $spacing-md;
+    background: rgba($color-secondary, 0.1);
+    border: 1px solid rgba($color-secondary, 0.3);
+    border-radius: $radius-full;
+    color: $color-secondary;
+    font-family: $font-heading;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      background: rgba($color-secondary, 0.2);
+      border-color: $color-secondary;
+      color: $color-secondary;
+      @include glow($color-secondary, 0.3);
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-xs $spacing-lg;
+      font-size: $font-size-sm;
+    }
+  }
+
+  &__glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle,
+      rgba($color-primary, 0.15) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity $transition-base;
+    pointer-events: none;
+    z-index: 0;
+  }
+}

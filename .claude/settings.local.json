@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm start)",
+      "Bash(set PORT=3001)",
+      "Bash(npm outdated:*)",
+      "Bash(npm install:*)",
+      "Bash(npm update:*)",
+      "Bash(del \"D:\\\\Projects\\\\Web\\\\Portfolio\\\\src\\\\styles\\\\*.css\")",
+      "Bash(dir:*)",
+      "Bash(cat:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(curl -s \"https://portfolio-backend-lilac.vercel.app/api/projects\")",
+      "WebSearch",
+      "Bash(del \"D:\\\\Projects\\\\Web\\\\Portfolio\\\\src\\\\styles\\\\scss\\\\_mixins-new.scss\")",
+      "Bash(npm run build:*)"
+    ]
+  }
+}

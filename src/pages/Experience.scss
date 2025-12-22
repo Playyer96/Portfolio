@@ -1,0 +1,174 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.experience {
+  min-height: 100vh;
+  padding: $spacing-4xl $spacing-lg $spacing-5xl;
+  position: relative;
+  background: $color-bg-darker;
+
+  @include respond-to(md) {
+    padding: $spacing-5xl $spacing-2xl;
+  }
+
+  &__loading,
+  &__error {
+    @include flex-column-center;
+    min-height: 100vh;
+    gap: $spacing-lg;
+  }
+
+  &__loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba($color-primary, 0.2);
+    border-top-color: $color-primary;
+    border-radius: 50%;
+    @include glow($color-primary);
+  }
+
+  &__error h2 {
+    color: $color-secondary;
+  }
+
+  &__header {
+    margin-bottom: $spacing-4xl;
+    text-align: center;
+
+    @include respond-to(md) {
+      margin-bottom: $spacing-5xl;
+    }
+  }
+
+  &__title-wrapper {
+    @include flex-center;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-md;
+  }
+
+  &__title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-black;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    white-space: nowrap;
+
+    @include respond-to(md) {
+      font-size: $font-size-5xl;
+    }
+  }
+
+  &__title-line {
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(
+      90deg,
+      rgba($color-primary, 0.5) 0%,
+      transparent 100%
+    );
+    display: none;
+
+    @include respond-to(md) {
+      display: block;
+    }
+  }
+
+  &__subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    max-width: 600px;
+    margin: 0 auto $spacing-2xl;
+
+    @include respond-to(md) {
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    gap: $spacing-sm;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  &__filter-btn {
+    padding: $spacing-sm $spacing-lg;
+    @include liquid-glass(8px, 0.4, 0.1);
+    border-radius: $radius-full;
+    color: $color-text-secondary;
+    font-family: $font-heading;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      @include liquid-glass(10px, 0.5, 0.12);
+      border-color: rgba($color-primary, 0.4);
+      color: $color-primary;
+    }
+
+    &.active {
+      background: $gradient-primary;
+      border-color: transparent;
+      color: $color-bg-dark;
+      @include glow($color-primary, 0.4);
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-md $spacing-xl;
+      font-size: $font-size-base;
+    }
+  }
+
+  &__timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba($color-primary, 0.5) 10%,
+      rgba($color-primary, 0.5) 90%,
+      transparent 100%
+    );
+    transform: translateX(-50%);
+    z-index: 1;
+
+    @media (max-width: $breakpoint-md) {
+      left: 30px;
+    }
+  }
+
+  &__timeline-container {
+    position: relative;
+    z-index: 2;
+  }
+
+  &__no-results {
+    @include flex-column-center;
+    padding: $spacing-5xl $spacing-lg;
+    text-align: center;
+
+    h3 {
+      font-size: $font-size-2xl;
+      color: $color-text-primary;
+      margin: 0 0 $spacing-sm;
+    }
+
+    p {
+      font-size: $font-size-base;
+      color: $color-text-secondary;
+      margin: 0;
+    }
+  }
+}

@@ -1,0 +1,82 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.contact-icons {
+  display: flex;
+  gap: $spacing-lg;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  &__link {
+    @include flex-center;
+    width: 50px;
+    height: 50px;
+    background: rgba($color-primary, 0.1);
+    border: 2px solid rgba($color-primary, 0.3);
+    border-radius: $radius-md;
+    color: $color-primary;
+    font-size: $font-size-xl;
+    transition: all $transition-base;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      @include absolute-cover;
+      background: $gradient-primary;
+      opacity: 0;
+      transition: opacity $transition-base;
+      z-index: 0;
+    }
+
+    svg {
+      position: relative;
+      z-index: 1;
+      transition: all $transition-base;
+    }
+
+    &:hover {
+      border-color: $color-primary;
+      @include glow-hover($color-primary, 0.6);
+
+      &::before {
+        opacity: 0.2;
+      }
+
+      svg {
+        color: $color-text-primary;
+        filter: drop-shadow(0 0 8px $color-primary);
+      }
+    }
+
+    &:nth-child(2) {
+      &:hover {
+        border-color: $color-accent;
+        @include glow-hover($color-accent, 0.6);
+
+        &::before {
+          background: $gradient-primary;
+        }
+      }
+    }
+
+    &:nth-child(4) {
+      &:hover {
+        border-color: $color-secondary;
+        @include glow-hover($color-secondary, 0.6);
+
+        &::before {
+          background: $gradient-secondary;
+        }
+      }
+    }
+
+    @include respond-to(md) {
+      width: 55px;
+      height: 55px;
+      font-size: $font-size-2xl;
+    }
+  }
+}

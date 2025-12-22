@@ -1,0 +1,166 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.tech-stack {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4xl;
+  width: 100%;
+
+  &__category {
+    position: relative;
+  }
+
+  &__category-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-2xl;
+  }
+
+  &__category-number {
+    font-family: $font-mono;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    @include text-gradient($gradient-primary);
+    min-width: 40px;
+
+    @include respond-to(md) {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__category-title {
+    font-family: $font-heading;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    white-space: nowrap;
+    margin: 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  &__category-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      rgba($color-primary, 0.5) 0%,
+      transparent 100%
+    );
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: $spacing-lg;
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: $spacing-xl;
+    }
+  }
+
+  &__card {
+    position: relative;
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      background: $color-bg-card-hover;
+
+      .tech-stack__card-border {
+        opacity: 1;
+      }
+
+      .tech-stack__glow {
+        opacity: 1;
+      }
+
+      .tech-stack__icon {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 12px currentColor);
+      }
+    }
+  }
+
+  &__card-inner {
+    @include flex-column-center;
+    padding: $spacing-xl;
+    gap: $spacing-md;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__card-border {
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    border-radius: $radius-lg;
+    background: $gradient-primary;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity $transition-base;
+    pointer-events: none;
+  }
+
+  &__icon-wrapper {
+    position: relative;
+    @include flex-center;
+    width: 70px;
+    height: 70px;
+
+    @include respond-to(md) {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  &__icon {
+    font-size: $font-size-4xl;
+    color: $color-primary;
+    transition: all $transition-base;
+    z-index: 1;
+
+    @include respond-to(md) {
+      font-size: $font-size-5xl;
+    }
+  }
+
+  &__glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(
+      circle,
+      rgba($color-primary, 0.3) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity $transition-base;
+    pointer-events: none;
+  }
+
+  &__name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-align: center;
+    line-height: 1.3;
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+    }
+  }
+}
