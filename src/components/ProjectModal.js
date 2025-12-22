@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaReact, FaUnity, FaTimes, FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { SiUnrealengine, SiCplusplus, SiSharp } from "react-icons/si";
+import { FaReact, FaUnity, FaTimes, FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGitlab, FaDocker } from "react-icons/fa";
+import { SiUnrealengine, SiCplusplus, SiSharp, SiPerforce } from "react-icons/si";
 import ReactPlayer from "react-player";
 import "./ProjectModal.scss";
 
@@ -54,8 +54,20 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
       'unity': FaUnity,
       'unreal engine': SiUnrealengine,
       'unreal': SiUnrealengine,
+      'html5': FaHtml5,
+      'css 3': FaCss3Alt,
+      'css3': FaCss3Alt,
+      'javascript': FaJs,
+      'nodejs': FaNodeJs,
+      'node': FaNodeJs,
+      'python': FaPython,
       'c++': SiCplusplus,
-      'c#': SiSharp
+      'c#': SiSharp,
+      'git': FaGitAlt,
+      'github': FaGithub,
+      'gitlab': FaGitlab,
+      'docker': FaDocker,
+      'perforce': SiPerforce
     };
     return iconMap[(techName || '').toLowerCase()];
   };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FadeIn, StaggerContainer } from "../components/animations";
+import { FadeIn } from "../components/animations";
+import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import ProjectCard from "../components/ProjectCard";
 import ProjectModal from "../components/ProjectModal";
@@ -12,6 +13,7 @@ const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeFilter, setActiveFilter] = useState("all");
@@ -19,6 +21,8 @@ const Projects = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
+      const startTime = Date.now();
+
       try {
         const response = await fetch(`${API_URL}/projects`);
         if (!response.ok) {
@@ -45,11 +49,20 @@ const Projects = () => {
         console.error("Error fetching projects:", err);
         setError(err.message);
       } finally {
-        setLoading(false);
+        const loadTime = Date.now() - startTime;
+        if (loadTime < 200) {
+          setTimeout(() => setLoading(false), 200 - loadTime);
+        } else {
+          setLoading(false);
+        }
       }
     };
 
+    const loadingTimer = setTimeout(() => setShowLoading(true), 200);
+
     fetchProjects();
+
+    return () => clearTimeout(loadingTimer);
   }, []);
 
   const fetchImage = async (url) => {
@@ -97,7 +110,7 @@ const Projects = () => {
     setFilteredProjects(filtered);
   }, [activeFilter, searchQuery, projects]);
 
-  if (loading) {
+  if (loading && showLoading) {
     return (
       <div className="projects">
         <ParticleBackground particleCount={30} />
@@ -113,6 +126,10 @@ const Projects = () => {
     );
   }
 
+  if (loading && !showLoading) {
+    return null;
+  }
+
   if (error) {
     return (
       <div className="projects">
@@ -124,8 +141,9 @@ const Projects = () => {
   }
 
   return (
-    <div className="projects">
-      <ParticleBackground particleCount={40} />
+    <PageTransition>
+      <div className="projects">
+        <ParticleBackground particleCount={40} />
 
       <div className="container">
         {/* Header Section */}
@@ -133,7 +151,6 @@ const Projects = () => {
           <FadeIn direction="down" delay={0.2}>
             <div className="projects__title-wrapper">
               <h1 className="projects__title">
-                <span className="projects__title-number">02.</span>
                 My Projects
               </h1>
               <div className="projects__title-line"></div>
@@ -197,17 +214,16 @@ const Projects = () => {
         </FadeIn>
 
         {/* Projects Grid */}
-        <StaggerContainer staggerDelay={0.1} className="projects__grid">
+        <div className="projects__grid">
           <AnimatePresence mode="popLayout">
             {filteredProjects.length > 0 ? (
               filteredProjects.map((project, index) => (
                 <motion.div
-                  key={project._id || project.id}
-                  variants={{
-                    hidden: { opacity: 0, scale: 0.8 },
-                    visible: { opacity: 1, scale: 1 }
-                  }}
-                  exit={{ opacity: 0, scale: 0.8 }}
+                  key={project._id || project.id || project.name}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.4, delay: index * 0.03 }}
                   layout
                 >
                   <ProjectCard
@@ -222,13 +238,14 @@ const Projects = () => {
                 className="projects__no-results"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
                 <h3>No projects found</h3>
                 <p>Try adjusting your filters or search query</p>
               </motion.div>
             )}
           </AnimatePresence>
-        </StaggerContainer>
+        </div>
       </div>
 
       {/* Project Modal */}
@@ -237,7 +254,8 @@ const Projects = () => {
         isOpen={!!selectedProject}
         onClose={() => setSelectedProject(null)}
       />
-    </div>
+      </div>
+    </PageTransition>
   );
 };
 

@@ -39,16 +39,6 @@
     }
   }
 
-  &__title-number {
-    font-family: $font-mono;
-    @include text-gradient($gradient-primary);
-    font-size: $font-size-2xl;
-
-    @include respond-to(md) {
-      font-size: $font-size-3xl;
-    }
-  }
-
   &__title-line {
     height: 1px;
     flex: 1;

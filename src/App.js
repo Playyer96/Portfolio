@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import Experience from "./pages/Experience";
@@ -11,6 +12,22 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import "./App.scss";
 
+function AnimatedRoutes() {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<AboutDisplay />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/experience" element={<Experience />} />
+        <Route path="/cv" element={<Cv />} />
+      </Routes>
+    </AnimatePresence>
+  );
+}
+
 function App() {
   return (
     <div className="App">
@@ -18,13 +35,7 @@ function App() {
         <Navbar />
         <ScrollToTop />
         <main className="App__main">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<AboutDisplay />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/experience" element={<Experience />} />
-            <Route path="/cv" element={<Cv />} />
-          </Routes>
+          <AnimatedRoutes />
         </main>
         <Footer />
         <Analytics />

@@ -7,7 +7,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: $z-modal;
+  z-index: 9999;
   @include flex-center;
   padding: $spacing-lg;
 
@@ -23,11 +23,9 @@
     width: 100%;
     max-width: 1200px;
     max-height: 90vh;
-    background: $color-bg-card;
+    @include liquid-glass-glow(30px, 0.75, $color-primary);
     border-radius: $radius-2xl;
     overflow-y: auto;
-    border: 1px solid rgba($color-primary, 0.2);
-    @include glow($color-primary, 0.3);
     @include custom-scrollbar;
 
     @include respond-to(md) {

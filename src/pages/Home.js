@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer } from "../components/animations";
+import PageTransition from "../components/PageTransition";
 import ContactIcons from "../components/ContactIcons";
 import ParticleBackground from "../components/effects/ParticleBackground";
+import TechBento from "../components/TechBento";
 import useMousePosition from "../hooks/useMousePosition";
 import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGithub, FaGitlab, FaDocker, FaSlack, FaJira } from "react-icons/fa";
 import { SiUnrealengine, SiCplusplus, SiSharp, SiPerforce } from "react-icons/si";
@@ -14,12 +16,15 @@ const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lila
 const Home = () => {
   const [technologies, setTechnologies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const mousePosition = useMousePosition();
 
   useEffect(() => {
     const fetchTechnologies = async () => {
+      const startTime = Date.now();
+
       try {
         const response = await fetch(`${API_URL}/technologies`);
         if (!response.ok) {
@@ -31,11 +36,22 @@ const Home = () => {
       } catch (err) {
         setError(err.message);
       } finally {
-        setLoading(false);
+        const loadTime = Date.now() - startTime;
+        // Only show loading if it takes longer than 200ms
+        if (loadTime < 200) {
+          setTimeout(() => setLoading(false), 200 - loadTime);
+        } else {
+          setLoading(false);
+        }
       }
     };
 
+    // Delay showing the loading spinner to avoid flash
+    const loadingTimer = setTimeout(() => setShowLoading(true), 200);
+
     fetchTechnologies();
+
+    return () => clearTimeout(loadingTimer);
   }, []);
 
   const getIconComponent = (techName) => {
@@ -62,7 +78,7 @@ const Home = () => {
     return iconMap[(techName || '').toLowerCase()] || FaReact;
   };
 
-  if (loading) {
+  if (loading && showLoading) {
     return (
       <div className="home">
         <ParticleBackground particleCount={30} />
@@ -78,6 +94,10 @@ const Home = () => {
     );
   }
 
+  if (loading && !showLoading) {
+    return null;
+  }
+
   if (error) {
     return (
       <div className="home">
@@ -89,8 +109,9 @@ const Home = () => {
   }
 
   return (
-    <div className="home">
-      <ParticleBackground particleCount={50} />
+    <PageTransition>
+      <div className="home">
+        <ParticleBackground particleCount={50} />
 
       {/* Cursor Follow Effect */}
       <motion.div
@@ -106,10 +127,20 @@ const Home = () => {
       <section className="home__hero">
         <div className="home__hero-content">
           <FadeIn direction="down" delay={0.2}>
-            <div className="home__hero-tag">
-              <span className="home__hero-tag-dot"></span>
-              Available for work
-            </div>
+            <motion.div
+              className="home__hero-tag"
+              animate={{
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            >
+              <span className="home__hero-tag-icon">{"</>"}</span>
+              Available to work
+            </motion.div>
           </FadeIn>
 
           <div className="home__hero-title">
@@ -167,26 +198,6 @@ const Home = () => {
             </div>
           </FadeIn>
         </div>
-
-        {/* Animated Code Brackets */}
-        <div className="home__hero-decoration">
-          <motion.div
-            className="home__bracket home__bracket--left"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 0.1, x: 0 }}
-            transition={{ delay: 0.5, duration: 1 }}
-          >
-            {"</>"}
-          </motion.div>
-          <motion.div
-            className="home__bracket home__bracket--right"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 0.1, x: 0 }}
-            transition={{ delay: 0.5, duration: 1 }}
-          >
-            {"</>"}
-          </motion.div>
-        </div>
       </section>
 
       {/* Technologies Section */}
@@ -195,7 +206,6 @@ const Home = () => {
           <FadeIn direction="up" delay={0.2}>
             <div className="home__section-header">
               <h2 className="home__section-title">
-                <span className="home__section-number">01.</span>
                 Tech Stack
               </h2>
               <div className="home__section-line"></div>
@@ -208,35 +218,7 @@ const Home = () => {
             </p>
           </FadeIn>
 
-          <StaggerContainer staggerDelay={0.05} className="home__tech-grid">
-            {technologies.map((tech, index) => {
-              const IconComponent = getIconComponent(tech.text);
-              return (
-                <motion.div
-                  key={index}
-                  className="home__tech-card"
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { opacity: 1, y: 0 }
-                  }}
-                  whileHover={{
-                    y: -8,
-                    transition: { duration: 0.2 }
-                  }}
-                >
-                  <motion.div
-                    className="home__tech-icon-wrapper"
-                    whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <IconComponent className="home__tech-icon" />
-                  </motion.div>
-                  <div className="home__tech-glow"></div>
-                  <span className="home__tech-name">{tech.text}</span>
-                </motion.div>
-              );
-            })}
-          </StaggerContainer>
+          <TechBento technologies={technologies} getIconComponent={getIconComponent} />
         </div>
       </section>
 
@@ -277,7 +259,8 @@ const Home = () => {
           </StaggerContainer>
         </div>
       </section>
-    </div>
+      </div>
+    </PageTransition>
   );
 };
 

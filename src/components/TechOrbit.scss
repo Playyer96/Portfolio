@@ -1,0 +1,153 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.tech-orbit {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include respond-to(md) {
+    max-width: 800px;
+    height: 800px;
+  }
+
+  &__center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  &__core {
+    @include flex-center;
+    width: 120px;
+    height: 120px;
+    background: $gradient-primary;
+    border-radius: 50%;
+    @include glow($color-primary, 0.8);
+    border: 3px solid $color-bg-darker;
+
+    @include respond-to(md) {
+      width: 160px;
+      height: 160px;
+    }
+
+    &-text {
+      font-family: $font-heading;
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-black;
+      color: $color-bg-dark;
+
+      @include respond-to(md) {
+        font-size: $font-size-3xl;
+      }
+    }
+  }
+
+  &__item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+               rotate(var(--angle))
+               translateY(calc(var(--radius) * -1))
+               rotate(calc(var(--angle) * -1));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+
+    animation: orbit 30s linear infinite;
+  }
+
+  &__icon-wrapper {
+    position: relative;
+    @include flex-center;
+    width: 70px;
+    height: 70px;
+    background: $color-bg-card;
+    border-radius: 50%;
+    border: 2px solid rgba($color-primary, 0.3);
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      background: $color-bg-card-hover;
+      border-color: $color-primary;
+      @include glow($color-primary, 0.6);
+
+      .tech-orbit__glow {
+        opacity: 1;
+      }
+    }
+
+    @include respond-to(md) {
+      width: 90px;
+      height: 90px;
+    }
+  }
+
+  &__icon {
+    font-size: $font-size-3xl;
+    color: $color-primary;
+    z-index: 1;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(
+      circle,
+      rgba($color-primary, 0.4) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity $transition-base;
+    pointer-events: none;
+  }
+
+  &__label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-align: center;
+    white-space: nowrap;
+    padding: $spacing-xs $spacing-sm;
+    background: rgba($color-bg-card, 0.8);
+    border-radius: $radius-md;
+    backdrop-filter: blur(5px);
+
+    @include respond-to(md) {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: translate(-50%, -50%)
+               rotate(var(--angle))
+               translateY(calc(var(--radius) * -1))
+               rotate(calc(var(--angle) * -1));
+  }
+  to {
+    transform: translate(-50%, -50%)
+               rotate(calc(var(--angle) + 360deg))
+               translateY(calc(var(--radius) * -1))
+               rotate(calc((var(--angle) + 360deg) * -1));
+  }
+}

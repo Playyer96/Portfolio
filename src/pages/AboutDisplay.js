@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer } from "../components/animations";
+import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import SkillBar from "../components/SkillBar";
 import "./AboutDisplay.scss";
@@ -98,8 +99,9 @@ const AboutDisplay = () => {
   }
 
   return (
-    <div className="about">
-      <ParticleBackground particleCount={40} />
+    <PageTransition>
+      <div className="about">
+        <ParticleBackground particleCount={40} />
 
       {/* Hero Section with Image */}
       <section className="about__hero">
@@ -130,7 +132,6 @@ const AboutDisplay = () => {
               <FadeIn direction="right" delay={0.3}>
                 <div className="about__title-wrapper">
                   <h1 className="about__title">
-                    <span className="about__title-number">03.</span>
                     About Me
                   </h1>
                   <div className="about__title-line"></div>
@@ -275,7 +276,8 @@ const AboutDisplay = () => {
           </StaggerContainer>
         </div>
       </section>
-    </div>
+      </div>
+    </PageTransition>
   );
 };
 

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FaReact, FaUnity } from "react-icons/fa";
-import { SiUnrealengine, SiCplusplus, SiSharp } from "react-icons/si";
+import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGithub, FaGitlab, FaDocker } from "react-icons/fa";
+import { SiUnrealengine, SiCplusplus, SiSharp, SiPerforce } from "react-icons/si";
 import "./ProjectCard.scss";
 
 const ProjectCard = ({ project, onClick, index }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [showAllTech, setShowAllTech] = useState(false);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -25,8 +26,20 @@ const ProjectCard = ({ project, onClick, index }) => {
       'unity': FaUnity,
       'unreal engine': SiUnrealengine,
       'unreal': SiUnrealengine,
+      'html5': FaHtml5,
+      'css 3': FaCss3Alt,
+      'css3': FaCss3Alt,
+      'javascript': FaJs,
+      'nodejs': FaNodeJs,
+      'node': FaNodeJs,
+      'python': FaPython,
       'c++': SiCplusplus,
-      'c#': SiSharp
+      'c#': SiSharp,
+      'git': FaGitAlt,
+      'github': FaGithub,
+      'gitlab': FaGitlab,
+      'docker': FaDocker,
+      'perforce': SiPerforce
     };
     return iconMap[(techName || '').toLowerCase()];
   };
@@ -37,10 +50,6 @@ const ProjectCard = ({ project, onClick, index }) => {
       onClick={onClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
       whileHover={{ scale: 1.02 }}
       style={{
         transform: `perspective(1000px) rotateX(${-mousePosition.y}deg) rotateY(${mousePosition.x}deg)`
@@ -76,28 +85,37 @@ const ProjectCard = ({ project, onClick, index }) => {
         {/* Technologies */}
         {project.technologies && project.technologies.length > 0 && (
           <div className="project-card__tech">
-            {project.technologies.slice(0, 4).map((tech, idx) => {
-              const techName = tech.name || tech.text || '';
-              const IconComponent = getIconComponent(techName);
-              return (
-                <motion.div
-                  key={idx}
-                  className="project-card__tech-item"
-                  whileHover={{ scale: 1.2, rotate: 10 }}
-                  title={techName}
-                >
-                  {IconComponent ? (
-                    <IconComponent />
-                  ) : (
-                    <span className="project-card__tech-text">{techName.substring(0, 2)}</span>
-                  )}
-                </motion.div>
-              );
-            })}
-            {project.technologies.length > 4 && (
-              <div className="project-card__tech-more">
-                +{project.technologies.length - 4}
-              </div>
+            <div className="project-card__tech-tags">
+              {(showAllTech ? project.technologies : project.technologies.slice(0, 3)).map((tech, idx) => {
+                const techName = tech.name || tech.text || '';
+                const IconComponent = getIconComponent(techName);
+                return (
+                  <motion.div
+                    key={idx}
+                    className="project-card__tech-tag"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: idx * 0.05 }}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    {IconComponent && <IconComponent className="project-card__tech-tag-icon" />}
+                    <span className="project-card__tech-tag-text">{techName}</span>
+                  </motion.div>
+                );
+              })}
+            </div>
+            {project.technologies.length > 3 && (
+              <motion.button
+                className="project-card__tech-more-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowAllTech(!showAllTech);
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {showAllTech ? 'Show Less' : `+${project.technologies.length - 3} More`}
+              </motion.button>
             )}
           </div>
         )}

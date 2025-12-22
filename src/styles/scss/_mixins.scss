@@ -150,6 +150,13 @@
   border: none;
   outline: none;
   text-decoration: none;
+
+  &:focus,
+  &:focus-visible,
+  &:active {
+    outline: none;
+    box-shadow: none;
+  }
 }
 
 @mixin button-primary {
@@ -169,13 +176,18 @@
 
 @mixin button-outline {
   @include button-base;
-  background: transparent;
+  @include liquid-glass(10px, 0.3, 0.15);
   color: $color-primary;
-  border: 2px solid $color-primary;
+  border: 2px solid rgba($color-primary, 0.5);
 
   &:hover {
-    background: rgba($color-primary, 0.1);
+    @include liquid-glass-hover;
+    border-color: $color-primary;
     @include glow($color-primary);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
   }
 }
 
@@ -213,7 +225,7 @@
     border-radius: $radius-full;
 
     &:hover {
-      background: lighten($thumb-color, 10%);
+      opacity: 0.8;
     }
   }
 
@@ -286,5 +298,118 @@
     );
     pointer-events: none;
     z-index: 1;
+  }
+}
+
+// Apple Liquid Glass effect (WWDC 2025)
+@mixin liquid-glass($blur: 20px, $opacity: 0.6, $tint-opacity: 0.1) {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, $tint-opacity) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-color: rgba($color-bg-card, $opacity);
+  backdrop-filter: blur($blur) saturate(180%);
+  -webkit-backdrop-filter: blur($blur) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.37),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+}
+
+@mixin liquid-glass-glow($blur: 20px, $opacity: 0.6, $glow-color: $color-primary) {
+  @include liquid-glass($blur, $opacity);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.37),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+    0 0 20px rgba($glow-color, 0.3);
+}
+// Apple Liquid Glass effect (inspired by iOS/macOS design)
+@mixin liquid-glass($blur: 20px, $opacity: 0.6, $tint-opacity: 0.1) {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, $tint-opacity) 0%,
+    rgba(255, 255, 255, $tint-opacity * 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-color: rgba($color-bg-card, $opacity);
+  backdrop-filter: blur($blur) saturate(200%) brightness(110%);
+  -webkit-backdrop-filter: blur($blur) saturate(200%) brightness(110%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.37),
+    0 4px 16px 0 rgba(0, 0, 0, 0.22),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@mixin liquid-glass-hover {
+  backdrop-filter: blur(30px) saturate(220%) brightness(115%);
+  -webkit-backdrop-filter: blur(30px) saturate(220%) brightness(115%);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 12px 40px 0 rgba(0, 0, 0, 0.42),
+    0 6px 20px 0 rgba(0, 0, 0, 0.27),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px) scale(1.02);
+}
+
+@mixin liquid-glass-glow($blur: 20px, $opacity: 0.6, $glow-color: $color-primary) {
+  @include liquid-glass($blur, $opacity);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.37),
+    0 4px 16px 0 rgba(0, 0, 0, 0.22),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.1),
+    0 0 30px rgba($glow-color, 0.4),
+    0 0 60px rgba($glow-color, 0.2);
+}
+
+@mixin liquid-glass-button {
+  @include liquid-glass(15px, 0.5, 0.12);
+  border-radius: $radius-lg;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.5s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &:hover {
+    @include liquid-glass-hover;
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+  }
+}
+
+@mixin liquid-glass-card {
+  @include liquid-glass(20px, 0.65, 0.08);
+  border-radius: $radius-xl;
+  overflow: hidden;
+
+  &:hover {
+    @include liquid-glass-hover;
   }
 }

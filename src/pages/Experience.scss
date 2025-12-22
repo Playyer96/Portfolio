@@ -59,16 +59,6 @@
     }
   }
 
-  &__title-number {
-    font-family: $font-mono;
-    @include text-gradient($gradient-primary);
-    font-size: $font-size-2xl;
-
-    @include respond-to(md) {
-      font-size: $font-size-3xl;
-    }
-  }
-
   &__title-line {
     height: 1px;
     flex: 1;
@@ -104,8 +94,7 @@
 
   &__filter-btn {
     padding: $spacing-sm $spacing-lg;
-    background: rgba($color-primary, 0.05);
-    border: 1px solid rgba($color-primary, 0.2);
+    @include liquid-glass(8px, 0.4, 0.1);
     border-radius: $radius-full;
     color: $color-text-secondary;
     font-family: $font-heading;
@@ -115,7 +104,7 @@
     transition: all $transition-base;
 
     &:hover {
-      background: rgba($color-primary, 0.1);
+      @include liquid-glass(10px, 0.5, 0.12);
       border-color: rgba($color-primary, 0.4);
       color: $color-primary;
     }

@@ -77,21 +77,47 @@
       align-items: center;
       gap: $spacing-sm;
       padding: $spacing-sm $spacing-lg;
-      background: rgba($color-primary, 0.1);
-      border: 1px solid rgba($color-primary, 0.3);
-      border-radius: $radius-full;
-      color: $color-primary;
+      background: linear-gradient(
+        90deg,
+        rgba($color-primary, 0.15),
+        rgba($color-secondary, 0.15),
+        rgba($color-primary, 0.15)
+      );
+      background-size: 200% 100%;
+      border: 1px solid transparent;
+      border-radius: $radius-md;
+      color: $color-text-primary;
+      font-family: $font-mono;
       font-size: $font-size-sm;
-      font-weight: $font-weight-semibold;
+      font-weight: $font-weight-bold;
       margin-bottom: $spacing-2xl;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
 
-      &-dot {
-        width: 8px;
-        height: 8px;
-        background: $color-primary;
-        border-radius: 50%;
-        animation: pulse 2s ease-in-out infinite;
-        @include glow($color-primary);
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: $radius-md;
+        padding: 1px;
+        background: linear-gradient(
+          90deg,
+          $color-primary,
+          $color-secondary,
+          $color-primary
+        );
+        background-size: 200% 100%;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: border-flow 3s linear infinite;
+      }
+
+      &-icon {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-black;
+        @include text-gradient($gradient-primary);
       }
     }
 
@@ -167,41 +193,43 @@
     &-socials {
       margin-top: $spacing-2xl;
     }
-
-    &-decoration {
-      pointer-events: none;
-    }
-  }
-
-  &__bracket {
-    position: absolute;
-    font-family: $font-mono;
-    font-size: 20rem;
-    font-weight: $font-weight-bold;
-    color: $color-primary;
-    opacity: 0.05;
-    user-select: none;
-
-    &--left {
-      top: 20%;
-      left: -5%;
-    }
-
-    &--right {
-      bottom: 20%;
-      right: -5%;
-    }
-
-    @include respond-to(md) {
-      font-size: 30rem;
-    }
   }
 
   // CTA Buttons
   &__cta-primary {
-    @include button-primary;
+    @include liquid-glass-button;
     padding: $spacing-md $spacing-2xl;
     font-size: $font-size-base;
+    background: linear-gradient(135deg, rgba($color-primary, 0.2), rgba($color-accent, 0.2));
+    border: 2px solid rgba($color-primary, 0.5);
+    color: $color-primary;
+    font-weight: $font-weight-bold;
+    box-shadow:
+      0 0 20px rgba($color-primary, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba($color-primary, 0.1), transparent);
+      border-radius: $radius-lg;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    &:hover {
+      border-color: $color-primary;
+      box-shadow:
+        0 0 30px rgba($color-primary, 0.5),
+        0 0 60px rgba($color-primary, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+
+      &::after {
+        opacity: 1;
+      }
+    }
 
     @include respond-to(md) {
       padding: $spacing-lg $spacing-3xl;
@@ -210,9 +238,39 @@
   }
 
   &__cta-secondary {
-    @include button-outline;
+    @include liquid-glass-button;
     padding: $spacing-md $spacing-2xl;
     font-size: $font-size-base;
+    background: linear-gradient(135deg, rgba($color-secondary, 0.15), rgba($color-accent, 0.15));
+    border: 2px solid rgba($color-secondary, 0.4);
+    color: $color-secondary;
+    font-weight: $font-weight-bold;
+    box-shadow:
+      0 0 20px rgba($color-secondary, 0.2),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba($color-secondary, 0.1), transparent);
+      border-radius: $radius-lg;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    &:hover {
+      border-color: $color-secondary;
+      box-shadow:
+        0 0 30px rgba($color-secondary, 0.5),
+        0 0 60px rgba($color-secondary, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+
+      &::after {
+        opacity: 1;
+      }
+    }
 
     @include respond-to(md) {
       padding: $spacing-lg $spacing-3xl;
@@ -248,16 +306,6 @@
 
     @include respond-to(md) {
       font-size: $font-size-4xl;
-    }
-  }
-
-  &__section-number {
-    font-family: $font-mono;
-    @include text-gradient($gradient-primary);
-    font-size: $font-size-2xl;
-
-    @include respond-to(md) {
-      font-size: $font-size-3xl;
     }
   }
 
@@ -382,13 +430,16 @@
   }
 
   &__stat-card {
-    @include card($spacing-xl);
+    padding: $spacing-xl;
+    @include liquid-glass(15px, 0.55, 0.12);
     @include flex-column-center;
     text-align: center;
+    border-radius: $radius-lg;
     transition: all $transition-base;
 
     &:hover {
-      @include card-hover;
+      transform: translateY(-5px);
+      @include liquid-glass-glow(15px, 0.65, $color-primary);
     }
   }
 
@@ -410,5 +461,14 @@
     @include respond-to(md) {
       font-size: $font-size-lg;
     }
+  }
+}
+
+@keyframes border-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
   }
 }
