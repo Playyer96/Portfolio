@@ -7,16 +7,13 @@
   left: 0;
   width: 100%;
   z-index: $z-fixed;
-  background: rgba($color-bg-darker, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  @include liquid-glass(15px, 0.7, 0.08);
   border-bottom: 1px solid rgba($color-primary, 0.1);
   transition: all $transition-base;
 
   &.scrolled {
-    background: rgba($color-bg-darker, 0.95);
+    @include liquid-glass-glow(20px, 0.85, $color-primary);
     border-bottom-color: rgba($color-primary, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   }
 
   &__container {
@@ -172,7 +169,7 @@
     width: 80%;
     max-width: 300px;
     height: 100vh;
-    background: $color-bg-card;
+    @include liquid-glass(25px, 0.75, 0.12);
     border-left: 1px solid rgba($color-primary, 0.2);
     @include glow($color-primary, 0.2);
     z-index: $z-modal;

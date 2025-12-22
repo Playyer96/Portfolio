@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FadeIn, StaggerContainer } from "../components/animations";
+import { FadeIn } from "../components/animations";
+import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import TimelineItem from "../components/TimelineItem";
 import "./Experience.scss";
@@ -10,11 +11,14 @@ const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lila
 const Experience = () => {
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all"); // all, work, education
 
   useEffect(() => {
     const fetchExperiences = async () => {
+      const startTime = Date.now();
+
       try {
         const response = await fetch(`${API_URL}/experience`);
         if (!response.ok) {
@@ -26,11 +30,20 @@ const Experience = () => {
       } catch (err) {
         setError(err.message);
       } finally {
-        setLoading(false);
+        const loadTime = Date.now() - startTime;
+        if (loadTime < 200) {
+          setTimeout(() => setLoading(false), 200 - loadTime);
+        } else {
+          setLoading(false);
+        }
       }
     };
 
+    const loadingTimer = setTimeout(() => setShowLoading(true), 200);
+
     fetchExperiences();
+
+    return () => clearTimeout(loadingTimer);
   }, []);
 
   const filteredExperiences = experiences.filter(exp => {
@@ -40,7 +53,7 @@ const Experience = () => {
     return true;
   });
 
-  if (loading) {
+  if (loading && showLoading) {
     return (
       <div className="experience">
         <ParticleBackground particleCount={30} />
@@ -56,6 +69,10 @@ const Experience = () => {
     );
   }
 
+  if (loading && !showLoading) {
+    return null;
+  }
+
   if (error) {
     return (
       <div className="experience">
@@ -67,8 +84,9 @@ const Experience = () => {
   }
 
   return (
-    <div className="experience">
-      <ParticleBackground particleCount={40} />
+    <PageTransition>
+      <div className="experience">
+        <ParticleBackground particleCount={40} />
 
       <div className="container">
         {/* Header Section */}
@@ -76,7 +94,6 @@ const Experience = () => {
           <FadeIn direction="down" delay={0.2}>
             <div className="experience__title-wrapper">
               <h1 className="experience__title">
-                <span className="experience__title-number">04.</span>
                 My Journey
               </h1>
               <div className="experience__title-line"></div>
@@ -124,16 +141,15 @@ const Experience = () => {
         <section className="experience__timeline">
           <div className="experience__timeline-line"></div>
 
-          <AnimatePresence mode="wait">
-            <StaggerContainer staggerDelay={0.15} className="experience__timeline-container">
+          <div className="experience__timeline-container">
+            <AnimatePresence mode="popLayout">
               {filteredExperiences.map((exp, index) => (
                 <motion.div
-                  key={index}
-                  variants={{
-                    hidden: { opacity: 0, y: 50 },
-                    visible: { opacity: 1, y: 0 }
-                  }}
-                  exit={{ opacity: 0, scale: 0.8 }}
+                  key={exp._id || exp.id || `${exp.name}-${exp.date}-${index}`}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -30, scale: 0.9 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
                   layout
                 >
                   <TimelineItem
@@ -143,22 +159,24 @@ const Experience = () => {
                   />
                 </motion.div>
               ))}
-            </StaggerContainer>
-          </AnimatePresence>
+            </AnimatePresence>
 
-          {filteredExperiences.length === 0 && (
-            <motion.div
-              className="experience__no-results"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              <h3>No experiences found</h3>
-              <p>Try selecting a different filter</p>
-            </motion.div>
-          )}
+            {filteredExperiences.length === 0 && (
+              <motion.div
+                className="experience__no-results"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <h3>No experiences found</h3>
+                <p>Try selecting a different filter</p>
+              </motion.div>
+            )}
+          </div>
         </section>
       </div>
-    </div>
+      </div>
+    </PageTransition>
   );
 };
 

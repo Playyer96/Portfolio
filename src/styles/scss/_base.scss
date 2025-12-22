@@ -247,7 +247,7 @@ body {
   background: linear-gradient(
     90deg,
     $color-bg-card 0%,
-    lighten($color-bg-card, 5%) 50%,
+    $color-bg-card-hover 50%,
     $color-bg-card 100%
   );
   background-size: 1000px 100%;

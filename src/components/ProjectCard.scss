@@ -3,18 +3,16 @@
 
 .project-card {
   position: relative;
-  background: $color-bg-card;
+  @include liquid-glass(12px, 0.5, 0.15);
   border-radius: $radius-xl;
   overflow: hidden;
   cursor: pointer;
   transition: all $transition-base;
-  border: 1px solid rgba($color-primary, 0.1);
   transform-style: preserve-3d;
   will-change: transform;
 
   &:hover {
-    border-color: rgba($color-primary, 0.4);
-    @include glow-hover($color-primary, 0.4);
+    @include liquid-glass-glow(15px, 0.65, $color-primary);
 
     .project-card__image {
       transform: scale(1.1);
@@ -88,66 +86,88 @@
     color: $color-text-secondary;
     line-height: 1.6;
     margin: 0;
-    min-height: 3em;
+    @include line-clamp(4);
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+      @include line-clamp(5);
+    }
+  }
+
+  &__tech {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    margin-top: $spacing-md;
+  }
+
+  &__tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+  }
+
+  &__tech-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-sm;
+    background: rgba($color-primary, 0.1);
+    border: 1px solid rgba($color-primary, 0.25);
+    border-radius: $radius-full;
+    color: $color-text-secondary;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    transition: all $transition-base;
+    cursor: default;
+
+    &:hover {
+      background: rgba($color-primary, 0.15);
+      border-color: rgba($color-primary, 0.4);
+      color: $color-primary;
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-xs $spacing-md;
+      font-size: $font-size-sm;
+    }
+  }
+
+  &__tech-tag-icon {
+    font-size: $font-size-sm;
+    color: $color-primary;
 
     @include respond-to(md) {
       font-size: $font-size-base;
     }
   }
 
-  &__tech {
-    display: flex;
-    gap: $spacing-sm;
-    align-items: center;
-    margin-top: $spacing-sm;
+  &__tech-tag-text {
+    white-space: nowrap;
   }
 
-  &__tech-item {
-    @include flex-center;
-    width: 36px;
-    height: 36px;
-    background: rgba($color-primary, 0.1);
-    border: 1px solid rgba($color-primary, 0.3);
-    border-radius: $radius-md;
-    color: $color-primary;
-    font-size: $font-size-lg;
-    transition: all $transition-base;
-    cursor: pointer;
-
-    &:hover {
-      background: rgba($color-primary, 0.2);
-      border-color: $color-primary;
-      @include glow($color-primary, 0.4);
-    }
-
-    @include respond-to(md) {
-      width: 40px;
-      height: 40px;
-      font-size: $font-size-xl;
-    }
-  }
-
-  &__tech-text {
-    font-family: $font-heading;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-bold;
-    text-transform: uppercase;
-  }
-
-  &__tech-more {
-    @include flex-center;
-    width: 36px;
-    height: 36px;
+  &__tech-more-btn {
+    align-self: flex-start;
+    padding: $spacing-xs $spacing-md;
     background: rgba($color-secondary, 0.1);
     border: 1px solid rgba($color-secondary, 0.3);
-    border-radius: $radius-md;
+    border-radius: $radius-full;
     color: $color-secondary;
+    font-family: $font-heading;
     font-size: $font-size-xs;
-    font-weight: $font-weight-bold;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      background: rgba($color-secondary, 0.2);
+      border-color: $color-secondary;
+      color: $color-secondary;
+      @include glow($color-secondary, 0.3);
+    }
 
     @include respond-to(md) {
-      width: 40px;
-      height: 40px;
+      padding: $spacing-xs $spacing-lg;
       font-size: $font-size-sm;
     }
   }

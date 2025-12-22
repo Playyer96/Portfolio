@@ -1,0 +1,485 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.tech-constellation {
+  position: relative;
+  width: 100%;
+  min-height: 700px;
+  padding: $spacing-2xl 0;
+  overflow: hidden;
+
+  @include respond-to(md) {
+    min-height: 850px;
+  }
+
+  // Particles
+  &__particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  &__particle {
+    position: absolute;
+    background: $color-primary;
+    border-radius: 50%;
+    @include glow($color-primary, 0.8);
+  }
+
+  // Filters
+  &__filters {
+    display: flex;
+    gap: $spacing-md;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: $spacing-3xl;
+    position: relative;
+    z-index: 10;
+  }
+
+  &__filter {
+    position: relative;
+    padding: $spacing-sm $spacing-xl;
+    background: rgba($color-bg-darker, 0.8);
+    border: 2px solid rgba($color-primary, 0.4);
+    border-radius: $radius-full;
+    color: $color-text-primary;
+    font-family: $font-mono;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all $transition-base;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+
+    @include respond-to(md) {
+      font-size: $font-size-sm;
+    }
+
+    &:hover {
+      border-color: var(--cat-color, $color-primary);
+      transform: translateY(-2px);
+      @include glow(var(--cat-color, $color-primary), 0.6);
+
+      .tech-constellation__filter-glow {
+        opacity: 0.3;
+      }
+    }
+
+    &.active {
+      background: rgba($color-primary, 0.15);
+      border-color: var(--cat-color, $color-primary);
+      color: var(--cat-color, $color-primary);
+      @include glow(var(--cat-color, $color-primary), 0.8);
+
+      .tech-constellation__filter-glow {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  &__filter-glow {
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--cat-color, $color-primary), transparent);
+    opacity: 0;
+    transition: opacity $transition-base;
+    border-radius: $radius-full;
+  }
+
+  // Constellation Space
+  &__space {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    aspect-ratio: 1;
+    margin: 0 auto;
+    perspective: 1500px;
+    transform-style: preserve-3d;
+
+    @include respond-to(md) {
+      max-width: 1100px;
+    }
+  }
+
+  &__connections {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  // Tech Nodes
+  &__node {
+    position: absolute;
+    left: var(--node-x);
+    top: var(--node-y);
+    transform: translate(-50%, -50%) translateZ(calc(var(--node-z) * 100px));
+    width: 90px;
+    height: 90px;
+    cursor: pointer;
+    transition: all $transition-base;
+    z-index: calc(var(--node-z) * 10);
+
+    @include respond-to(md) {
+      width: 110px;
+      height: 110px;
+    }
+
+    &:hover {
+      z-index: 100;
+
+      .tech-constellation__hologram-layer {
+        animation: hologram-glitch 0.5s ease-in-out infinite;
+      }
+
+      .tech-constellation__scanlines {
+        opacity: 1;
+      }
+
+      .tech-constellation__label {
+        opacity: 1;
+        transform: translateY(-75px);
+
+        @include respond-to(md) {
+          transform: translateY(-85px);
+        }
+      }
+    }
+  }
+
+  // Holographic Layers
+  &__hologram {
+    @include absolute-cover;
+    pointer-events: none;
+  }
+
+  &__hologram-layer {
+    @include absolute-cover;
+    border: 2px solid var(--node-color);
+    border-radius: 50%;
+    opacity: 0.2;
+
+    &--1 {
+      animation: hologram-float-1 3s ease-in-out infinite;
+    }
+
+    &--2 {
+      animation: hologram-float-2 4s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+
+    &--3 {
+      animation: hologram-float-3 5s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+  }
+
+  // Orbital Rings
+  &__orbit {
+    position: absolute;
+    inset: -15px;
+    border: 1px solid var(--node-color);
+    border-radius: 50%;
+    opacity: 0.3;
+
+    &--1 {
+      border-style: dashed;
+    }
+
+    &--2 {
+      inset: -25px;
+      border-style: dotted;
+      opacity: 0.2;
+    }
+  }
+
+  // Core
+  &__core {
+    @include absolute-cover;
+    @include flex-center;
+    background: radial-gradient(circle, rgba($color-bg-darker, 0.95) 0%, rgba($color-bg-darker, 0.8) 100%);
+    border: 3px solid var(--node-color);
+    border-radius: 50%;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+
+    &::before {
+      content: '';
+      @include absolute-cover;
+      background: radial-gradient(circle at 30% 30%, var(--node-color) 0%, transparent 70%);
+      opacity: 0.2;
+    }
+  }
+
+  &__core-glow {
+    position: absolute;
+    inset: -30%;
+    background: radial-gradient(circle, var(--node-color) 0%, transparent 70%);
+    opacity: 0.4;
+    animation: core-pulse 3s ease-in-out infinite;
+  }
+
+  &__icon {
+    font-size: $font-size-3xl;
+    color: var(--node-color);
+    filter: drop-shadow(0 0 10px var(--node-color));
+    position: relative;
+    z-index: 1;
+    transition: all $transition-base;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+
+    .tech-constellation__node:hover & {
+      transform: scale(1.2) rotate(5deg);
+    }
+  }
+
+  // Scan Lines
+  &__scanlines {
+    @include absolute-cover;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(var(--node-color), 0.1) 2px,
+      rgba(var(--node-color), 0.1) 4px
+    );
+    opacity: 0;
+    transition: opacity $transition-base;
+    pointer-events: none;
+    border-radius: 50%;
+    animation: scanline-move 2s linear infinite;
+  }
+
+  // Label
+  &__label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60px);
+    white-space: nowrap;
+    opacity: 0;
+    transition: all $transition-base;
+    pointer-events: none;
+    z-index: 10;
+
+    @include respond-to(md) {
+      transform: translate(-50%, -70px);
+    }
+
+    span {
+      position: relative;
+      z-index: 1;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-bold;
+      color: $color-text-primary;
+      text-shadow: 0 0 10px var(--node-color);
+
+      @include respond-to(md) {
+        font-size: $font-size-sm;
+      }
+    }
+  }
+
+  &__label-bg {
+    position: absolute;
+    inset: -8px -12px;
+    background: rgba($color-bg-darker, 0.95);
+    border: 2px solid var(--node-color);
+    border-radius: $radius-md;
+    @include glow(var(--node-color), 0.6);
+    backdrop-filter: blur(10px);
+  }
+
+  // Pulse
+  &__pulse {
+    @include absolute-cover;
+    border: 3px solid var(--node-color);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  // Center Core
+  &__center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    z-index: 50;
+
+    @include respond-to(md) {
+      width: 150px;
+      height: 150px;
+    }
+  }
+
+  &__center-ring {
+    @include absolute-cover;
+    border: 3px solid $color-primary;
+    border-radius: 50%;
+    @include glow($color-primary, 1);
+
+    &::before,
+    &::after {
+      content: '';
+      @include absolute-cover;
+      border: 2px solid $color-primary;
+      border-radius: 50%;
+    }
+
+    &::before {
+      margin: -15px;
+      opacity: 0.5;
+    }
+
+    &::after {
+      margin: -25px;
+      opacity: 0.3;
+      border-style: dashed;
+    }
+  }
+
+  &__center-core {
+    @include absolute-cover;
+    @include flex-center;
+    margin: 3px;
+    background: radial-gradient(circle, $color-primary 0%, rgba($color-primary, 0.2) 100%);
+    border-radius: 50%;
+  }
+
+  &__center-text {
+    font-family: $font-heading;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-black;
+    color: $color-bg-dark;
+    text-shadow: 0 0 20px $color-primary;
+
+    @include respond-to(md) {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  // Stats
+  &__stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-xl;
+    margin-top: $spacing-3xl;
+    padding: $spacing-lg $spacing-xl;
+    background: rgba($color-bg-card, 0.4);
+    border: 1px solid rgba($color-primary, 0.3);
+    border-radius: $radius-lg;
+    backdrop-filter: blur(10px);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include respond-to(md) {
+      gap: $spacing-2xl;
+      padding: $spacing-xl $spacing-2xl;
+    }
+  }
+
+  &__stat {
+    @include flex-column-center;
+    gap: $spacing-xs;
+  }
+
+  &__stat-value {
+    font-family: $font-mono;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-black;
+    @include text-gradient($gradient-primary);
+
+    @include respond-to(md) {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  &__stat-label {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  &__stat-divider {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(180deg, transparent, $color-primary, transparent);
+  }
+}
+
+// Animations
+@keyframes hologram-float-1 {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.1) translateY(-5px);
+    opacity: 0.4;
+  }
+}
+
+@keyframes hologram-float-2 {
+  0%, 100% {
+    transform: scale(1) translateY(0) rotate(0deg);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.15) translateY(-7px) rotate(5deg);
+    opacity: 0.3;
+  }
+}
+
+@keyframes hologram-float-3 {
+  0%, 100% {
+    transform: scale(1) translateY(0) rotate(0deg);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.2) translateY(-10px) rotate(-5deg);
+    opacity: 0.25;
+  }
+}
+
+@keyframes hologram-glitch {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes core-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes scanline-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 20px;
+  }
+}

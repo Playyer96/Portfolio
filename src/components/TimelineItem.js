@@ -6,7 +6,8 @@ import "./TimelineItem.scss";
 
 const TimelineItem = ({ experience, index, isEven }) => {
   const IconComponent = experience.icon === "WorkIcon" ? WorkIcon : SchoolIcon;
-  const iconColor = experience.iconBackground || "#00ff88";
+  // Use primary green for work, cyan for education
+  const iconColor = experience.icon === "WorkIcon" ? "#00ff88" : "#00d9ff";
 
   return (
     <div className={`timeline-item ${isEven ? "timeline-item--right" : "timeline-item--left"}`}>

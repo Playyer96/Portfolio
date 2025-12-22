@@ -1,0 +1,451 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.tech-tree {
+  position: relative;
+  width: 100%;
+  padding: $spacing-2xl 0;
+
+  // Branch Selector
+  &__selector {
+    display: flex;
+    gap: $spacing-md;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: $spacing-3xl;
+    position: relative;
+    z-index: 10;
+  }
+
+  &__branch-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-md $spacing-xl;
+    background: rgba($color-bg-card, 0.6);
+    border: 2px solid rgba($color-primary, 0.3);
+    border-radius: $radius-lg;
+    color: $color-text-secondary;
+    font-family: $font-heading;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+    transition: all $transition-base;
+    backdrop-filter: blur(10px);
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--branch-color, $color-primary) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity $transition-base;
+      border-radius: $radius-lg;
+    }
+
+    &:hover, &.active {
+      border-color: var(--branch-color, $color-primary);
+      color: $color-text-primary;
+      transform: translateY(-2px);
+      @include glow(var(--branch-color, $color-primary), 0.4);
+
+      &::before {
+        opacity: 0.15;
+      }
+
+      .tech-tree__branch-icon {
+        transform: scale(1.2);
+      }
+    }
+
+    &.active {
+      background: rgba($color-bg-card, 0.9);
+      @include glow(var(--branch-color, $color-primary), 0.6);
+    }
+  }
+
+  &__branch-icon {
+    font-size: $font-size-xl;
+    transition: transform $transition-base;
+    filter: drop-shadow(0 0 8px var(--branch-color, $color-primary));
+  }
+
+  // Branches Container
+  &__branches {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4xl;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $spacing-lg;
+  }
+
+  &__branch {
+    position: relative;
+  }
+
+  // Branch Header
+  &__branch-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-2xl;
+    flex-wrap: wrap;
+  }
+
+  &__branch-root {
+    position: relative;
+    @include flex-center;
+    width: 70px;
+    height: 70px;
+    background: radial-gradient(circle, var(--branch-color) 0%, rgba(var(--branch-color), 0.2) 100%);
+    border-radius: 50%;
+    border: 3px solid var(--branch-color);
+    @include glow(var(--branch-color), 0.8);
+    flex-shrink: 0;
+
+    @include respond-to(md) {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  &__root-pulse {
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    border: 2px solid var(--branch-color);
+    animation: pulse-ring 2s ease-out infinite;
+  }
+
+  &__branch-icon-large {
+    font-size: $font-size-3xl;
+    filter: drop-shadow(0 0 10px var(--branch-color));
+    animation: float 3s ease-in-out infinite;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__branch-info {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  &__branch-title {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-xs 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__branch-count {
+    font-family: $font-mono;
+    font-size: $font-size-sm;
+    color: var(--branch-color);
+    margin: 0;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__branch-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--branch-color) 0%, transparent 100%);
+    min-width: 50px;
+
+    @include respond-to(md) {
+      min-width: 100px;
+    }
+  }
+
+  // Tech Nodes Grid
+  &__nodes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: $spacing-xl;
+    position: relative;
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: $spacing-2xl;
+    }
+  }
+
+  &__node {
+    position: relative;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &.locked {
+      filter: grayscale(1) brightness(0.5);
+      cursor: not-allowed;
+    }
+  }
+
+  &__connection-line {
+    position: absolute;
+    left: -$spacing-xl;
+    top: 50%;
+    width: $spacing-xl;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--branch-color) 100%);
+    transform-origin: right center;
+    @include glow(var(--branch-color), 0.5);
+
+    @include respond-to(md) {
+      left: -$spacing-2xl;
+      width: $spacing-2xl;
+    }
+  }
+
+  &__node-inner {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, rgba($color-bg-card, 0.9) 0%, rgba($color-bg-darker, 0.8) 100%);
+    border: 3px solid var(--branch-color);
+    border-radius: $radius-lg;
+    @include flex-center;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+
+    &::before {
+      content: '';
+      @include absolute-cover;
+      background: radial-gradient(circle at 30% 30%, rgba(var(--branch-color), 0.2) 0%, transparent 60%);
+    }
+  }
+
+  &__node-glow {
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle, var(--branch-color) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity $transition-base;
+
+    .tech-tree__node:hover & {
+      opacity: 0.6;
+      animation: glow-pulse 1.5s ease-in-out infinite;
+    }
+  }
+
+  &__node-icon-wrapper {
+    @include flex-center;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__node-icon {
+    font-size: $font-size-3xl;
+    color: var(--branch-color);
+    filter: drop-shadow(0 0 8px var(--branch-color));
+    transition: all $transition-base;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+
+    .tech-tree__node:hover & {
+      transform: scale(1.15);
+    }
+  }
+
+  &__unlock-burst {
+    @include absolute-cover;
+    border-radius: $radius-lg;
+    border: 3px solid var(--branch-color);
+    pointer-events: none;
+  }
+
+  &__node-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    padding: 4px 8px;
+    background: var(--branch-color);
+    color: $color-bg-dark;
+    font-family: $font-mono;
+    font-size: 10px;
+    font-weight: $font-weight-bold;
+    border-radius: $radius-sm;
+    @include glow(var(--branch-color), 0.8);
+    z-index: 2;
+
+    .tech-tree__node.locked & {
+      background: rgba($color-text-muted, 0.5);
+      color: $color-bg-darker;
+      box-shadow: none;
+    }
+  }
+
+  &__node-label {
+    margin-top: $spacing-sm;
+    text-align: center;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    line-height: 1.3;
+
+    @include respond-to(md) {
+      font-size: $font-size-sm;
+    }
+  }
+
+  // Tooltip
+  &__tooltip {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    padding: $spacing-lg;
+    background: rgba($color-bg-card, 0.98);
+    border: 2px solid $color-primary;
+    border-radius: $radius-lg;
+    min-width: 250px;
+    @include glow($color-primary, 0.8);
+    backdrop-filter: blur(20px);
+
+    @include respond-to(md) {
+      bottom: 100px;
+      min-width: 280px;
+    }
+  }
+
+  &__tooltip-header {
+    font-family: $font-heading;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    @include text-gradient($gradient-primary);
+    margin-bottom: $spacing-md;
+    text-align: center;
+
+    @include respond-to(md) {
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__tooltip-body {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+
+    span:first-child {
+      font-family: $font-mono;
+    }
+  }
+
+  &__tooltip-value {
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+  }
+
+  // Stats Footer
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-lg;
+    max-width: 900px;
+    margin: $spacing-4xl auto 0;
+    padding: 0 $spacing-lg;
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(4, 1fr);
+      gap: $spacing-xl;
+    }
+  }
+
+  &__stat-card {
+    @include flex-column-center;
+    padding: $spacing-xl;
+    background: rgba($color-bg-card, 0.6);
+    border: 2px solid rgba($color-primary, 0.3);
+    border-radius: $radius-lg;
+    backdrop-filter: blur(10px);
+    transition: all $transition-base;
+    gap: $spacing-sm;
+
+    &:hover {
+      border-color: $color-primary;
+      @include glow($color-primary, 0.4);
+      transform: translateY(-4px);
+    }
+  }
+
+  &__stat-icon {
+    font-size: $font-size-3xl;
+    filter: drop-shadow(0 0 10px $color-primary);
+  }
+
+  &__stat-value {
+    font-family: $font-heading;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-black;
+    @include text-gradient($gradient-primary);
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__stat-label {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    text-align: center;
+
+    @include respond-to(md) {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// Animations
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}

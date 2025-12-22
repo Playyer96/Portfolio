@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FadeIn } from "../components/animations";
+import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import { FaDownload, FaEye, FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa";
 import MyCv from "../assets/cv/CV-Danilo-Vanegas-2025.pdf";
@@ -26,8 +27,9 @@ const Cv = () => {
   ];
 
   return (
-    <div className="cv">
-      <ParticleBackground particleCount={40} />
+    <PageTransition>
+      <div className="cv">
+        <ParticleBackground particleCount={40} />
 
       <div className="container">
         {/* Header */}
@@ -35,7 +37,6 @@ const Cv = () => {
           <FadeIn direction="down" delay={0.2}>
             <div className="cv__title-wrapper">
               <h1 className="cv__title">
-                <span className="cv__title-number">05.</span>
                 Resume
               </h1>
               <div className="cv__title-line"></div>
@@ -172,7 +173,8 @@ const Cv = () => {
           </FadeIn>
         </section>
       </div>
-    </div>
+      </div>
+    </PageTransition>
   );
 };
 

@@ -59,16 +59,6 @@
     }
   }
 
-  &__title-number {
-    font-family: $font-mono;
-    @include text-gradient($gradient-primary);
-    font-size: $font-size-2xl;
-
-    @include respond-to(md) {
-      font-size: $font-size-3xl;
-    }
-  }
-
   &__title-line {
     height: 1px;
     flex: 1;
@@ -196,25 +186,35 @@
   }
 
   &__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: $spacing-xl;
+    column-count: 1;
+    column-gap: $spacing-xl;
 
     @include respond-to(sm) {
-      grid-template-columns: repeat(2, 1fr);
+      column-count: 2;
     }
 
     @include respond-to(lg) {
-      grid-template-columns: repeat(3, 1fr);
-      gap: $spacing-2xl;
+      column-count: 3;
+      column-gap: $spacing-2xl;
+    }
+
+    > * {
+      break-inside: avoid;
+      margin-bottom: $spacing-xl;
+      display: inline-block;
+      width: 100%;
+
+      @include respond-to(lg) {
+        margin-bottom: $spacing-2xl;
+      }
     }
   }
 
   &__no-results {
-    grid-column: 1 / -1;
     @include flex-column-center;
     padding: $spacing-5xl $spacing-lg;
     text-align: center;
+    width: 100%;
 
     h3 {
       font-size: $font-size-2xl;
