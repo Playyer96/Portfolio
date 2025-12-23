@@ -2,12 +2,11 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 export default function ScrollToTop() {
-  const { pathName } = useLocation();
+  const { pathname } = useLocation();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, pathName);
+  }, [pathname]);
 
   return null;
 }

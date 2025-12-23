@@ -14,7 +14,12 @@
       "Bash(curl -s \"https://portfolio-backend-lilac.vercel.app/api/projects\")",
       "WebSearch",
       "Bash(del \"D:\\\\Projects\\\\Web\\\\Portfolio\\\\src\\\\styles\\\\scss\\\\_mixins-new.scss\")",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(where:*)",
+      "Bash(node scripts/convert-favicon.js:*)",
+      "Bash(node scripts/generate-pwa-icons.js:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(node scripts/generate-og-image.js:*)"
     ]
   }
 }

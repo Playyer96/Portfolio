@@ -4,6 +4,7 @@ import { FadeIn } from "../components/animations";
 import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import TimelineItem from "../components/TimelineItem";
+import SEO from "../components/SEO";
 import "./Experience.scss";
 
 const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lilac.vercel.app/api';
@@ -85,6 +86,12 @@ const Experience = () => {
 
   return (
     <PageTransition>
+      <SEO
+        title="Experience - Danilo Vanegas | Game Developer Career & Education"
+        description="Discover my professional journey as a Unity and Unreal game developer. View my work experience, education, and career progression in game development."
+        keywords="Game Developer Experience, Unity Developer Career, Unreal Developer Experience, Game Development Education, Professional Experience"
+        canonicalUrl="https://danidev.xyz/experience"
+      />
       <div className="experience">
         <ParticleBackground particleCount={40} />
 

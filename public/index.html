@@ -2,28 +2,42 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/favicon.svg" />
+    <link rel="alternate icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#0a0e27" />
     <meta
       name="description"
       content="Portfolio site showcasing experience and projects as a Unity and Unreal game developer"
     />
 
-    <!-- Add meta tags for SEO -->
-    <meta
-      name="keywords"
-      content="Unity, Unreal, game developer, portfolio, projects"
-    />
-    <meta name="author" content="Dani" />
+    <!-- SEO Meta Tags -->
+    <meta name="keywords" content="Unity Developer, Unreal Engine, Game Developer, Portfolio, C#, C++, Game Programming, Multiplayer Games, 3D Games" />
+    <meta name="author" content="Danilo Vanegas" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://danidev.xyz/" />
 
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
 
-    <!-- Add Open Graph meta tags for social sharing -->
-    <meta property="og:title" content="Dani's Portfolio" />
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://danidev.xyz/" />
-    <meta property="og:image" content="https://danidev.xyz/static/media/profile-pic.fe3af5cc484eaf0791c6.png" />
+    <meta property="og:title" content="Danilo Vanegas - Unity & Unreal Game Developer Portfolio" />
+    <meta property="og:description" content="Portfolio site showcasing experience and projects as a Unity and Unreal game developer" />
+    <meta property="og:image" content="https://danidev.xyz/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Danilo Vanegas - Game Developer Portfolio" />
+    <meta property="og:site_name" content="Danilo Vanegas Portfolio" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://danidev.xyz/" />
+    <meta name="twitter:title" content="Danilo Vanegas - Unity & Unreal Game Developer Portfolio" />
+    <meta name="twitter:description" content="Portfolio site showcasing experience and projects as a Unity and Unreal game developer" />
+    <meta name="twitter:image" content="https://danidev.xyz/og-image.png" />
+    <meta name="twitter:creator" content="@danidev" />
 
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -42,7 +56,57 @@
     -->
 
     <!-- Add a title that targets relevant keywords -->
-    <title>Dani's Portfolio - Unity and Unreal Game Developer</title>
+    <title>Danilo Vanegas - Unity & Unreal Game Developer Portfolio</title>
+
+    <!-- Structured Data (JSON-LD) for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Danilo Vanegas",
+      "jobTitle": "Game Developer",
+      "description": "Unity and Unreal game developer specializing in multiplayer systems, 3D game development, and immersive gameplay experiences",
+      "url": "https://danidev.xyz",
+      "image": "https://danidev.xyz/og-image.png",
+      "sameAs": [
+        "https://github.com/Playyer96",
+        "https://linkedin.com/in/danilo-vanegas"
+      ],
+      "knowsAbout": [
+        "Unity Development",
+        "Unreal Engine",
+        "Game Development",
+        "C#",
+        "C++",
+        "Multiplayer Systems",
+        "3D Game Development",
+        "Game Programming"
+      ],
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Game Developer",
+        "occupationLocation": {
+          "@type": "Country",
+          "name": "Colombia"
+        },
+        "skills": "Unity, Unreal Engine, C#, C++, Multiplayer, Game Design"
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Danilo Vanegas Portfolio",
+      "url": "https://danidev.xyz",
+      "description": "Portfolio showcasing Unity and Unreal game development projects and experience",
+      "author": {
+        "@type": "Person",
+        "name": "Danilo Vanegas"
+      }
+    }
+    </script>
   </head>
 
   <body>

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { FadeIn } from "../components/animations";
 import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
+import SEO from "../components/SEO";
 import { FaDownload, FaEye, FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa";
 import MyCv from "../assets/cv/CV-Danilo-Vanegas-2025.pdf";
 import "./Cv.scss";
@@ -28,6 +29,12 @@ const Cv = () => {
 
   return (
     <PageTransition>
+      <SEO
+        title="CV/Resume - Danilo Vanegas | Download Game Developer Resume"
+        description="View and download the CV/Resume of Danilo Vanegas, a Unity and Unreal game developer. Get in touch for game development opportunities and collaborations."
+        keywords="Game Developer CV, Unity Developer Resume, Unreal Developer Resume, Download CV, Game Development Resume, Hire Game Developer"
+        canonicalUrl="https://danidev.xyz/cv"
+      />
       <div className="cv">
         <ParticleBackground particleCount={40} />
 
