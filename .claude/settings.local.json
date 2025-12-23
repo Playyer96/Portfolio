@@ -19,11 +19,13 @@
       "Bash(node scripts/convert-favicon.js:*)",
       "Bash(node scripts/generate-pwa-icons.js:*)",
       "Bash(npm uninstall:*)",
-      "Bash(node scripts/generate-og-image.js:*)"
+      "Bash(node scripts/generate-og-image.js:*)",
+      "Bash(wc:*)",
+      "Bash(grep:*)"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "supabase"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }

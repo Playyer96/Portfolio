@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import AboutDisplay from "./pages/AboutDisplay";
 import Cv from "./pages/Cv";
 import ScrollToTop from "./components/ScrollToTop";
+import SkipLink from "./components/SkipLink";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import "./App.scss";
@@ -32,9 +33,10 @@ function App() {
   return (
     <div className="App">
       <Router>
+        <SkipLink />
         <Navbar />
         <ScrollToTop />
-        <main className="App__main">
+        <main id="main-content" className="App__main">
           <AnimatedRoutes />
         </main>
         <Footer />
