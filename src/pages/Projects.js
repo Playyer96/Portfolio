@@ -222,15 +222,15 @@ const Projects = () => {
 
         {/* Projects Grid */}
         <div className="projects__grid">
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence>
             {filteredProjects.length > 0 ? (
               filteredProjects.map((project, index) => (
                 <motion.div
                   key={project._id || project.id || project.name}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.4, delay: index * 0.03 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.3 }}
                   layout
                 >
                   <ProjectCard

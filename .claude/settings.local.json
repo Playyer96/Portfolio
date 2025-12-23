@@ -21,5 +21,9 @@
       "Bash(npm uninstall:*)",
       "Bash(node scripts/generate-og-image.js:*)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "supabase"
+  ],
+  "enableAllProjectMcpServers": true
 }
