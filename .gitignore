@@ -47,3 +47,6 @@ Thumbs.db
 # Temporary files created by editors
 *.swp
 .vercel
+
+# Claude Code worktrees (temporary development branches)
+.claude/worktrees/
