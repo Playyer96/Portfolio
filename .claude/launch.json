@@ -1,0 +1,26 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "port": 3000,
+      "cwd": "D:/Projects/Web/Portfolio"
+    },
+    {
+      "name": "portfolio-test",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["test"],
+      "port": null,
+      "cwd": "D:/Projects/Web/Portfolio"
+    },
+    {
+      "name": "portfolio-build",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "build"],
+      "port": null,
+      "cwd": "D:/Projects/Web/Portfolio"
+    }
+  ]
+}
