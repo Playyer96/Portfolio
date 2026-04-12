@@ -4,17 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal portfolio website built with React, showcasing projects, experience, and technical skills. The frontend fetches data from a separate backend API hosted on Vercel.
+Personal portfolio website for a game developer built with React, showcasing projects, experience, and technical skills. The frontend fetches data from a separate backend API hosted on Vercel. Focused on modern, refined UI/UX with smooth animations and mobile-first design.
 
 ## Technology Stack
 
 - **Frontend**: React 18 with functional components and hooks
-- **UI Libraries**: Material-UI, React Icons
-- **Routing**: React Router v6
-- **Animations**: React Transition Group, react-vertical-timeline-component
-- **Styling**: CSS modules (one CSS file per component/page)
-- **Deployment**: Vercel
-- **Analytics**: Vercel Analytics and Speed Insights
+- **Animations**: Framer Motion (primary), React Transition Group, react-vertical-timeline-component
+- **Routing**: React Router v6 with page transitions
+- **Styling**: SCSS with modular architecture (one SCSS file per component/page)
+- **UI Libraries**: React Icons (primary icon set), Material-UI
+- **Deployment**: Vercel with Analytics and Speed Insights
+- **SEO**: React Helmet Async for meta tag management
 
 ## Development Commands
 
@@ -110,6 +110,86 @@ Technologies are displayed as icons using a mapping system:
 - Modal component has similar mapping for project technologies
 - Fallback to default icon if technology name not found
 
+## SCSS Architecture
+
+### File Organization
+```
+src/styles/scss/
+├── index.scss                    # Main entry point, imports all
+├── _variables.scss              # Colors, spacing, typography, z-index
+├── _mixins.scss                 # Reusable utility mixins
+├── _utilities.scss              # Utility classes
+├── _base.scss                   # Base element styles
+├── _animations.scss             # Keyframe animations
+├── abstracts/
+│   ├── _variables.scss
+│   ├── _mixins.scss
+│   ├── _functions.scss
+│   └── _animations.scss
+```
+
+### Key SCSS Features
+- **CSS Variables**: All colors, spacing, typography in `_variables.scss`
+- **Mixins**: `flex-center`, `flex-column`, `flex-between`, `text-gradient`, `glow`, `liquid-glass`, `respond-to` (breakpoints)
+- **Responsive Design**: Mobile-first approach using `@include respond-to(md/lg/xl)` breakpoints
+- **Color System**: Primary/secondary colors, gradients, glassmorphism effects
+- **Spacing Scale**: `$spacing-xs` through `$spacing-5xl` for consistent whitespace
+
+### Styling Patterns
+- BEM naming convention: `.component__element--modifier`
+- One SCSS file per component/page
+- Import variables and mixins at top of each file
+- Use CSS Grid and Flexbox for layouts (no floats)
+- Modern animations use Framer Motion, not CSS keyframes
+
+## Animation Architecture
+
+### Framer Motion Usage
+- **Motion components**: Use `<motion.div>`, `<motion.button>`, etc. for animated elements
+- **Variants**: Define animation states as objects passed to `variants` prop
+- **Common patterns**:
+  ```jsx
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    whileHover={{ scale: 1.05 }}
+  />
+  ```
+
+### Animation Components (`src/components/animations/`)
+1. **FadeIn**: Fade in with optional direction (up/down/left/right)
+2. **StaggerContainer**: Stagger animations for child elements
+3. **SlideIn**: Slide animation with direction
+4. **ScaleIn**: Scale animation with fade
+5. **AnimatedText**: Character-by-character text animation
+
+### Page Transitions
+- Pages wrapped in `<PageTransition>` component
+- Uses `react-transition-group` for 500ms route transitions
+- Smooth fade in/out between routes
+
+### Effects
+- **ParticleBackground**: Decorative animated particles (configurable count)
+- **ScrollAnimation**: Elements animate when scrolled into view
+
+## Custom Hooks
+
+- `useMousePosition`: Track mouse position for cursor effects
+- `useParallax`: Parallax scroll effect on elements
+- `useScrollAnimation`: Trigger animations on scroll into viewport
+
+## SEO & Meta Tags
+
+- Uses **React Helmet Async** for dynamic meta tag management
+- **SEO component** (`src/components/SEO.js`) with props for:
+  - `title`: Page title for browser tab and search results
+  - `description`: Meta description
+  - `keywords`: Meta keywords
+  - `canonicalUrl`: Canonical URL to prevent duplicates
+- Each page should include SEO component with relevant metadata
+- Open Graph and Twitter Card tags recommended for social sharing
+
 ## Environment Variables
 
 Required for development:
@@ -123,9 +203,29 @@ REACT_APP_API_URL=<backend_api_url>
 - Deployed on Vercel
 - API requests proxied via `vercel.json` rewrites
 - Includes Vercel Analytics and Speed Insights
+- Automatic deployments on merge to main branch
+
+## Performance Considerations
+
+- Lazy load images with proper sizing
+- Use Vercel Speed Insights to monitor performance
+- Framer Motion animations are GPU-accelerated (transform/opacity only)
+- Minimize reflows: use `will-change` CSS sparingly
+- Code splitting via React Router for page components
 
 ## Testing
 
 - Testing library: Jest (via Create React App)
 - Run with: `npm test`
 - Test files use `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`
+
+## Current Design Direction (2026-04-12)
+
+**Modern Tech Minimalism** - Refined dark theme focusing on:
+- Compact, modern component design (no bulky elements)
+- Typography-driven layouts
+- Selective accent colors (not everything glowing)
+- Smooth, purposeful animations
+- Mobile-first responsive approach
+- Auto-preview content (no unnecessary toggle buttons)
+- Grid-based layouts for proper reflow and organization

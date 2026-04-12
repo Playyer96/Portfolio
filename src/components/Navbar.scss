@@ -166,14 +166,19 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: 80%;
-    max-width: 300px;
+    width: 100%;
+    max-width: 320px;
     height: 100vh;
     @include liquid-glass(25px, 0.75, 0.12);
     border-left: 1px solid rgba($color-primary, 0.2);
     @include glow($color-primary, 0.2);
     z-index: $z-modal;
     overflow-y: auto;
+
+    @include respond-to(sm) {
+      width: 85%;
+      max-width: 300px;
+    }
 
     @include respond-to(md) {
       display: none;
@@ -182,7 +187,11 @@
     &-content {
       @include flex-column;
       gap: $spacing-xs;
-      padding: $spacing-4xl $spacing-lg $spacing-2xl;
+      padding: $spacing-3xl $spacing-lg $spacing-2xl;
+
+      @include respond-to(sm) {
+        padding: $spacing-4xl $spacing-lg $spacing-2xl;
+      }
     }
 
     &-link {

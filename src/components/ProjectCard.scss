@@ -67,6 +67,10 @@
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
+
+    @include respond-to(sm) {
+      padding: $spacing-xl;
+    }
   }
 
   &__title {

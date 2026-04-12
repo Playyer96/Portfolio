@@ -4,7 +4,7 @@
 .tech-stack {
   display: flex;
   flex-direction: column;
-  gap: $spacing-4xl;
+  gap: $spacing-3xl;
   width: 100%;
 
   &__category {
@@ -14,153 +14,132 @@
   &__category-header {
     display: flex;
     align-items: center;
-    gap: $spacing-lg;
-    margin-bottom: $spacing-2xl;
+    gap: $spacing-md;
+    margin-bottom: $spacing-xl;
   }
 
   &__category-number {
     font-family: $font-mono;
-    font-size: $font-size-xl;
+    font-size: $font-size-sm;
     font-weight: $font-weight-bold;
     @include text-gradient($gradient-primary);
-    min-width: 40px;
+    min-width: auto;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 
     @include respond-to(md) {
-      font-size: $font-size-2xl;
+      font-size: $font-size-sm;
     }
   }
 
   &__category-title {
     font-family: $font-heading;
-    font-size: $font-size-2xl;
+    font-size: $font-size-lg;
     font-weight: $font-weight-bold;
     color: $color-text-primary;
     white-space: nowrap;
     margin: 0;
 
     @include respond-to(md) {
-      font-size: $font-size-3xl;
+      font-size: $font-size-xl;
     }
   }
 
   &__category-line {
     flex: 1;
-    height: 2px;
+    height: 1px;
     background: linear-gradient(
       90deg,
-      rgba($color-primary, 0.5) 0%,
+      rgba($color-primary, 0.3) 0%,
       transparent 100%
     );
   }
 
   &__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: $spacing-lg;
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+    align-items: center;
 
     @include respond-to(md) {
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: $spacing-xl;
+      gap: $spacing-lg;
     }
   }
 
   &__card {
     position: relative;
-    background: $color-bg-card;
-    border-radius: $radius-lg;
+    background: transparent;
+    border: 1px solid rgba($color-primary, 0.2);
+    border-radius: $radius-md;
     overflow: hidden;
-    cursor: pointer;
+    cursor: default;
     transition: all $transition-base;
+    padding: $spacing-sm $spacing-md;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    flex-shrink: 0;
 
     &:hover {
-      background: $color-bg-card-hover;
-
-      .tech-stack__card-border {
-        opacity: 1;
-      }
-
-      .tech-stack__glow {
-        opacity: 1;
-      }
+      background: rgba($color-primary, 0.05);
+      border-color: rgba($color-primary, 0.4);
 
       .tech-stack__icon {
-        transform: scale(1.1);
-        filter: drop-shadow(0 0 12px currentColor);
+        transform: scale(1.08);
       }
     }
   }
 
   &__card-inner {
-    @include flex-column-center;
-    padding: $spacing-xl;
-    gap: $spacing-md;
+    @include flex-center;
+    gap: $spacing-xs;
     position: relative;
     z-index: 1;
+    flex-direction: row;
   }
 
   &__card-border {
-    position: absolute;
-    inset: 0;
-    border: 2px solid transparent;
-    border-radius: $radius-lg;
-    background: $gradient-primary;
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity $transition-base;
-    pointer-events: none;
+    display: none;
   }
 
   &__icon-wrapper {
     position: relative;
     @include flex-center;
-    width: 70px;
-    height: 70px;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
 
     @include respond-to(md) {
-      width: 80px;
-      height: 80px;
+      width: 36px;
+      height: 36px;
     }
   }
 
   &__icon {
-    font-size: $font-size-4xl;
+    font-size: $font-size-xl;
     color: $color-primary;
     transition: all $transition-base;
     z-index: 1;
 
     @include respond-to(md) {
-      font-size: $font-size-5xl;
+      font-size: $font-size-2xl;
     }
   }
 
   &__glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 120%;
-    height: 120%;
-    background: radial-gradient(
-      circle,
-      rgba($color-primary, 0.3) 0%,
-      transparent 70%
-    );
-    opacity: 0;
-    transition: opacity $transition-base;
-    pointer-events: none;
+    display: none;
   }
 
   &__name {
-    font-size: $font-size-sm;
+    font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
     color: $color-text-secondary;
     text-align: center;
-    line-height: 1.3;
+    line-height: 1.2;
+    white-space: nowrap;
 
     @include respond-to(md) {
-      font-size: $font-size-base;
+      font-size: $font-size-sm;
     }
   }
 }

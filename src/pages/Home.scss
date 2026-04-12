@@ -20,6 +20,10 @@
     pointer-events: none;
     z-index: 1;
     will-change: transform;
+
+    @include respond-to(sm) {
+      display: none; /* Disable on mobile for performance */
+    }
   }
 
   // Loading State

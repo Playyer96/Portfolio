@@ -62,20 +62,18 @@ const TechStack = ({ technologies, getIconComponent }) => {
                       key={index}
                       className="tech-stack__card"
                       variants={{
-                        hidden: { opacity: 0, y: 20 },
-                        visible: { opacity: 1, y: 0 }
+                        hidden: { opacity: 0 },
+                        visible: { opacity: 1 }
                       }}
-                      whileHover={{ y: -8 }}
-                      transition={{ duration: 0.3 }}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.2 }}
                     >
                       <div className="tech-stack__card-inner">
                         <div className="tech-stack__icon-wrapper">
                           <IconComponent className="tech-stack__icon" />
-                          <div className="tech-stack__glow"></div>
                         </div>
                         <span className="tech-stack__name">{tech.text || tech.name}</span>
                       </div>
-                      <div className="tech-stack__card-border"></div>
                     </motion.div>
                   );
                 })}

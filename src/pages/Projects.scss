@@ -186,27 +186,49 @@
   }
 
   &__grid {
-    column-count: 1;
-    column-gap: $spacing-xl;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-xl;
+    animation: fadeIn 0.4s ease-in-out;
 
     @include respond-to(sm) {
-      column-count: 2;
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-lg;
     }
 
     @include respond-to(lg) {
-      column-count: 3;
-      column-gap: $spacing-2xl;
+      grid-template-columns: repeat(3, 1fr);
+      gap: $spacing-2xl;
     }
 
     > * {
-      break-inside: avoid;
-      margin-bottom: $spacing-xl;
-      display: inline-block;
-      width: 100%;
+      display: flex;
+      flex-direction: column;
+      animation: scaleIn 0.3s ease-out;
 
       @include respond-to(lg) {
-        margin-bottom: $spacing-2xl;
+        min-height: auto;
       }
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 

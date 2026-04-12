@@ -9,7 +9,8 @@ import MyCv from "../assets/cv/CV-Danilo-Vanegas-2025.pdf";
 import "./Cv.scss";
 
 const Cv = () => {
-  const [showPdf, setShowPdf] = useState(false);
+  // Auto-preview the PDF by default
+  const [showPdf, setShowPdf] = useState(true);
 
   const handleDownload = () => {
     const link = document.createElement('a');
@@ -69,15 +70,6 @@ const Cv = () => {
               >
                 <FaDownload />
                 Download PDF
-              </motion.button>
-              <motion.button
-                className="cv__btn cv__btn--secondary"
-                onClick={() => setShowPdf(!showPdf)}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FaEye />
-                {showPdf ? "Hide Preview" : "View Online"}
               </motion.button>
             </div>
           </FadeIn>
