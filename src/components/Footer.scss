@@ -3,8 +3,8 @@
 
 .footer {
   position: relative;
-  margin-top: $spacing-4xl;
-  padding: $spacing-3xl $spacing-lg;
+  margin-top: $spacing-2xl;
+  padding: $spacing-xl $spacing-lg;
   border-top: 1px solid rgba($color-primary, 0.1);
   background: linear-gradient(
     135deg,
@@ -13,26 +13,26 @@
   );
 
   @include respond-to(md) {
-    padding: $spacing-4xl $spacing-lg;
-    margin-top: $spacing-5xl;
+    padding: $spacing-2xl $spacing-lg;
+    margin-top: $spacing-3xl;
   }
 
   &__content {
     display: flex;
     flex-direction: column;
-    gap: $spacing-3xl;
+    gap: $spacing-2xl;
     max-width: 100%;
   }
 
   &__main {
     display: grid;
     grid-template-columns: 1fr;
-    gap: $spacing-2xl;
+    gap: $spacing-lg;
 
     @include respond-to(md) {
       grid-template-columns: auto 1px 1fr;
       align-items: start;
-      gap: $spacing-3xl;
+      gap: $spacing-xl;
     }
   }
 
@@ -40,20 +40,20 @@
     text-align: left;
 
     @include respond-to(md) {
-      min-width: 250px;
+      min-width: 200px;
     }
   }
 
   &__name {
     font-family: $font-heading;
-    font-size: $font-size-xl;
+    font-size: $font-size-lg;
     font-weight: $font-weight-bold;
     color: $color-text-primary;
     margin: 0 0 $spacing-xs 0;
     letter-spacing: -0.5px;
 
     @include respond-to(md) {
-      font-size: $font-size-2xl;
+      font-size: $font-size-xl;
     }
   }
 
@@ -78,12 +78,12 @@
 
   &__nav {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: $spacing-2xl;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: $spacing-lg;
 
     @include respond-to(md) {
       display: flex;
-      gap: $spacing-4xl;
+      gap: $spacing-2xl;
     }
   }
 
@@ -97,7 +97,7 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     color: $color-primary;
-    margin: 0 0 $spacing-md 0;
+    margin: 0 0 $spacing-sm 0;
   }
 
   &__nav-list {
@@ -106,7 +106,7 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: $spacing-xs;
 
     a {
       font-size: $font-size-sm;
@@ -140,14 +140,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: $spacing-lg;
-    padding: $spacing-2xl 0;
+    gap: $spacing-md;
+    padding: $spacing-lg 0;
     border-top: 1px solid rgba($color-primary, 0.1);
     border-bottom: 1px solid rgba($color-primary, 0.1);
 
     @include respond-to(md) {
-      gap: $spacing-xl;
-      padding: $spacing-xl 0;
+      gap: $spacing-lg;
+      padding: $spacing-lg 0;
     }
   }
 
@@ -155,15 +155,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: $radius-md;
     background: rgba($color-primary, 0.05);
     color: $color-primary;
     text-decoration: none;
     transition: all $transition-base;
     border: 1px solid rgba($color-primary, 0.2);
-    font-size: $font-size-lg;
+    font-size: $font-size-base;
 
     &:hover {
       background: rgba($color-primary, 0.1);
@@ -172,9 +172,9 @@
     }
 
     @include respond-to(md) {
-      width: 48px;
-      height: 48px;
-      font-size: $font-size-xl;
+      width: 44px;
+      height: 44px;
+      font-size: $font-size-lg;
     }
   }
 
@@ -183,8 +183,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: $spacing-md;
+    gap: $spacing-sm;
     text-align: center;
+    padding-top: $spacing-sm;
   }
 
   &__copyright,
