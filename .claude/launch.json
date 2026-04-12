@@ -6,21 +6,21 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["start"],
       "port": 3000,
-      "cwd": "D:/Projects/Web/Portfolio"
+      "cwd": "."
     },
     {
       "name": "portfolio-test",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["test"],
       "port": null,
-      "cwd": "D:/Projects/Web/Portfolio"
+      "cwd": "."
     },
     {
       "name": "portfolio-build",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "build"],
       "port": null,
-      "cwd": "D:/Projects/Web/Portfolio"
+      "cwd": "."
     }
   ]
 }
