@@ -85,6 +85,59 @@
     }
   }
 
+  // Career Summary Stats
+  &__summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: $spacing-md;
+    max-width: 600px;
+    margin: 0 auto $spacing-2xl;
+
+    @include respond-to(md) {
+      gap: $spacing-lg;
+      margin-bottom: $spacing-3xl;
+    }
+  }
+
+  &__summary-item {
+    @include flex-column-center;
+    padding: $spacing-md;
+    background: rgba($color-primary, 0.05);
+    border: 1px solid rgba($color-primary, 0.2);
+    border-radius: $radius-lg;
+    text-align: center;
+    transition: all $transition-base;
+
+    &:hover {
+      background: rgba($color-primary, 0.1);
+      border-color: rgba($color-primary, 0.4);
+    }
+  }
+
+  &__summary-number {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-black;
+    color: $color-primary;
+    line-height: 1;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__summary-label {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    margin-top: $spacing-xs;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: $font-weight-semibold;
+
+    @include respond-to(md) {
+      font-size: $font-size-sm;
+    }
+  }
+
   &__filters {
     display: flex;
     gap: $spacing-sm;

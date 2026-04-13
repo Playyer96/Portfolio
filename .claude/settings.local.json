@@ -45,7 +45,8 @@
       "Bash(git --version)",
       "Bash(git push:*)",
       "Bash(npx react-scripts:*)",
-      "mcp__obsidian__delete_note"
+      "mcp__obsidian__delete_note",
+      "Bash(git commit -m 'feat: Phase 7 complete - Experience & Timeline Enhancement with tech badges and career stats:*)"
     ]
   }
 }
