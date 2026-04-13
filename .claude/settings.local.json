@@ -19,7 +19,21 @@
       "Bash(node scripts/convert-favicon.js:*)",
       "Bash(node scripts/generate-pwa-icons.js:*)",
       "Bash(npm uninstall:*)",
-      "Bash(node scripts/generate-og-image.js:*)"
+      "Bash(node scripts/generate-og-image.js:*)",
+      "mcp__obsidian__search_notes",
+      "mcp__obsidian__read_note",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(grep -l \"SEO\" *.js)",
+      "mcp__obsidian__patch_note",
+      "mcp__obsidian__write_note",
+      "mcp__obsidian__update_frontmatter",
+      "mcp__obsidian__get_vault_stats",
+      "mcp__obsidian__get_frontmatter",
+      "Bash(grep -E \"\\\\\\\\\\\\$|@mixin\")",
+      "Bash(find /d/Projects/Web/Portfolio/src -type f \\\\\\( -name \"*.js\" -o -name \"*.jsx\" \\\\\\) -exec grep -l \"expandable\\\\|collapsible\\\\|accordion\\\\|toggle\" {} \\\\;)",
+      "Bash(xargs wc:*)",
+      "Bash(grep -r \"transform.*scale\\\\|transform.*translate\\\\|box-shadow.*0 0\\\\|:hover\" /d/Projects/Web/Portfolio/.claude/worktrees/gifted-grothendieck/src/components/*.scss --include=\"*.scss\")"
     ]
   }
 }

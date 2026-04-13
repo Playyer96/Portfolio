@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer } from "../components/animations";
 import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
-import SkillBar from "../components/SkillBar";
+import SkillShowcase from "../components/SkillShowcase";
 import SEO from "../components/SEO";
 import "./AboutDisplay.scss";
 
@@ -17,6 +17,7 @@ const AboutDisplay = () => {
   };
   const [aboutData, setAboutData] = useState(null);
   const [stats, setStats] = useState({ yearsOfExperience: "5+" });
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -65,15 +66,29 @@ const AboutDisplay = () => {
     fetchStats();
   }, []);
 
-  // Game developer skills
-  const skills = [
-    { name: "Unreal Engine", level: 90, color: "#00ff88" },
-    { name: "Unity", level: 85, color: "#00d9ff" },
-    { name: "C++", level: 80, color: "#ff00ff" },
-    { name: "C#", level: 85, color: "#00ff88" },
-    { name: "Game Design", level: 75, color: "#00d9ff" },
-    { name: "Graphics Programming", level: 70, color: "#ff00ff" }
-  ];
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(`${API_URL}/projects`);
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data)) {
+            setProjects(data);
+          } else if (data.data && Array.isArray(data.data)) {
+            setProjects(data.data);
+          } else if (data.data && Array.isArray(data.data[0]?.projects)) {
+            setProjects(data.data[0].projects);
+          }
+        }
+      } catch (err) {
+        // Silently fail - continue without projects
+        console.debug('Failed to fetch projects:', err);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
 
   const services = [
     {
@@ -192,36 +207,8 @@ const AboutDisplay = () => {
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section className="about__skills-section">
-        <div className="container">
-          <FadeIn direction="up" delay={0.2}>
-            <h2 className="about__section-title">Technical Skills</h2>
-            <p className="about__section-subtitle">
-              My expertise in game development technologies
-            </p>
-          </FadeIn>
-
-          <StaggerContainer staggerDelay={0.1} className="about__skills-grid">
-            {skills.map((skill, index) => (
-              <motion.div
-                key={skill.name}
-                variants={{
-                  hidden: { opacity: 0, x: -50 },
-                  visible: { opacity: 1, x: 0 }
-                }}
-              >
-                <SkillBar
-                  name={skill.name}
-                  level={skill.level}
-                  color={skill.color}
-                  delay={index * 0.1}
-                />
-              </motion.div>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
+      {/* Skills Section - New Interactive Showcase */}
+      <SkillShowcase projects={projects} />
 
       {/* Services Section */}
       <section className="about__services-section">
