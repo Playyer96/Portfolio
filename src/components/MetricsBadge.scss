@@ -1,0 +1,127 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.metrics-badge {
+  @include liquid-glass(12px, 0.5, 0.1);
+  border-radius: $radius-full;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-sm;
+  cursor: default;
+  will-change: transform;
+
+  &:hover {
+    @include liquid-glass-glow(15px, 0.6, $color-primary);
+  }
+
+  // Size variants
+  &--sm {
+    padding: $spacing-xs $spacing-md;
+
+    .metrics-badge__icon {
+      font-size: $font-size-sm;
+    }
+
+    .metrics-badge__value {
+      font-size: $font-size-base;
+    }
+
+    .metrics-badge__label {
+      font-size: $font-size-xs;
+    }
+  }
+
+  &--md {
+    padding: $spacing-sm $spacing-lg;
+
+    .metrics-badge__icon {
+      font-size: $font-size-lg;
+    }
+
+    .metrics-badge__value {
+      font-size: $font-size-xl;
+    }
+
+    .metrics-badge__label {
+      font-size: $font-size-xs;
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-md $spacing-xl;
+
+      .metrics-badge__icon {
+        font-size: $font-size-xl;
+      }
+
+      .metrics-badge__value {
+        font-size: $font-size-2xl;
+      }
+
+      .metrics-badge__label {
+        font-size: $font-size-sm;
+      }
+    }
+  }
+
+  &--lg {
+    padding: $spacing-md $spacing-xl;
+
+    .metrics-badge__icon {
+      font-size: $font-size-xl;
+    }
+
+    .metrics-badge__value {
+      font-size: $font-size-2xl;
+    }
+
+    .metrics-badge__label {
+      font-size: $font-size-sm;
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-lg $spacing-2xl;
+
+      .metrics-badge__icon {
+        font-size: $font-size-2xl;
+      }
+
+      .metrics-badge__value {
+        font-size: $font-size-3xl;
+      }
+
+      .metrics-badge__label {
+        font-size: $font-size-base;
+      }
+    }
+  }
+
+  &__icon {
+    @include flex-center;
+    color: $color-primary;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    @include flex-column;
+    align-items: flex-start;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  &__value {
+    font-family: $font-heading;
+    font-weight: $font-weight-black;
+    color: $color-text-primary;
+    line-height: 1.1;
+    @include text-gradient($gradient-primary);
+  }
+
+  &__label {
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+}

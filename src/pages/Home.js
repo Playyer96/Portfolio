@@ -8,6 +8,7 @@ import ParticleBackground from "../components/effects/ParticleBackground";
 import TechBento from "../components/TechBento";
 import GitHubWidget from "../components/GitHubWidget";
 import FeaturedProjects from "../components/FeaturedProjects";
+import StatsShowcase from "../components/StatsShowcase";
 import SEO from "../components/SEO";
 import useMousePosition from "../hooks/useMousePosition";
 import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGithub, FaGitlab, FaDocker, FaSlack, FaJira } from "react-icons/fa";
@@ -274,48 +275,39 @@ const Home = () => {
       {/* Quick Stats Section */}
       <section className="home__stats">
         <div className="container">
-          <StaggerContainer staggerDelay={0.1} className="home__stats-grid">
-            <motion.div
-              className="home__stat-card"
-              variants={{
-                hidden: { opacity: 0, scale: 0.8 },
-                visible: { opacity: 1, scale: 1 }
-              }}
-            >
-              <h3 className="home__stat-number text-gradient-primary">{stats.yearsOfExperience}</h3>
-              <p className="home__stat-label">Years Experience</p>
-            </motion.div>
-            <motion.div
-              className="home__stat-card"
-              variants={{
-                hidden: { opacity: 0, scale: 0.8 },
-                visible: { opacity: 1, scale: 1 }
-              }}
-            >
-              <h3 className="home__stat-number text-gradient-primary">20+</h3>
-              <p className="home__stat-label">Shipped Projects</p>
-            </motion.div>
-            <motion.div
-              className="home__stat-card"
-              variants={{
-                hidden: { opacity: 0, scale: 0.8 },
-                visible: { opacity: 1, scale: 1 }
-              }}
-            >
-              <h3 className="home__stat-number text-gradient-primary">100K+</h3>
-              <p className="home__stat-label">Player Base</p>
-            </motion.div>
-            <motion.div
-              className="home__stat-card"
-              variants={{
-                hidden: { opacity: 0, scale: 0.8 },
-                visible: { opacity: 1, scale: 1 }
-              }}
-            >
-              <h3 className="home__stat-number text-gradient-primary">10+</h3>
-              <p className="home__stat-label">Technologies</p>
-            </motion.div>
-          </StaggerContainer>
+          <FadeIn direction="up" delay={0.2}>
+            <div className="home__section-header">
+              <h2 className="home__section-title">
+                Track Record
+              </h2>
+              <div className="home__section-line"></div>
+            </div>
+          </FadeIn>
+
+          <StatsShowcase
+            stats={[
+              {
+                number: stats.yearsOfExperience?.replace('+', '') || '5',
+                label: 'Years Experience',
+                color: 'primary',
+                animated: true
+              },
+              {
+                number: '20',
+                label: 'Shipped Projects',
+                color: 'secondary',
+                animated: true
+              },
+              {
+                number: '10',
+                label: 'Technologies',
+                color: 'accent',
+                animated: true
+              }
+            ]}
+            showGithubIntegration={true}
+            columns={4}
+          />
         </div>
       </section>
       </div>
