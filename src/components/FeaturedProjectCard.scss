@@ -1,0 +1,250 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.featured-card {
+  position: relative;
+  @include liquid-glass(12px, 0.5, 0.1);
+  border-radius: $radius-xl;
+  overflow: hidden;
+  transition: all $transition-base;
+  will-change: transform;
+
+  &:hover {
+    @include liquid-glass-glow(15px, 0.65, $color-primary);
+
+    .featured-card__glow {
+      opacity: 1;
+    }
+
+    .featured-card__actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // Image Container
+  &__image-container {
+    position: relative;
+    width: 100%;
+    @include aspect-ratio(16, 9);
+    overflow: hidden;
+    background: $color-bg-darker;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+  }
+
+  &__image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba($color-primary, 0.05) 0%,
+      rgba($color-accent, 0.05) 100%
+    );
+  }
+
+  // Gradient overlay on image for text readability
+  &__gradient-overlay {
+    @include absolute-cover;
+    background: linear-gradient(
+      to top,
+      rgba($color-bg-darker, 0.9) 0%,
+      rgba($color-bg-darker, 0.4) 40%,
+      transparent 70%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  // Title on image
+  &__image-title {
+    position: absolute;
+    bottom: $spacing-md;
+    left: $spacing-md;
+    right: $spacing-md;
+    z-index: 2;
+
+    @include respond-to(md) {
+      bottom: $spacing-lg;
+      left: $spacing-lg;
+      right: $spacing-lg;
+    }
+  }
+
+  &__name {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+    line-height: 1.2;
+    @include truncate;
+
+    @include respond-to(md) {
+      font-size: $font-size-2xl;
+    }
+
+    @include respond-to(lg) {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  // Tech icons on image
+  &__image-tech {
+    position: absolute;
+    bottom: $spacing-md;
+    right: $spacing-md;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    z-index: 2;
+
+    @include respond-to(md) {
+      bottom: $spacing-lg;
+      right: $spacing-lg;
+      gap: $spacing-sm;
+    }
+  }
+
+  &__image-tech-icon {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    background: rgba($color-bg-darker, 0.7);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba($color-primary, 0.3);
+    border-radius: $radius-md;
+    color: $color-primary;
+    font-size: $font-size-sm;
+    transition: all $transition-fast;
+
+    &:hover {
+      background: rgba($color-primary, 0.15);
+      border-color: rgba($color-primary, 0.5);
+    }
+
+    @include respond-to(md) {
+      width: 32px;
+      height: 32px;
+      font-size: $font-size-base;
+    }
+  }
+
+  &__image-tech-more {
+    @include flex-center;
+    height: 28px;
+    padding: 0 $spacing-sm;
+    background: rgba($color-bg-darker, 0.7);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba($color-secondary, 0.3);
+    border-radius: $radius-md;
+    color: $color-secondary;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+
+    @include respond-to(md) {
+      height: 32px;
+      font-size: $font-size-sm;
+    }
+  }
+
+  // Content area
+  &__content {
+    padding: $spacing-md;
+    @include flex-column;
+    gap: $spacing-md;
+
+    @include respond-to(md) {
+      padding: $spacing-lg;
+    }
+  }
+
+  &__description {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: 1.6;
+    margin: 0;
+    @include line-clamp(3);
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+    }
+  }
+
+  // Action buttons
+  &__actions {
+    display: flex;
+    gap: $spacing-sm;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all $transition-base;
+
+    @include respond-to(md) {
+      gap: $spacing-md;
+    }
+  }
+
+  &__action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-md;
+    border-radius: $radius-md;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-decoration: none;
+    transition: all $transition-fast;
+    cursor: pointer;
+
+    @include respond-to(md) {
+      padding: $spacing-sm $spacing-md;
+      font-size: $font-size-sm;
+    }
+
+    &--github {
+      background: rgba($color-text-primary, 0.1);
+      border: 1px solid rgba($color-text-primary, 0.2);
+      color: $color-text-primary;
+
+      &:hover {
+        background: rgba($color-text-primary, 0.15);
+        border-color: rgba($color-text-primary, 0.4);
+      }
+    }
+
+    &--live {
+      background: rgba($color-primary, 0.1);
+      border: 1px solid rgba($color-primary, 0.3);
+      color: $color-primary;
+
+      &:hover {
+        background: rgba($color-primary, 0.2);
+        border-color: rgba($color-primary, 0.5);
+        @include glow($color-primary, 0.2);
+      }
+    }
+  }
+
+  // Glow effect
+  &__glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      rgba($color-primary, 0.08) 0%,
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity $transition-base;
+    pointer-events: none;
+    z-index: 0;
+  }
+}

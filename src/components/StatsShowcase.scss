@@ -1,0 +1,77 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.stats-showcase {
+  width: 100%;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+  }
+
+  // Responsive grid
+  @include respond-to(sm) {
+    &__grid {
+      gap: $spacing-lg;
+    }
+  }
+
+  @include respond-to(md) {
+    &__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @include respond-to(lg) {
+    &__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: $spacing-xl;
+    }
+  }
+
+  @include respond-to(xl) {
+    &__grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+
+  // Column overrides
+  &--cols-2 &__grid {
+    grid-template-columns: repeat(2, 1fr);
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &--cols-3 &__grid {
+    @include respond-to(md) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &--cols-4 &__grid {
+    @include respond-to(md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to(lg) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  &--cols-6 &__grid {
+    @include respond-to(md) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include respond-to(lg) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @include respond-to(xl) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+}

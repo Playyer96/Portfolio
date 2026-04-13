@@ -44,6 +44,59 @@ const Projects = () => {
         const updatedProjects = await Promise.all(
           fetchedProjects.map(async (project) => {
             const imageUrl = await fetchImage(project.images?.[0]?.image || "default.jpg");
+
+            // Add test case study data to FSX Pro for testing CaseStudy components
+            if (project.name === "FSX Pro") {
+              return {
+                ...project,
+                imageUrl,
+                caseStudy: {
+                  problem: {
+                    challenge: "Golf simulation systems require sub-millisecond ball tracking data processing with extreme accuracy to maintain realism and player engagement.",
+                    context: "Foresight Sports needed to process high-frequency kinematic data from their ball tracking sensors and convert it into game-ready simulation parameters.",
+                    goals: [
+                      "Process sensor data with <1ms latency",
+                      "Achieve millimeter-level tracking accuracy",
+                      "Support multiplayer game mechanics",
+                      "Scale to handle enterprise deployments"
+                    ]
+                  },
+                  solution: {
+                    approach: "Architected a modular C# system using Unity's High-Performance C# (HPC) Scripting and Burst Compiler to minimize latency while maintaining code maintainability.",
+                    keyFeatures: [
+                      "Real-time ball physics simulation",
+                      "Proprietary launch monitor integration",
+                      "Multi-client synchronization",
+                      "Dynamic swing analysis algorithms"
+                    ],
+                    technicalHighlights: [
+                      "Burst-compiled computation kernels",
+                      "Custom physics engine optimizations",
+                      "Network replication for multiplayer",
+                      "Real-time data visualization"
+                    ]
+                  },
+                  metrics: [
+                    { label: "Latency", value: "<1ms", icon: "⚡" },
+                    { label: "Accuracy", value: "±2mm", icon: "🎯" },
+                    { label: "Frame Rate", value: "120fps", icon: "📈" },
+                    { label: "Users", value: "500+", icon: "👥" }
+                  ],
+                  timeline: [
+                    { phase: "Architecture & Design", duration: "Week 1-2", status: "completed" },
+                    { phase: "Core Physics Engine", duration: "Week 3-5", status: "completed" },
+                    { phase: "Integration & Testing", duration: "Week 6-7", status: "completed" },
+                    { phase: "Optimization & Deployment", duration: "Week 8", status: "completed" }
+                  ],
+                  learnings: [
+                    "Burst compilation is essential for latency-sensitive applications",
+                    "Custom physics engines often outperform off-the-shelf solutions",
+                    "Data-driven design decisions lead to more robust implementations"
+                  ]
+                }
+              };
+            }
+
             return { ...project, imageUrl };
           })
         );

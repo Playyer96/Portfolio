@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { FadeIn } from "../components/animations";
 import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import SEO from "../components/SEO";
-import { FaDownload, FaEye, FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaDownload, FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa";
 import MyCv from "../assets/cv/CV-Danilo-Vanegas-2025.pdf";
 import "./Cv.scss";
 
 const Cv = () => {
-  // Auto-preview the PDF by default
-  const [showPdf, setShowPdf] = useState(true);
 
   const handleDownload = () => {
     const link = document.createElement('a');
@@ -75,22 +73,6 @@ const Cv = () => {
           </FadeIn>
         </section>
 
-        {/* PDF Viewer */}
-        {showPdf && (
-          <motion.section
-            className="cv__viewer"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-          >
-            <iframe
-              className="cv__iframe"
-              title="My CV"
-              src={MyCv}
-              type="application/pdf"
-            />
-          </motion.section>
-        )}
 
         {/* Quick Overview */}
         <section className="cv__overview">

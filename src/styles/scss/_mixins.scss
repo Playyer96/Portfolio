@@ -151,11 +151,9 @@
   outline: none;
   text-decoration: none;
 
-  &:focus,
-  &:focus-visible,
-  &:active {
-    outline: none;
-    box-shadow: none;
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
   }
 }
 
@@ -301,29 +299,6 @@
   }
 }
 
-// Apple Liquid Glass effect (WWDC 2025)
-@mixin liquid-glass($blur: 20px, $opacity: 0.6, $tint-opacity: 0.1) {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, $tint-opacity) 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  background-color: rgba($color-bg-card, $opacity);
-  backdrop-filter: blur($blur) saturate(180%);
-  -webkit-backdrop-filter: blur($blur) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 8px 32px 0 rgba(0, 0, 0, 0.37),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
-}
-
-@mixin liquid-glass-glow($blur: 20px, $opacity: 0.6, $glow-color: $color-primary) {
-  @include liquid-glass($blur, $opacity);
-  box-shadow:
-    0 8px 32px 0 rgba(0, 0, 0, 0.37),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
-    0 0 20px rgba($glow-color, 0.3);
-}
 // Apple Liquid Glass effect (inspired by iOS/macOS design)
 @mixin liquid-glass($blur: 20px, $opacity: 0.6, $tint-opacity: 0.1) {
   position: relative;

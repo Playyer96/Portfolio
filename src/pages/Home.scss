@@ -71,9 +71,34 @@
     }
 
     &-content {
-      max-width: 900px;
+      max-width: 1200px;
       width: 100%;
-      text-align: center;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: $spacing-3xl;
+      align-items: center;
+
+      @include respond-to(lg) {
+        grid-template-columns: 1.2fr 1fr;
+        gap: $spacing-4xl;
+      }
+    }
+
+    &-left {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-2xl;
+    }
+
+    &-right {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+
+      @include respond-to(lg) {
+        justify-content: flex-end;
+      }
     }
 
     &-tag {
@@ -126,60 +151,30 @@
     }
 
     &-title {
-      margin-bottom: $spacing-xl;
-
       h1 {
-        font-size: $font-size-4xl;
+        font-size: $font-size-2xl;
         font-weight: $font-weight-black;
-        margin-bottom: $spacing-md;
+        margin: 0;
+        line-height: 1.3;
+        color: $color-text-primary;
 
         @include respond-to(md) {
-          font-size: $font-size-6xl;
+          font-size: $font-size-4xl;
         }
 
         @include respond-to(lg) {
-          font-size: 5rem;
+          font-size: $font-size-5xl;
         }
       }
     }
 
-    &-subtitle {
-      h2 {
-        font-size: $font-size-xl;
-        font-weight: $font-weight-medium;
-        color: $color-text-secondary;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: $spacing-md;
-        flex-wrap: wrap;
-
-        @include respond-to(md) {
-          font-size: $font-size-3xl;
-        }
-      }
-    }
-
-    &-role {
-      @include text-gradient($gradient-primary);
-      font-weight: $font-weight-bold;
-    }
-
-    &-separator {
-      color: $color-primary;
-      opacity: 0.5;
-    }
-
-    &-engines {
-      color: $color-text-secondary;
-    }
 
     &-description {
       font-size: $font-size-base;
-      line-height: 1.8;
+      line-height: 1.7;
       color: $color-text-secondary;
-      max-width: 700px;
-      margin: 0 auto $spacing-2xl;
+      max-width: 100%;
+      margin: 0;
 
       @include respond-to(md) {
         font-size: $font-size-lg;
@@ -189,96 +184,74 @@
     &-actions {
       display: flex;
       gap: $spacing-lg;
-      justify-content: center;
-      margin-bottom: $spacing-2xl;
+      justify-content: flex-start;
       flex-wrap: wrap;
+      margin: $spacing-lg 0;
     }
 
     &-socials {
-      margin-top: $spacing-2xl;
+      margin-top: $spacing-lg;
     }
   }
 
   // CTA Buttons
   &__cta-primary {
-    @include liquid-glass-button;
     padding: $spacing-md $spacing-2xl;
     font-size: $font-size-base;
-    background: linear-gradient(135deg, rgba($color-primary, 0.2), rgba($color-accent, 0.2));
-    border: 2px solid rgba($color-primary, 0.5);
+    background: linear-gradient(135deg, rgba($color-primary, 0.15), rgba($color-accent, 0.1));
+    border: 2px solid rgba($color-primary, 0.3);
     color: $color-primary;
-    font-weight: $font-weight-bold;
-    box-shadow:
-      0 0 20px rgba($color-primary, 0.3),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba($color-primary, 0.1), transparent);
-      border-radius: $radius-lg;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    border-radius: $radius-lg;
+    transition: all $transition-base;
+    position: relative;
+    overflow: hidden;
 
     &:hover {
-      border-color: $color-primary;
-      box-shadow:
-        0 0 30px rgba($color-primary, 0.5),
-        0 0 60px rgba($color-primary, 0.3),
-        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      border-color: rgba($color-primary, 0.5);
+      background: linear-gradient(135deg, rgba($color-primary, 0.2), rgba($color-accent, 0.15));
+      box-shadow: 0 0 12px rgba($color-primary, 0.15);
+      transform: translateY(-2px);
+    }
 
-      &::after {
-        opacity: 1;
-      }
+    &:active {
+      transform: translateY(0);
     }
 
     @include respond-to(md) {
-      padding: $spacing-lg $spacing-3xl;
-      font-size: $font-size-lg;
+      padding: $spacing-md $spacing-3xl;
+      font-size: $font-size-base;
     }
   }
 
   &__cta-secondary {
-    @include liquid-glass-button;
     padding: $spacing-md $spacing-2xl;
     font-size: $font-size-base;
-    background: linear-gradient(135deg, rgba($color-secondary, 0.15), rgba($color-accent, 0.15));
-    border: 2px solid rgba($color-secondary, 0.4);
+    background: linear-gradient(135deg, rgba($color-secondary, 0.1), rgba($color-accent, 0.1));
+    border: 2px solid rgba($color-secondary, 0.25);
     color: $color-secondary;
-    font-weight: $font-weight-bold;
-    box-shadow:
-      0 0 20px rgba($color-secondary, 0.2),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba($color-secondary, 0.1), transparent);
-      border-radius: $radius-lg;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    border-radius: $radius-lg;
+    transition: all $transition-base;
+    position: relative;
+    overflow: hidden;
 
     &:hover {
-      border-color: $color-secondary;
-      box-shadow:
-        0 0 30px rgba($color-secondary, 0.5),
-        0 0 60px rgba($color-secondary, 0.3),
-        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      border-color: rgba($color-secondary, 0.4);
+      background: linear-gradient(135deg, rgba($color-secondary, 0.15), rgba($color-accent, 0.1));
+      box-shadow: 0 0 12px rgba($color-secondary, 0.1);
+      transform: translateY(-2px);
+    }
 
-      &::after {
-        opacity: 1;
-      }
+    &:active {
+      transform: translateY(0);
     }
 
     @include respond-to(md) {
-      padding: $spacing-lg $spacing-3xl;
-      font-size: $font-size-lg;
+      padding: $spacing-md $spacing-3xl;
+      font-size: $font-size-base;
     }
   }
 
@@ -429,7 +402,11 @@
     @include grid(1, $spacing-lg);
 
     @include respond-to(sm) {
-      @include grid(3, $spacing-xl);
+      @include grid(2, $spacing-lg);
+    }
+
+    @include respond-to(md) {
+      @include grid(4, $spacing-xl);
     }
   }
 
