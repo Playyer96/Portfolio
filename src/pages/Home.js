@@ -16,6 +16,7 @@ const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lila
 
 const Home = () => {
   const [technologies, setTechnologies] = useState([]);
+  const [stats, setStats] = useState({ yearsOfExperience: "5+" });
   const [loading, setLoading] = useState(true);
   const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -53,6 +54,25 @@ const Home = () => {
     fetchTechnologies();
 
     return () => clearTimeout(loadingTimer);
+  }, []);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch(`${API_URL}/stats`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.yearsOfExperience) {
+            setStats(data);
+          }
+        }
+      } catch (err) {
+        // Silently fail - use fallback value
+        console.debug('Failed to fetch stats:', err);
+      }
+    };
+
+    fetchStats();
   }, []);
 
   const getIconComponent = (techName) => {
@@ -240,7 +260,7 @@ const Home = () => {
                 visible: { opacity: 1, scale: 1 }
               }}
             >
-              <h3 className="home__stat-number text-gradient-primary">5+</h3>
+              <h3 className="home__stat-number text-gradient-primary">{stats.yearsOfExperience}</h3>
               <p className="home__stat-label">Years Experience</p>
             </motion.div>
             <motion.div

@@ -16,6 +16,7 @@ const AboutDisplay = () => {
     canonicalUrl: "https://danidev.xyz/about"
   };
   const [aboutData, setAboutData] = useState(null);
+  const [stats, setStats] = useState({ yearsOfExperience: "5+" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -43,6 +44,25 @@ const AboutDisplay = () => {
     };
 
     fetchAboutData();
+  }, []);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch(`${API_URL}/stats`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.yearsOfExperience) {
+            setStats(data);
+          }
+        }
+      } catch (err) {
+        // Silently fail - use fallback value
+        console.debug('Failed to fetch stats:', err);
+      }
+    };
+
+    fetchStats();
   }, []);
 
   // Game developer skills
@@ -245,7 +265,7 @@ const AboutDisplay = () => {
               }}
               whileHover={{ scale: 1.05 }}
             >
-              <h3 className="about__stat-number">5+</h3>
+              <h3 className="about__stat-number">{stats.yearsOfExperience}</h3>
               <p className="about__stat-label">Years of Experience</p>
             </motion.div>
             <motion.div
