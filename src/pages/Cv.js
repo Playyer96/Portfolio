@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { FadeIn } from "../components/animations";
 import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import SEO from "../components/SEO";
-import { FaDownload, FaEye, FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaDownload, FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa";
 import MyCv from "../assets/cv/CV-Danilo-Vanegas-2025.pdf";
 import "./Cv.scss";
 
 const Cv = () => {
-  // Auto-preview the PDF by default
-  const [showPdf, setShowPdf] = useState(true);
 
   const handleDownload = () => {
     const link = document.createElement('a');

@@ -4,11 +4,17 @@ import { FadeIn, StaggerContainer } from "../components/animations";
 import PageTransition from "../components/PageTransition";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import SkillBar from "../components/SkillBar";
+import SEO from "../components/SEO";
 import "./AboutDisplay.scss";
 
 const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lilac.vercel.app/api';
 
 const AboutDisplay = () => {
+  const seoData = {
+    title: "About Dani - Game Developer",
+    description: "Learn more about Danilo Vanegas, a passionate game developer specializing in Unity and Unreal Engine with expertise in gameplay programming, graphics optimization, and multiplayer systems.",
+    canonicalUrl: "https://danidev.xyz/about"
+  };
   const [aboutData, setAboutData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -99,8 +105,10 @@ const AboutDisplay = () => {
   }
 
   return (
-    <PageTransition>
-      <div className="about">
+    <>
+      <SEO {...seoData} />
+      <PageTransition>
+        <div className="about">
         <ParticleBackground particleCount={40} />
 
       {/* Hero Section with Image */}
@@ -276,8 +284,9 @@ const AboutDisplay = () => {
           </StaggerContainer>
         </div>
       </section>
-      </div>
-    </PageTransition>
+        </div>
+      </PageTransition>
+    </>
   );
 };
 
