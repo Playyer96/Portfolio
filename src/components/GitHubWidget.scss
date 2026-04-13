@@ -1,0 +1,163 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.github-widget {
+  width: 100%;
+  height: fit-content;
+
+  &__card {
+    padding: $spacing-2xl;
+    background: linear-gradient(
+      135deg,
+      rgba($color-bg-card, 0.6) 0%,
+      rgba($color-bg-card-hover, 0.4) 100%
+    );
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba($color-primary, 0.15);
+    border-radius: $radius-lg;
+    transition: all $transition-base;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+
+    &:hover {
+      border-color: rgba($color-primary, 0.3);
+      background: linear-gradient(
+        135deg,
+        rgba($color-bg-card, 0.7) 0%,
+        rgba($color-bg-card-hover, 0.5) 100%
+      );
+      box-shadow:
+        0 8px 32px rgba($color-primary, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    color: $color-primary;
+    opacity: 0.8;
+    transition: all $transition-base;
+  }
+
+  &__header {
+    text-align: center;
+  }
+
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__username {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+    font-weight: $font-weight-medium;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+  }
+
+  &__stat {
+    text-align: center;
+    padding: $spacing-md;
+    background: rgba($color-primary, 0.05);
+    border: 1px solid rgba($color-primary, 0.1);
+    border-radius: $radius-md;
+    transition: all $transition-base;
+
+    &:hover {
+      background: rgba($color-primary, 0.08);
+      border-color: rgba($color-primary, 0.2);
+    }
+  }
+
+  &__stat-value {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-black;
+    background: $gradient-primary;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__stat-label {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__button {
+    padding: $spacing-md $spacing-lg;
+    background: linear-gradient(135deg, rgba($color-primary, 0.15) 0%, rgba($color-accent, 0.1) 100%);
+    border: 1px solid rgba($color-primary, 0.3);
+    border-radius: $radius-md;
+    color: $color-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: all $transition-base;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+
+    &:hover {
+      background: linear-gradient(135deg, rgba($color-primary, 0.25) 0%, rgba($color-accent, 0.15) 100%);
+      border-color: rgba($color-primary, 0.5);
+      box-shadow: 0 0 12px rgba($color-primary, 0.2);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba($color-primary, 0.2) 50%,
+      transparent 100%
+    );
+  }
+
+  &__footer {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    text-align: center;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  // Responsive
+  @include respond-to(sm) {
+    &__card {
+      padding: $spacing-xl;
+    }
+  }
+
+  @include respond-to(md) {
+    &__card {
+      padding: $spacing-2xl;
+    }
+
+    &__title {
+      font-size: $font-size-2xl;
+    }
+  }
+}

@@ -6,6 +6,7 @@ import PageTransition from "../components/PageTransition";
 import ContactIcons from "../components/ContactIcons";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import TechBento from "../components/TechBento";
+import GitHubWidget from "../components/GitHubWidget";
 import SEO from "../components/SEO";
 import useMousePosition from "../hooks/useMousePosition";
 import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGithub, FaGitlab, FaDocker, FaSlack, FaJira } from "react-icons/fa";
@@ -153,77 +154,71 @@ const Home = () => {
       {/* Hero Section */}
       <section className="home__hero">
         <div className="home__hero-content">
-          <FadeIn direction="down" delay={0.2}>
-            <motion.div
-              className="home__hero-tag"
-              animate={{
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-            >
-              <span className="home__hero-tag-icon">{"</>"}</span>
-              Available to work
-            </motion.div>
-          </FadeIn>
-
-          <div className="home__hero-title">
-            <FadeIn direction="up" delay={0.4}>
-              <h1>
-                Hi, I'm <span className="text-gradient-primary">Dani</span>
-              </h1>
+          {/* Left Column: Text Content */}
+          <div className="home__hero-left">
+            <FadeIn direction="down" delay={0.2}>
+              <motion.div
+                className="home__hero-tag"
+                animate={{
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              >
+                <span className="home__hero-tag-icon">{"</>"}</span>
+                Available to work
+              </motion.div>
             </FadeIn>
-            <FadeIn direction="up" delay={0.6}>
-              <div className="home__hero-subtitle">
-                <motion.h2
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
+
+            <div className="home__hero-title">
+              <FadeIn direction="up" delay={0.4}>
+                <h1>
+                  Game Developer specializing in <span className="text-gradient-primary">multiplayer systems</span>, graphics optimization, and gameplay architecture
+                </h1>
+              </FadeIn>
+            </div>
+
+            <FadeIn direction="up" delay={0.8}>
+              <p className="home__hero-description">
+                5+ years shipping AAA-quality games with Unreal Engine and Unity. Expert in gameplay programming, real-time optimization, and scalable multiplayer systems.
+              </p>
+            </FadeIn>
+
+            <FadeIn direction="up" delay={1.0}>
+              <div className="home__hero-actions">
+                <motion.button
+                  className="home__cta-primary"
+                  onClick={() => window.open("https://github.com/Playyer96", "_blank")}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <span className="home__hero-role">Game Developer</span>
-                  <span className="home__hero-separator">|</span>
-                  <span className="home__hero-engines">Unreal & Unity</span>
-                </motion.h2>
+                  View on GitHub
+                </motion.button>
+                <motion.button
+                  className="home__cta-secondary"
+                  onClick={() => navigate("/projects")}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Explore Projects
+                </motion.button>
+              </div>
+            </FadeIn>
+
+            <FadeIn direction="up" delay={1.2}>
+              <div className="home__hero-socials">
+                <ContactIcons />
               </div>
             </FadeIn>
           </div>
 
-          <FadeIn direction="up" delay={1}>
-            <p className="home__hero-description">
-              Passionate about creating immersive gaming experiences and learning cutting-edge technologies.
-              Specializing in gameplay programming, graphics optimization, and interactive systems.
-            </p>
-          </FadeIn>
-
-          <FadeIn direction="up" delay={1.2}>
-            <div className="home__hero-actions">
-              <motion.button
-                className="home__cta-primary"
-                onClick={() => navigate("/projects")}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                View My Projects
-              </motion.button>
-              <motion.button
-                className="home__cta-secondary"
-                onClick={() => navigate("/about")}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                About Me
-              </motion.button>
-            </div>
-          </FadeIn>
-
-          <FadeIn direction="up" delay={1.4}>
-            <div className="home__hero-socials">
-              <ContactIcons />
-            </div>
-          </FadeIn>
+          {/* Right Column: GitHub Widget */}
+          <div className="home__hero-right">
+            <GitHubWidget />
+          </div>
         </div>
       </section>
 
@@ -271,7 +266,17 @@ const Home = () => {
               }}
             >
               <h3 className="home__stat-number text-gradient-primary">20+</h3>
-              <p className="home__stat-label">Projects Completed</p>
+              <p className="home__stat-label">Shipped Projects</p>
+            </motion.div>
+            <motion.div
+              className="home__stat-card"
+              variants={{
+                hidden: { opacity: 0, scale: 0.8 },
+                visible: { opacity: 1, scale: 1 }
+              }}
+            >
+              <h3 className="home__stat-number text-gradient-primary">100K+</h3>
+              <p className="home__stat-label">Player Base</p>
             </motion.div>
             <motion.div
               className="home__stat-card"
