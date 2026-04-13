@@ -6,6 +6,7 @@ import ParticleBackground from "../components/effects/ParticleBackground";
 import ProjectCard from "../components/ProjectCard";
 import ProjectModal from "../components/ProjectModal";
 import SEO from "../components/SEO";
+import { useDebounce } from "../hooks/useDebounce";
 import "./Projects.scss";
 
 const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lilac.vercel.app/api';
@@ -19,6 +20,9 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Debounce search query to reduce unnecessary filtering
+  const debouncedSearch = useDebounce(searchQuery, 300);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -97,19 +101,19 @@ const Projects = () => {
       );
     }
 
-    // Filter by search query
-    if (searchQuery) {
+    // Filter by search query (debounced for better performance)
+    if (debouncedSearch) {
       filtered = filtered.filter(project =>
-        project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.descriptions?.some(desc => desc.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        project.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        project.descriptions?.some(desc => desc.toLowerCase().includes(debouncedSearch.toLowerCase())) ||
         project.technologies?.some(tech =>
-          (tech.name || tech.text || '').toLowerCase().includes(searchQuery.toLowerCase())
+          (tech.name || tech.text || '').toLowerCase().includes(debouncedSearch.toLowerCase())
         )
       );
     }
 
     setFilteredProjects(filtered);
-  }, [activeFilter, searchQuery, projects]);
+  }, [activeFilter, debouncedSearch, projects]);
 
   if (loading && showLoading) {
     return (
@@ -222,15 +226,15 @@ const Projects = () => {
 
         {/* Projects Grid */}
         <div className="projects__grid">
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence>
             {filteredProjects.length > 0 ? (
               filteredProjects.map((project, index) => (
                 <motion.div
                   key={project._id || project.id || project.name}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.4, delay: index * 0.03 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.3 }}
                   layout
                 >
                   <ProjectCard

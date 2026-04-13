@@ -137,6 +137,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                       src={media[currentImageIndex]?.image}
                       alt={`${project.name} ${currentImageIndex + 1}`}
                       className="project-modal__image"
+                      loading="lazy"
                     />
                   )}
                 </motion.div>
