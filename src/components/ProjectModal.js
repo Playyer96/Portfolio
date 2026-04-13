@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaReact, FaUnity, FaTimes, FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGitlab, FaDocker } from "react-icons/fa";
 import { SiUnrealengine, SiCplusplus, SiSharp, SiPerforce } from "react-icons/si";
 import ReactPlayer from "react-player";
+import FadeIn from "./animations/FadeIn";
+import { CaseStudySection, MetricsGrid, Timeline } from "./CaseStudy";
 import "./ProjectModal.scss";
 
 const ProjectModal = ({ project, isOpen, onClose }) => {
@@ -204,69 +206,209 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                 )}
               </div>
 
-              {/* Description */}
-              {(project.descriptions || project.description) && (
-                <div className="project-modal__section">
-                  <h3 className="project-modal__section-title">About</h3>
-                  {project.descriptions ? (
-                    project.descriptions.map((desc, idx) => (
-                      <p key={idx} className="project-modal__description">
-                        {desc}
-                      </p>
-                    ))
-                  ) : (
-                    <p className="project-modal__description">
-                      {project.description || "No description available."}
-                    </p>
+              {/* Case Study Content */}
+              {project.caseStudy ? (
+                <div className="project-modal__case-study">
+                  {/* Problem Statement Section */}
+                  {project.caseStudy.problem && (
+                    <CaseStudySection
+                      title="Problem Statement"
+                      delay={0.1}
+                      className="project-modal__case-study-section"
+                    >
+                      {project.caseStudy.problem.challenge && (
+                        <div className="project-modal__case-study-item">
+                          <h4 className="project-modal__case-study-subtitle">Challenge</h4>
+                          <p className="project-modal__case-study-text">
+                            {project.caseStudy.problem.challenge}
+                          </p>
+                        </div>
+                      )}
+                      {project.caseStudy.problem.context && (
+                        <div className="project-modal__case-study-item">
+                          <h4 className="project-modal__case-study-subtitle">Context</h4>
+                          <p className="project-modal__case-study-text">
+                            {project.caseStudy.problem.context}
+                          </p>
+                        </div>
+                      )}
+                      {project.caseStudy.problem.goals && project.caseStudy.problem.goals.length > 0 && (
+                        <div className="project-modal__case-study-item">
+                          <h4 className="project-modal__case-study-subtitle">Goals</h4>
+                          <ul className="project-modal__case-study-list">
+                            {project.caseStudy.problem.goals.map((goal, idx) => (
+                              <li key={idx} className="project-modal__case-study-list-item">
+                                {goal}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </CaseStudySection>
+                  )}
+
+                  {/* Solution Section */}
+                  {project.caseStudy.solution && (
+                    <CaseStudySection
+                      title="Solution"
+                      delay={0.2}
+                      className="project-modal__case-study-section"
+                    >
+                      {project.caseStudy.solution.approach && (
+                        <div className="project-modal__case-study-item">
+                          <h4 className="project-modal__case-study-subtitle">Approach</h4>
+                          <p className="project-modal__case-study-text">
+                            {project.caseStudy.solution.approach}
+                          </p>
+                        </div>
+                      )}
+                      {project.caseStudy.solution.keyFeatures && project.caseStudy.solution.keyFeatures.length > 0 && (
+                        <div className="project-modal__case-study-item">
+                          <h4 className="project-modal__case-study-subtitle">Key Features</h4>
+                          <ul className="project-modal__case-study-list">
+                            {project.caseStudy.solution.keyFeatures.map((feature, idx) => (
+                              <li key={idx} className="project-modal__case-study-list-item">
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {project.caseStudy.solution.technicalHighlights && project.caseStudy.solution.technicalHighlights.length > 0 && (
+                        <div className="project-modal__case-study-item">
+                          <h4 className="project-modal__case-study-subtitle">Technical Highlights</h4>
+                          <ul className="project-modal__case-study-list">
+                            {project.caseStudy.solution.technicalHighlights.map((highlight, idx) => (
+                              <li key={idx} className="project-modal__case-study-list-item">
+                                {highlight}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </CaseStudySection>
+                  )}
+
+                  {/* Metrics Section */}
+                  {project.caseStudy.metrics && project.caseStudy.metrics.length > 0 && (
+                    <FadeIn
+                      delay={0.3}
+                      duration={0.6}
+                      direction="up"
+                      className="project-modal__case-study-section"
+                    >
+                      <div className="project-modal__case-study-metrics-header">
+                        <h3 className="project-modal__case-study-metrics-title">Impact & Results</h3>
+                      </div>
+                      <MetricsGrid
+                        metrics={project.caseStudy.metrics}
+                        className="project-modal__metrics-grid"
+                      />
+                    </FadeIn>
+                  )}
+
+                  {/* Timeline Section */}
+                  {project.caseStudy.timeline && project.caseStudy.timeline.length > 0 && (
+                    <FadeIn
+                      delay={0.4}
+                      duration={0.6}
+                      direction="up"
+                      className="project-modal__case-study-section"
+                    >
+                      <div className="project-modal__case-study-timeline-header">
+                        <h3 className="project-modal__case-study-timeline-title">Project Timeline</h3>
+                      </div>
+                      <Timeline
+                        phases={project.caseStudy.timeline}
+                        className="project-modal__timeline"
+                      />
+                    </FadeIn>
+                  )}
+
+                  {/* Key Learnings Section */}
+                  {project.caseStudy.learnings && project.caseStudy.learnings.length > 0 && (
+                    <CaseStudySection
+                      title="Key Learnings"
+                      delay={0.5}
+                      className="project-modal__case-study-section"
+                    >
+                      <ul className="project-modal__case-study-list">
+                        {project.caseStudy.learnings.map((learning, idx) => (
+                          <li key={idx} className="project-modal__case-study-list-item">
+                            {learning}
+                          </li>
+                        ))}
+                      </ul>
+                    </CaseStudySection>
                   )}
                 </div>
-              )}
+              ) : (
+                <>
+                  {/* Description */}
+                  {(project.descriptions || project.description) && (
+                    <div className="project-modal__section">
+                      <h3 className="project-modal__section-title">About</h3>
+                      {project.descriptions ? (
+                        project.descriptions.map((desc, idx) => (
+                          <p key={idx} className="project-modal__description">
+                            {desc}
+                          </p>
+                        ))
+                      ) : (
+                        <p className="project-modal__description">
+                          {project.description || "No description available."}
+                        </p>
+                      )}
+                    </div>
+                  )}
 
-              {/* Technologies */}
-              {project.technologies && project.technologies.length > 0 && (
-                <div className="project-modal__section">
-                  <h3 className="project-modal__section-title">Technologies</h3>
-                  <div className="project-modal__tech-grid">
-                    {project.technologies.map((tech, index) => {
-                      const techName = tech.name || tech.text || '';
-                      const IconComponent = getIconComponent(techName);
-                      return (
-                        <motion.div
-                          key={index}
-                          className="project-modal__tech-badge"
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: index * 0.05 }}
-                          whileHover={{ scale: 1.05, y: -2 }}
-                        >
-                          {IconComponent && <IconComponent className="project-modal__tech-icon" />}
-                          <span>{techName}</span>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
+                  {/* Technologies */}
+                  {project.technologies && project.technologies.length > 0 && (
+                    <div className="project-modal__section">
+                      <h3 className="project-modal__section-title">Technologies</h3>
+                      <div className="project-modal__tech-grid">
+                        {project.technologies.map((tech, index) => {
+                          const techName = tech.name || tech.text || '';
+                          const IconComponent = getIconComponent(techName);
+                          return (
+                            <motion.div
+                              key={index}
+                              className="project-modal__tech-badge"
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: index * 0.05 }}
+                              whileHover={{ scale: 1.05, y: -2 }}
+                            >
+                              {IconComponent && <IconComponent className="project-modal__tech-icon" />}
+                              <span>{techName}</span>
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
 
-              {/* Responsibilities */}
-              {project.responsibilities && project.responsibilities.length > 0 && (
-                <div className="project-modal__section">
-                  <h3 className="project-modal__section-title">Key Features & Responsibilities</h3>
-                  <ul className="project-modal__list">
-                    {project.responsibilities.map((item, index) => (
-                      <motion.li
-                        key={index}
-                        className="project-modal__list-item"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                      >
-                        <span className="project-modal__list-bullet">▸</span>
-                        {item}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
+                  {/* Responsibilities */}
+                  {project.responsibilities && project.responsibilities.length > 0 && (
+                    <div className="project-modal__section">
+                      <h3 className="project-modal__section-title">Key Features & Responsibilities</h3>
+                      <ul className="project-modal__list">
+                        {project.responsibilities.map((item, index) => (
+                          <motion.li
+                            key={index}
+                            className="project-modal__list-item"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                          >
+                            <span className="project-modal__list-bullet">▸</span>
+                            {item}
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </motion.div>

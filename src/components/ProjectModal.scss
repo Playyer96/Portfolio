@@ -313,4 +313,120 @@
     font-weight: $font-weight-bold;
     flex-shrink: 0;
   }
+
+  // Case Study Styles
+  &__case-study {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2xl;
+  }
+
+  &__case-study-section {
+    margin-bottom: 0;
+  }
+
+  &__case-study-item {
+    margin-bottom: $spacing-lg;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__case-study-subtitle {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    margin: 0 0 $spacing-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    @include respond-to(md) {
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__case-study-text {
+    font-size: $font-size-sm;
+    line-height: 1.8;
+    color: $color-text-secondary;
+    margin: 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+    }
+  }
+
+  &__case-study-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__case-study-list-item {
+    font-size: $font-size-sm;
+    line-height: 1.6;
+    color: $color-text-secondary;
+    padding-left: $spacing-md;
+    position: relative;
+
+    &::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: $color-primary;
+      font-weight: $font-weight-bold;
+    }
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+    }
+  }
+
+  &__case-study-metrics-header,
+  &__case-study-timeline-header {
+    margin-bottom: $spacing-xl;
+
+    @include respond-to(md) {
+      margin-bottom: $spacing-2xl;
+    }
+  }
+
+  &__case-study-metrics-title,
+  &__case-study-timeline-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    margin: 0 0 $spacing-md;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: $gradient-primary;
+      border-radius: $radius-full;
+    }
+
+    @include respond-to(md) {
+      font-size: $font-size-xl;
+    }
+  }
+
+  &__metrics-grid {
+    margin-bottom: $spacing-xl;
+
+    @include respond-to(md) {
+      margin-bottom: $spacing-2xl;
+    }
+  }
+
+  &__timeline {
+    margin-bottom: 0;
+  }
 }
