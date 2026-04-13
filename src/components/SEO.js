@@ -9,8 +9,28 @@ const SEO = ({
   ogType = "website",
   canonicalUrl = "https://danidev.xyz",
   author = "Danilo Vanegas",
-  twitterCard = "summary_large_image"
+  twitterCard = "summary_large_image",
+  structuredData = null
 }) => {
+  // Default structured data for Person/Portfolio
+  const defaultStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Danilo Vanegas",
+    "url": "https://danidev.xyz",
+    "image": "https://danidev.xyz/og-image.png",
+    "jobTitle": "Game Developer",
+    "description": description,
+    "sameAs": [
+      "https://github.com/danidev",
+      "https://linkedin.com/in/danilo-vanegas",
+      "https://instagram.com/danidev"
+    ],
+    "knowsAbout": ["Unity", "Unreal Engine", "C#", "C++", "Game Programming", "Multiplayer Systems", "Graphics Optimization"]
+  };
+
+  const jsonLdData = structuredData || defaultStructuredData;
+
   return (
     <Helmet>
       {/* Primary Meta Tags */}
@@ -47,6 +67,12 @@ const SEO = ({
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
       <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      {/* JSON-LD Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify(jsonLdData)}
+      </script>
     </Helmet>
   );
 };

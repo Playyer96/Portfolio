@@ -1,0 +1,97 @@
+@import '../styles/scss/variables';
+@import '../styles/scss/mixins';
+
+.featured-projects {
+  width: 100%;
+  padding: $spacing-3xl 0;
+
+  // Section Header
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-2xl;
+
+    @include respond-to(md) {
+      margin-bottom: $spacing-3xl;
+    }
+  }
+
+  &__title {
+    @include heading($font-size-3xl);
+    @include text-gradient($gradient-primary);
+    margin: 0 0 $spacing-md 0;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__divider {
+    width: 60px;
+    height: 3px;
+    background: $gradient-primary;
+    margin: 0 auto $spacing-md auto;
+    border-radius: $radius-full;
+  }
+
+  &__subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    margin: 0;
+    font-weight: $font-weight-regular;
+
+    @include respond-to(md) {
+      font-size: $font-size-lg;
+    }
+  }
+
+  // Project Grid
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-xl;
+    }
+
+    @include respond-to(lg) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  // View All CTA
+  &__cta {
+    @include flex-center;
+    margin-top: $spacing-2xl;
+
+    @include respond-to(md) {
+      margin-top: $spacing-3xl;
+    }
+  }
+
+  &__view-all {
+    @include button-base;
+    @include liquid-glass(10px, 0.3, 0.12);
+    color: $color-primary;
+    border: 1px solid rgba($color-primary, 0.3);
+    padding: $spacing-md $spacing-xl;
+    font-size: $font-size-base;
+    gap: $spacing-sm;
+    text-decoration: none;
+
+    &:hover {
+      border-color: rgba($color-primary, 0.6);
+      @include glow($color-primary, 0.3);
+    }
+  }
+
+  &__view-all-icon {
+    font-size: $font-size-sm;
+    transition: transform $transition-fast;
+
+    .featured-projects__view-all:hover & {
+      transform: translateX(4px);
+    }
+  }
+}

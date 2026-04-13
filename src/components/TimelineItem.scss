@@ -159,6 +159,97 @@
     }
   }
 
+  // Tech Badges Section
+  &__tech-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+
+  &__tech-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    background: rgba($color-primary, 0.1);
+    border: 1px solid rgba($color-primary, 0.3);
+    color: $color-primary;
+    transition: all $transition-base;
+    white-space: nowrap;
+
+    @include respond-to(md) {
+      padding: $spacing-xs $spacing-md;
+      font-size: $font-size-sm;
+    }
+
+    &:hover {
+      background: rgba($color-primary, 0.2);
+      border-color: rgba($color-primary, 0.5);
+      transform: translateY(-2px);
+    }
+
+    &--primary {
+      background: rgba($color-primary, 0.1);
+      border-color: rgba($color-primary, 0.3);
+      color: $color-primary;
+    }
+
+    &--secondary {
+      background: rgba($color-secondary, 0.1);
+      border-color: rgba($color-secondary, 0.3);
+      color: $color-secondary;
+
+      &:hover {
+        background: rgba($color-secondary, 0.2);
+        border-color: rgba($color-secondary, 0.5);
+      }
+    }
+
+    &--accent {
+      background: rgba($color-accent, 0.1);
+      border-color: rgba($color-accent, 0.3);
+      color: $color-accent;
+
+      &:hover {
+        background: rgba($color-accent, 0.2);
+        border-color: rgba($color-accent, 0.5);
+      }
+    }
+  }
+
+  // Responsibilities Section (as individual items, not list)
+  &__responsibilities {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__responsibility-item {
+    display: flex;
+    gap: $spacing-sm;
+    font-size: $font-size-sm;
+    line-height: 1.6;
+    color: $color-text-secondary;
+    transition: all $transition-base;
+
+    @include respond-to(md) {
+      font-size: $font-size-base;
+    }
+
+    &:hover {
+      color: $color-text-primary;
+      transform: translateX(4px);
+    }
+  }
+
+  &__responsibility-text {
+    flex: 1;
+  }
+
+  // Fallback list style (legacy)
   &__list {
     list-style: none;
     margin: 0;

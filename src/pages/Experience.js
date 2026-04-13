@@ -54,6 +54,44 @@ const Experience = () => {
     return true;
   });
 
+  // Calculate career stats from real data
+  const workExperiences = experiences.filter(exp => exp.icon === "WorkIcon");
+  const educationExperiences = experiences.filter(exp => exp.icon === "SchoolIcon");
+
+  // Count all unique technologies across all experiences
+  const TECH_MAP = {
+    "Unreal": "Unreal Engine",
+    "unreal engine": "Unreal Engine",
+    "Unity": "Unity",
+    "unity engine": "Unity",
+    "C#": "C#",
+    "C++": "C++",
+    "AR": "AR",
+    "VR": "VR",
+    "Hololens": "Mixed Reality",
+    "React": "React",
+    "Node": "Node.js",
+    "Python": "Python"
+  };
+
+  const getAllTechs = () => {
+    const techSet = new Set();
+    experiences.forEach(exp => {
+      if (exp.responsibilities && Array.isArray(exp.responsibilities)) {
+        exp.responsibilities.forEach(resp => {
+          if (!resp) return;
+          const respLower = resp.toLowerCase();
+          Object.keys(TECH_MAP).forEach(key => {
+            if (respLower.includes(key.toLowerCase())) {
+              techSet.add(TECH_MAP[key]);
+            }
+          });
+        });
+      }
+    });
+    return techSet.size;
+  };
+
   if (loading && showLoading) {
     return (
       <div className="experience">
@@ -111,6 +149,33 @@ const Experience = () => {
             <p className="experience__subtitle">
               Professional experience and educational background in game development
             </p>
+          </FadeIn>
+
+          {/* Career Summary Stats */}
+          <FadeIn direction="up" delay={0.45}>
+            <div className="experience__summary">
+              <motion.div
+                className="experience__summary-item"
+                whileHover={{ y: -5 }}
+              >
+                <div className="experience__summary-number">{workExperiences.length}</div>
+                <div className="experience__summary-label">Work Positions</div>
+              </motion.div>
+              <motion.div
+                className="experience__summary-item"
+                whileHover={{ y: -5 }}
+              >
+                <div className="experience__summary-number">{educationExperiences.length}</div>
+                <div className="experience__summary-label">Education</div>
+              </motion.div>
+              <motion.div
+                className="experience__summary-item"
+                whileHover={{ y: -5 }}
+              >
+                <div className="experience__summary-number">{getAllTechs()}</div>
+                <div className="experience__summary-label">Technologies</div>
+              </motion.div>
+            </div>
           </FadeIn>
 
           {/* Filter Tabs */}
