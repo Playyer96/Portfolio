@@ -12,7 +12,7 @@
   will-change: transform;
 
   &:hover {
-    @include liquid-glass-glow(15px, 0.65, $color-primary);
+    @include liquid-glass-glow(20px, 0.65, $color-primary);
 
     .project-card__image {
       transform: scale(1.1);
@@ -24,6 +24,31 @@
 
     .project-card__glow {
       opacity: 1;
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    .project-card__tech-tag {
+      animation: none;
+
+      &:nth-child(1) {
+        animation: fadeInUp 0.3s ease-out;
+      }
+
+      &:nth-child(2) {
+        animation: fadeInUp 0.3s ease-out 0.05s backwards;
+      }
+
+      &:nth-child(3) {
+        animation: fadeInUp 0.3s ease-out 0.1s backwards;
+      }
+
+      &:nth-child(4) {
+        animation: fadeInUp 0.3s ease-out 0.15s backwards;
+      }
+
+      &:nth-child(5) {
+        animation: fadeInUp 0.3s ease-out 0.2s backwards;
+      }
     }
   }
 
@@ -250,13 +275,16 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 100%;
-    height: 100%;
+    transform: translate(-50%, -50%);
+    width: 150%;
+    height: 150%;
     background: radial-gradient(
       circle,
-      rgba($color-primary, 0.15) 0%,
-      transparent 70%
+      rgba($color-primary, 0.2) 0%,
+      rgba($color-primary, 0.05) 50%,
+      transparent 80%
     );
+    filter: blur(40px);
     opacity: 0;
     transition: opacity $transition-base;
     pointer-events: none;

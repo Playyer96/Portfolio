@@ -115,10 +115,10 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                 <motion.div
                   key={currentImageIndex}
                   className="project-modal__media-wrapper"
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
-                  transition={{ duration: 0.3 }}
+                  initial={{ opacity: 0, x: 100, y: -20 }}
+                  animate={{ opacity: 1, x: 0, y: 0 }}
+                  exit={{ opacity: 0, x: -100, y: 20 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                 >
                   {media[currentImageIndex]?.type === 'video' ? (
                     <div className="project-modal__video">
@@ -206,7 +206,12 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
 
               {/* Description */}
               {(project.descriptions || project.description) && (
-                <div className="project-modal__section">
+                <motion.div
+                  className="project-modal__section"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.4 }}
+                >
                   <h3 className="project-modal__section-title">About</h3>
                   {project.descriptions ? (
                     project.descriptions.map((desc, idx) => (
@@ -219,12 +224,17 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                       {project.description || "No description available."}
                     </p>
                   )}
-                </div>
+                </motion.div>
               )}
 
               {/* Technologies */}
               {project.technologies && project.technologies.length > 0 && (
-                <div className="project-modal__section">
+                <motion.div
+                  className="project-modal__section"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                >
                   <h3 className="project-modal__section-title">Technologies</h3>
                   <div className="project-modal__tech-grid">
                     {project.technologies.map((tech, index) => {
@@ -234,10 +244,10 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                         <motion.div
                           key={index}
                           className="project-modal__tech-badge"
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: index * 0.05 }}
-                          whileHover={{ scale: 1.05, y: -2 }}
+                          initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
+                          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                          transition={{ delay: 0.3 + index * 0.06, duration: 0.4 }}
+                          whileHover={{ scale: 1.1, y: -4, rotate: 2 }}
                         >
                           {IconComponent && <IconComponent className="project-modal__tech-icon" />}
                           <span>{techName}</span>
@@ -245,12 +255,17 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                       );
                     })}
                   </div>
-                </div>
+                </motion.div>
               )}
 
               {/* Responsibilities */}
               {project.responsibilities && project.responsibilities.length > 0 && (
-                <div className="project-modal__section">
+                <motion.div
+                  className="project-modal__section"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.4 }}
+                >
                   <h3 className="project-modal__section-title">Key Features & Responsibilities</h3>
                   <ul className="project-modal__list">
                     {project.responsibilities.map((item, index) => (
@@ -266,7 +281,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                       </motion.li>
                     ))}
                   </ul>
-                </div>
+                </motion.div>
               )}
             </div>
           </motion.div>

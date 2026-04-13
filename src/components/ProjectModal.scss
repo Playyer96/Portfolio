@@ -148,13 +148,17 @@
     transform-origin: center;
 
     &:hover {
-      background: rgba($color-primary, 0.5);
+      background: rgba($color-primary, 0.6);
+      box-shadow: 0 0 8px rgba($color-primary, 0.4);
+      animation: pulseGlow 2s ease-in-out infinite;
     }
 
     &.active {
       background: $color-primary;
-      @include glow($color-primary, 0.6);
-      transform: scaleX(3);
+      @include glow($color-primary, 0.8);
+      transform: scaleX(3) rotate(5deg);
+      animation: pulseGlow 2s ease-in-out infinite;
+      box-shadow: 0 0 15px rgba($color-primary, 0.6);
     }
   }
 

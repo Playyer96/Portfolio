@@ -33,7 +33,19 @@
       "Bash(grep -E \"\\\\\\\\\\\\$|@mixin\")",
       "Bash(find /d/Projects/Web/Portfolio/src -type f \\\\\\( -name \"*.js\" -o -name \"*.jsx\" \\\\\\) -exec grep -l \"expandable\\\\|collapsible\\\\|accordion\\\\|toggle\" {} \\\\;)",
       "Bash(xargs wc:*)",
-      "Bash(grep -r \"transform.*scale\\\\|transform.*translate\\\\|box-shadow.*0 0\\\\|:hover\" /d/Projects/Web/Portfolio/.claude/worktrees/gifted-grothendieck/src/components/*.scss --include=\"*.scss\")"
+      "Bash(grep -r \"transform.*scale\\\\|transform.*translate\\\\|box-shadow.*0 0\\\\|:hover\" /d/Projects/Web/Portfolio/.claude/worktrees/gifted-grothendieck/src/components/*.scss --include=\"*.scss\")",
+      "Read(//tmp/**)",
+      "Bash(pkill -f \"npm start\")",
+      "Bash(pkill -f \"react-scripts\")",
+      "Bash([ -d node_modules ])",
+      "Bash(npm --version)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(gh pr create --base main --head claude/gifted-grothendieck --title 'Phase 2.3: Complete UI/UX & Styling Audit with Critical Fixes' --body ':*)",
+      "Bash(git --version)",
+      "Bash(git push:*)",
+      "Bash(npx react-scripts:*)",
+      "mcp__obsidian__delete_note"
     ]
   }
 }

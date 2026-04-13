@@ -404,6 +404,26 @@
   }
 }
 
+// Shine sweep for glossy button effect
+@keyframes shine-sweep {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+// Glow pulse for enhanced glow effects
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.8);
+  }
+}
+
 // Utility animation classes
 .animate-fade-in {
   animation: fadeIn 0.5s ease-in-out;
