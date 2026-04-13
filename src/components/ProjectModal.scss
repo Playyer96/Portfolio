@@ -145,6 +145,7 @@
     border-radius: $radius-full;
     cursor: pointer;
     transition: all $transition-base;
+    transform-origin: center;
 
     &:hover {
       background: rgba($color-primary, 0.5);
@@ -153,7 +154,7 @@
     &.active {
       background: $color-primary;
       @include glow($color-primary, 0.6);
-      width: 30px;
+      transform: scaleX(3);
     }
   }
 

@@ -73,22 +73,6 @@ const Cv = () => {
           </FadeIn>
         </section>
 
-        {/* PDF Viewer */}
-        {showPdf && (
-          <motion.section
-            className="cv__viewer"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-          >
-            <iframe
-              className="cv__iframe"
-              title="My CV"
-              src={MyCv}
-              type="application/pdf"
-            />
-          </motion.section>
-        )}
 
         {/* Quick Overview */}
         <section className="cv__overview">

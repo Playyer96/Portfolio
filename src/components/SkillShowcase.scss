@@ -13,8 +13,8 @@
   }
 
   &__title {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-black;
     background: $gradient-primary;
     background-clip: text;
     -webkit-background-clip: text;
@@ -24,7 +24,7 @@
   }
 
   &__subtitle {
-    font-size: 1.1rem;
+    font-size: $font-size-lg;
     color: $color-text-secondary;
     max-width: 600px;
     margin: 0 auto;
@@ -52,9 +52,9 @@
     color: $color-text-primary;
     border-radius: $radius-full;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: $font-weight-medium;
     transition: all $transition-base;
-    font-size: 0.95rem;
+    font-size: $font-size-base;
     white-space: nowrap;
 
     &:hover {
@@ -66,7 +66,7 @@
       background: $color-accent;
       color: $color-bg-dark;
       border-color: $color-accent;
-      box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+      box-shadow: 0 0 20px rgba($color-accent, 0.5);
     }
   }
 
@@ -112,18 +112,18 @@
   }
 
   &__skill-name {
-    font-size: 1.3rem;
-    font-weight: 700;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-black;
     margin: 0;
     margin-bottom: $spacing-xs;
     letter-spacing: -0.01em;
   }
 
   &__skill-focus {
-    font-size: 0.85rem;
+    font-size: $font-size-sm;
     color: $color-text-secondary;
     margin: 0;
-    font-weight: 400;
+    font-weight: $font-weight-regular;
   }
 
   &__expand-indicator {
@@ -142,7 +142,7 @@
   }
 
   &__description {
-    font-size: 1rem;
+    font-size: $font-size-base;
     color: $color-text-secondary;
     line-height: 1.6;
     margin-bottom: $spacing-xl;
@@ -157,8 +157,8 @@
     margin-bottom: $spacing-xl;
 
     h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: $font-size-base;
+      font-weight: $font-weight-semibold;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: $color-text-primary;
@@ -175,7 +175,7 @@
     li {
       padding: $spacing-sm $spacing-md;
       color: $color-text-secondary;
-      font-size: 0.95rem;
+      font-size: $font-size-base;
       display: flex;
       align-items: center;
       gap: $spacing-sm;
@@ -183,7 +183,7 @@
 
       &:hover {
         color: $color-text-primary;
-        padding-left: $spacing-lg;
+        transform: translateX($spacing-sm);
       }
     }
   }
@@ -197,8 +197,8 @@
   // Projects
   &__projects {
     h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: $font-size-base;
+      font-weight: $font-weight-semibold;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: $color-text-primary;
@@ -218,8 +218,8 @@
     padding: $spacing-xs $spacing-md;
     border: 1.5px solid;
     border-radius: $radius-full;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
     transition: all $transition-base;
     background: rgba(255, 255, 255, 0.03);
     white-space: nowrap;
@@ -233,7 +233,7 @@
 
   &__more-projects {
     padding: $spacing-xs $spacing-md;
-    font-size: 0.85rem;
+    font-size: $font-size-sm;
     color: $color-text-secondary;
     font-style: italic;
   }
@@ -261,8 +261,8 @@
   }
 
   &__stat-number {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-black;
     background: $gradient-primary;
     background-clip: text;
     -webkit-background-clip: text;
@@ -271,27 +271,14 @@
   }
 
   &__stat-label {
-    font-size: 0.9rem;
+    font-size: $font-size-sm;
     color: $color-text-secondary;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    font-weight: 600;
+    font-weight: $font-weight-semibold;
   }
 
-  // Responsive - Mobile first
-  @include respond-to(sm) {
-    // Tablet and larger
-    &__grid {
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
-  }
-
-  @include respond-to(md) {
-    // Desktop and larger
-    padding: $spacing-3xl $spacing-lg;
-  }
-
-  // Mobile default
+  // Mobile default - must come before responsive queries
   padding: $spacing-2xl $spacing-md;
 
   &__grid {
@@ -306,5 +293,18 @@
   &__expand-indicator {
     margin-left: 0;
     margin-top: $spacing-sm;
+  }
+
+  // Responsive - Mobile first
+  @include respond-to(sm) {
+    // Tablet and larger
+    &__grid {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+  }
+
+  @include respond-to(md) {
+    // Desktop and larger
+    padding: $spacing-3xl $spacing-lg;
   }
 }
