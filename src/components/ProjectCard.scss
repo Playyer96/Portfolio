@@ -42,6 +42,33 @@
     transition: transform $transition-slow;
   }
 
+  &__image-gradient {
+    @include absolute-cover;
+    background: linear-gradient(
+      to top,
+      rgba($color-bg-darker, 0.5) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &__tech-badge {
+    position: absolute;
+    top: $spacing-sm;
+    right: $spacing-sm;
+    padding: $spacing-xs $spacing-sm;
+    background: rgba($color-bg-darker, 0.8);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba($color-accent, 0.3);
+    border-radius: $radius-full;
+    color: $color-accent;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    z-index: 3;
+    pointer-events: none;
+  }
+
   &__overlay {
     @include absolute-cover;
     @include flex-center;
@@ -173,6 +200,49 @@
     @include respond-to(md) {
       padding: $spacing-xs $spacing-lg;
       font-size: $font-size-sm;
+    }
+  }
+
+  &__hover-actions {
+    display: flex;
+    gap: $spacing-sm;
+    padding: 0 $spacing-lg $spacing-md;
+    overflow: hidden;
+
+    @include respond-to(sm) {
+      padding: 0 $spacing-xl $spacing-lg;
+    }
+  }
+
+  &__hover-action {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-md;
+    border-radius: $radius-md;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-decoration: none;
+    background: rgba($color-text-primary, 0.08);
+    border: 1px solid rgba($color-text-primary, 0.15);
+    color: $color-text-secondary;
+    transition: all $transition-fast;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba($color-text-primary, 0.12);
+      color: $color-text-primary;
+    }
+
+    &--live {
+      background: rgba($color-primary, 0.08);
+      border-color: rgba($color-primary, 0.2);
+      color: $color-primary;
+
+      &:hover {
+        background: rgba($color-primary, 0.15);
+        border-color: rgba($color-primary, 0.4);
+      }
     }
   }
 

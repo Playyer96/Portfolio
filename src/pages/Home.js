@@ -7,6 +7,7 @@ import ContactIcons from "../components/ContactIcons";
 import ParticleBackground from "../components/effects/ParticleBackground";
 import TechBento from "../components/TechBento";
 import GitHubWidget from "../components/GitHubWidget";
+import FeaturedProjects from "../components/FeaturedProjects";
 import SEO from "../components/SEO";
 import useMousePosition from "../hooks/useMousePosition";
 import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGithub, FaGitlab, FaDocker, FaSlack, FaJira } from "react-icons/fa";
@@ -17,6 +18,7 @@ const API_URL = process.env.REACT_APP_API_URL || 'https://portfolio-backend-lila
 
 const Home = () => {
   const [technologies, setTechnologies] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [stats, setStats] = useState({ yearsOfExperience: "5+" });
   const [loading, setLoading] = useState(true);
   const [showLoading, setShowLoading] = useState(false);
@@ -55,6 +57,24 @@ const Home = () => {
     fetchTechnologies();
 
     return () => clearTimeout(loadingTimer);
+  }, []);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(`${API_URL}/projects`);
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data) && data[0]?.projects) {
+            setProjects(data[0].projects);
+          }
+        }
+      } catch (err) {
+        console.debug('Failed to fetch projects:', err);
+      }
+    };
+
+    fetchProjects();
   }, []);
 
   useEffect(() => {
@@ -243,6 +263,13 @@ const Home = () => {
           <TechBento technologies={technologies} getIconComponent={getIconComponent} />
         </div>
       </section>
+
+      {/* Featured Projects Section */}
+      {projects.length > 0 && (
+        <section className="home__featured-projects">
+          <FeaturedProjects projects={projects} limit={3} />
+        </section>
+      )}
 
       {/* Quick Stats Section */}
       <section className="home__stats">

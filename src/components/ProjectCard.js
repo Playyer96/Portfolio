@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGithub, FaGitlab, FaDocker } from "react-icons/fa";
+import { FaReact, FaUnity, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGithub, FaGitlab, FaDocker, FaExternalLinkAlt } from "react-icons/fa";
 import { SiUnrealengine, SiCplusplus, SiSharp, SiPerforce } from "react-icons/si";
 import "./ProjectCard.scss";
 
 const ProjectCard = ({ project, onClick, index }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showAllTech, setShowAllTech] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -44,12 +45,18 @@ const ProjectCard = ({ project, onClick, index }) => {
     return iconMap[(techName || '').toLowerCase()];
   };
 
+  const totalTech = project.technologies?.length || 0;
+
   return (
     <motion.div
-      className="project-card"
+      className={`project-card ${isHovered ? 'project-card--hovered' : ''}`}
       onClick={onClick}
       onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={(e) => {
+        handleMouseLeave();
+        setIsHovered(false);
+      }}
       whileHover={{ scale: 1.02 }}
       style={{
         transform: `perspective(1000px) rotateX(${-mousePosition.y}deg) rotateY(${mousePosition.x}deg)`
@@ -62,6 +69,7 @@ const ProjectCard = ({ project, onClick, index }) => {
           alt={project.name}
           className="project-card__image"
         />
+        <div className="project-card__image-gradient" />
         <div className="project-card__overlay">
           <motion.div
             className="project-card__view-btn"
@@ -71,6 +79,18 @@ const ProjectCard = ({ project, onClick, index }) => {
             View Project
           </motion.div>
         </div>
+
+        {/* Technology count badge on hover */}
+        {totalTech > 3 && (
+          <motion.div
+            className="project-card__tech-badge"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 0.8 }}
+            transition={{ duration: 0.2 }}
+          >
+            {totalTech} technologies
+          </motion.div>
+        )}
       </div>
 
       {/* Content */}
@@ -120,6 +140,42 @@ const ProjectCard = ({ project, onClick, index }) => {
           </div>
         )}
       </div>
+
+      {/* Hover action links */}
+      {(project.githubLink || project.liveLink) && (
+        <motion.div
+          className="project-card__hover-actions"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{
+            opacity: isHovered ? 1 : 0,
+            height: isHovered ? 'auto' : 0
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          {project.githubLink && (
+            <a
+              href={project.githubLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="project-card__hover-action"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <FaGithub /> GitHub
+            </a>
+          )}
+          {project.liveLink && (
+            <a
+              href={project.liveLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="project-card__hover-action project-card__hover-action--live"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <FaExternalLinkAlt /> Live Demo
+            </a>
+          )}
+        </motion.div>
+      )}
 
       {/* Card Glow Effect */}
       <div
