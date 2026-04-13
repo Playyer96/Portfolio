@@ -1,0 +1,558 @@
+// ============================================
+// CASE STUDY COMPONENTS - Complete Styling
+// ============================================
+
+@import '../../styles/scss/variables';
+@import '../../styles/scss/mixins';
+
+// ============================================
+// METRICS CARD
+// ============================================
+
+.metrics-card {
+  @include card($spacing-lg);
+  @include flex-column-center;
+  gap: $spacing-md;
+  text-align: center;
+  min-height: 200px;
+  justify-content: space-around;
+  position: relative;
+  overflow: hidden;
+  background: rgba($color-bg-card, 0.6);
+  backdrop-filter: blur(10px);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $gradient-primary;
+    opacity: 0;
+    transition: opacity $transition-base;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  &:hover {
+    background: rgba($color-bg-card-hover, 0.7);
+    border-color: rgba($color-primary, 0.5);
+
+    &::before {
+      opacity: 0.03;
+    }
+
+    .metrics-card__icon {
+      transform: scale(1.15) rotate(10deg);
+    }
+  }
+
+  // Glow variant
+  &.metrics-card--glow {
+    @include liquid-glass-glow(15px, 0.5, $color-primary);
+
+    &:hover {
+      @include glow-hover($color-primary, 0.8);
+    }
+  }
+
+  @include respond-to(sm) {
+    min-height: 180px;
+    padding: $spacing-md;
+  }
+
+  @include respond-to(xs) {
+    min-height: 160px;
+    gap: $spacing-sm;
+  }
+}
+
+.metrics-card__content {
+  @include flex-column-center;
+  width: 100%;
+  gap: $spacing-md;
+  position: relative;
+  z-index: 1;
+}
+
+.metrics-card__icon {
+  font-size: $font-size-4xl;
+  color: $color-primary;
+  transition: transform $transition-base;
+  filter: drop-shadow(0 0 10px rgba($color-primary, 0.5));
+
+  @include respond-to(sm) {
+    font-size: $font-size-3xl;
+  }
+
+  @include respond-to(xs) {
+    font-size: $font-size-2xl;
+  }
+}
+
+.metrics-card__value-wrapper {
+  @include flex-center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.metrics-card__value {
+  @include text-gradient($gradient-primary);
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  font-family: $font-mono;
+  letter-spacing: 0.05em;
+
+  @include respond-to(sm) {
+    font-size: $font-size-2xl;
+  }
+
+  @include respond-to(xs) {
+    font-size: $font-size-xl;
+  }
+}
+
+.metrics-card__unit {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  font-weight: $font-weight-regular;
+  margin-left: $spacing-xs;
+}
+
+.metrics-card__trend {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  transition: transform $transition-fast;
+
+  &.metrics-card__trend--up {
+    color: $color-primary;
+  }
+
+  &.metrics-card__trend--down {
+    color: $color-secondary;
+    transform: rotate(180deg);
+  }
+}
+
+.metrics-card__label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: $spacing-sm;
+}
+
+.metrics-card__context {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+  line-height: 1.5;
+  max-width: 90%;
+}
+
+// ============================================
+// METRICS GRID
+// ============================================
+
+.metrics-grid {
+  display: grid;
+  gap: $spacing-lg;
+  width: 100%;
+
+  // Responsive grid layout
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+  }
+
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
+
+  @include respond-to(xs) {
+    gap: $spacing-sm;
+  }
+}
+
+.metrics-grid__item {
+  width: 100%;
+}
+
+// ============================================
+// TIMELINE
+// ============================================
+
+.timeline {
+  position: relative;
+  width: 100%;
+}
+
+.timeline__track {
+  position: relative;
+  display: flex;
+}
+
+.timeline__line {
+  position: absolute;
+  left: 27px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba($color-primary, 0.5) 0%,
+    rgba($color-accent, 0.3) 50%,
+    rgba($color-secondary, 0.2) 100%
+  );
+  transform-origin: top;
+  z-index: 0;
+
+  @include respond-to(sm) {
+    left: 19px;
+  }
+}
+
+.timeline__steps {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3xl;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+
+  @include respond-to(sm) {
+    gap: $spacing-2xl;
+  }
+
+  @include respond-to(xs) {
+    gap: $spacing-xl;
+  }
+}
+
+// ============================================
+// TIMELINE STEP
+// ============================================
+
+.timeline-step {
+  display: flex;
+  gap: $spacing-xl;
+  position: relative;
+
+  @include respond-to(sm) {
+    gap: $spacing-lg;
+  }
+
+  @include respond-to(xs) {
+    gap: $spacing-md;
+  }
+}
+
+.timeline-step__dot {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  @include flex-center;
+  z-index: 2;
+
+  @include respond-to(sm) {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.timeline-step__dot-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: $radius-full;
+  background: $gradient-primary;
+  box-shadow:
+    0 0 0 8px rgba($color-primary, 0.1),
+    inset 0 0 20px rgba($color-primary, 0.3),
+    0 0 20px rgba($color-primary, 0.5);
+  animation: pulse 2s ease-in-out infinite;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-full;
+    background: $gradient-primary;
+    opacity: 0;
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  @include respond-to(sm) {
+    box-shadow:
+      0 0 0 6px rgba($color-primary, 0.1),
+      inset 0 0 15px rgba($color-primary, 0.3),
+      0 0 15px rgba($color-primary, 0.4);
+  }
+}
+
+.timeline-step__connector {
+  position: absolute;
+  left: calc(27px - 1px);
+  top: 56px;
+  width: 2px;
+  height: calc(100% - 56px);
+  background: linear-gradient(
+    180deg,
+    rgba($color-primary, 0.3),
+    rgba($color-accent, 0.1)
+  );
+  transform-origin: top;
+  z-index: 0;
+
+  @include respond-to(sm) {
+    left: calc(19px - 1px);
+    top: 40px;
+    height: calc(100% - 40px);
+  }
+}
+
+.timeline-step__content {
+  flex: 1;
+  padding-top: $spacing-sm;
+
+  @include respond-to(sm) {
+    padding-top: 0;
+  }
+}
+
+.timeline-step__phase {
+  @include heading($font-size-xl);
+  margin: 0 0 $spacing-xs 0;
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  @include respond-to(sm) {
+    font-size: $font-size-lg;
+  }
+}
+
+.timeline-step__duration {
+  font-size: $font-size-sm;
+  color: $color-accent;
+  font-weight: $font-weight-semibold;
+  margin: 0 0 $spacing-sm 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timeline-step__description {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  line-height: 1.6;
+  margin: 0;
+
+  @include respond-to(sm) {
+    font-size: $font-size-sm;
+  }
+}
+
+// ============================================
+// CASE STUDY SECTION
+// ============================================
+
+.case-study-section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+  padding: $spacing-xl;
+  border-radius: $radius-xl;
+  background: rgba($color-bg-card, 0.4);
+  border: 1px solid rgba($color-primary, 0.1);
+  transition: all $transition-base;
+
+  &:hover {
+    background: rgba($color-bg-card, 0.6);
+    border-color: rgba($color-primary, 0.2);
+  }
+
+  // Accent variant
+  &.case-study-section--accent {
+    background: linear-gradient(
+      135deg,
+      rgba($color-primary, 0.05) 0%,
+      rgba($color-accent, 0.05) 100%
+    );
+    border-color: rgba($color-primary, 0.2);
+
+    .case-study-section__title {
+      @include text-gradient($gradient-primary);
+    }
+  }
+
+  @include respond-to(md) {
+    padding: $spacing-lg;
+    gap: $spacing-lg;
+  }
+
+  @include respond-to(sm) {
+    padding: $spacing-md;
+    gap: $spacing-md;
+  }
+
+  @include respond-to(xs) {
+    padding: $spacing-sm;
+    gap: $spacing-sm;
+  }
+}
+
+.case-study-section__header {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.case-study-section__title {
+  @include heading($font-size-2xl);
+  margin: 0;
+  color: $color-text-primary;
+
+  @include respond-to(md) {
+    font-size: $font-size-xl;
+  }
+
+  @include respond-to(sm) {
+    font-size: $font-size-lg;
+  }
+}
+
+.case-study-section__subtitle {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  margin: 0;
+  line-height: 1.6;
+
+  @include respond-to(sm) {
+    font-size: $font-size-sm;
+  }
+}
+
+.case-study-section__content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  @include respond-to(md) {
+    gap: $spacing-md;
+  }
+}
+
+// ============================================
+// UTILITY CLASSES
+// ============================================
+
+.case-study__grid {
+  display: grid;
+  gap: $spacing-xl;
+
+  @include respond-to(md) {
+    gap: $spacing-lg;
+  }
+
+  @include respond-to(sm) {
+    gap: $spacing-md;
+  }
+}
+
+.case-study__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  li {
+    padding-left: $spacing-lg;
+    position: relative;
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    line-height: 1.6;
+
+    &::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: $color-primary;
+      font-weight: $font-weight-bold;
+    }
+
+    @include respond-to(sm) {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+.case-study__highlight {
+  background: linear-gradient(
+    90deg,
+    rgba($color-primary, 0.1) 0%,
+    rgba($color-accent, 0.1) 100%
+  );
+  padding: $spacing-md;
+  border-left: 3px solid $color-primary;
+  border-radius: $radius-md;
+  font-style: italic;
+  color: $color-text-primary;
+}
+
+// ============================================
+// LEARNING CARD (Optional addition for learnings)
+// ============================================
+
+.learning-card {
+  @include card($spacing-lg);
+  @include flex-column;
+  gap: $spacing-md;
+  border-left: 4px solid $color-accent;
+  transition: all $transition-base;
+
+  &:hover {
+    @include card-hover;
+    border-left-color: $color-primary;
+  }
+
+  @include respond-to(sm) {
+    padding: $spacing-md;
+  }
+}
+
+.learning-card__title {
+  @include heading($font-size-lg);
+  margin: 0;
+  color: $color-accent;
+
+  @include respond-to(sm) {
+    font-size: $font-size-base;
+  }
+}
+
+.learning-card__description {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  margin: 0;
+  line-height: 1.6;
+
+  @include respond-to(sm) {
+    font-size: $font-size-sm;
+  }
+}
+
+.learning-card__impact {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+  margin: 0;
+}

@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaReact, FaUnity, FaTimes, FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGitlab, FaDocker } from "react-icons/fa";
 import { SiUnrealengine, SiCplusplus, SiSharp, SiPerforce } from "react-icons/si";
 import ReactPlayer from "react-player";
+import FadeIn from "./animations/FadeIn";
+import { CaseStudySection, MetricsGrid, Timeline } from "./CaseStudy";
 import "./ProjectModal.scss";
 
 const ProjectModal = ({ project, isOpen, onClose }) => {
@@ -135,6 +137,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                       src={media[currentImageIndex]?.image}
                       alt={`${project.name} ${currentImageIndex + 1}`}
                       className="project-modal__image"
+                      loading="lazy"
                     />
                   )}
                 </motion.div>

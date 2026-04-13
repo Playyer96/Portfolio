@@ -68,6 +68,7 @@ const ProjectCard = ({ project, onClick, index }) => {
           src={project.imageUrl || project.images?.[0]?.image}
           alt={project.name}
           className="project-card__image"
+          loading="lazy"
         />
         <div className="project-card__image-gradient" />
         <div className="project-card__overlay">
