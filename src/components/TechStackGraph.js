@@ -109,6 +109,52 @@ const TechStackGraph = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // Combined mouse move handler for both hover detection and panning
+    const handleMouseMove = (e) => {
+      handleCanvasMouseMove(e);
+      handleCanvasPanMove(e);
+    };
+
+    // Combined mouse down handler
+    const handleMouseDown = (e) => {
+      handleCanvasMouseDown(e);
+      handleCanvasPanStart(e);
+    };
+
+    // Combined mouse up handler
+    const handleMouseUp = () => {
+      handleCanvasMouseUp();
+    };
+
+    // Mouse leave handler
+    const handleMouseLeave = () => {
+      setHoveredNode(null);
+      handleCanvasMouseUp();
+    };
+
+    // Attach event listeners
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mouseup', handleMouseUp);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
+    canvas.addEventListener('wheel', handleWheel, { passive: false });
+    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    // Cleanup on unmount
+    return () => {
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mousedown', handleMouseDown);
+      canvas.removeEventListener('mouseup', handleMouseUp);
+      canvas.removeEventListener('mouseleave', handleMouseLeave);
+      canvas.removeEventListener('wheel', handleWheel);
+      canvas.removeEventListener('contextmenu', (e) => e.preventDefault());
+    };
+  });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width;
@@ -359,21 +405,6 @@ const TechStackGraph = () => {
       <motion.canvas
         ref={canvasRef}
         className="tech-stack-graph__canvas"
-        onMouseMove={(e) => {
-          handleCanvasMouseMove(e);
-          handleCanvasPanMove(e);
-        }}
-        onMouseDown={(e) => {
-          handleCanvasMouseDown(e);
-          handleCanvasPanStart(e);
-        }}
-        onMouseUp={handleCanvasMouseUp}
-        onMouseLeave={() => {
-          setHoveredNode(null);
-          handleCanvasMouseUp();
-        }}
-        onWheel={handleWheel}
-        onContextMenu={(e) => e.preventDefault()}
         style={{ cursor: hoveredNode ? 'grab' : 'default' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
