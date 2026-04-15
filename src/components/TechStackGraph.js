@@ -132,7 +132,8 @@ const TechStackGraph = () => {
   const handleWheel = (e) => {
     e.preventDefault();
     const zoomSpeed = 0.1;
-    const newZoom = Math.max(0.05, Math.min(10, zoom + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed)));
+    const newZoom = Math.max(0.05, Math.min(10, zoomRef.current + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed)));
+    zoomRef.current = newZoom;
     setZoom(newZoom);
   };
 
@@ -140,7 +141,7 @@ const TechStackGraph = () => {
     // Right-click or middle-click for panning (or Ctrl+click)
     if (e.button === 2 || e.button === 1 || (e.ctrlKey && e.button === 0)) {
       isPanningRef.current = true;
-      panStartRef.current = { x: e.clientX - panX, y: e.clientY - panY };
+      panStartRef.current = { x: e.clientX - panXRef.current, y: e.clientY - panYRef.current };
     }
   };
 
@@ -148,6 +149,8 @@ const TechStackGraph = () => {
     if (isPanningRef.current) {
       const newPanX = e.clientX - panStartRef.current.x;
       const newPanY = e.clientY - panStartRef.current.y;
+      panXRef.current = newPanX;
+      panYRef.current = newPanY;
       setPanX(newPanX);
       setPanY(newPanY);
     }
