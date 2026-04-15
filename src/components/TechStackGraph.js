@@ -105,6 +105,106 @@ const TechStackGraph = () => {
     setNodes(initialNodes);
   }, []);
 
+  // Define state variables first
+  const [zoom, setZoom] = useState(1);
+  const [panX, setPanX] = useState(0);
+  const [panY, setPanY] = useState(0);
+  const zoomRef = useRef(1);
+  const panXRef = useRef(0);
+  const panYRef = useRef(0);
+  const draggedNodeRef = useRef(null);
+  const isPanningRef = useRef(false);
+  const panStartRef = useRef({ x: 0, y: 0 });
+
+  // Handler functions
+  const handleCanvasMouseMove = (e) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    // Inverse of: translate(center + pan) then scale(zoom)
+    // Convert screen coords to canvas world coords
+    const mouseX = ((e.clientX - rect.left - canvas.width / 2 - panXRef.current) / zoomRef.current);
+    const mouseY = ((e.clientY - rect.top - canvas.height / 2 - panYRef.current) / zoomRef.current);
+
+    // Handle dragging
+    if (draggedNodeRef.current) {
+      const node = draggedNodeRef.current;
+      node.x = mouseX;
+      node.y = mouseY;
+      node.vx = 0;
+      node.vy = 0;
+      return;
+    }
+
+    // Find hovered node
+    let nearestNode = null;
+    let minDist = 35;
+
+    nodesRef.current.forEach((node) => {
+      const dist = Math.sqrt((node.x - mouseX) ** 2 + (node.y - mouseY) ** 2);
+      if (dist < minDist) {
+        minDist = dist;
+        nearestNode = node.id;
+      }
+    });
+
+    setHoveredNode(nearestNode);
+  };
+
+  const handleCanvasMouseDown = (e) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = ((e.clientX - rect.left - canvas.width / 2 - panXRef.current) / zoomRef.current);
+    const mouseY = ((e.clientY - rect.top - canvas.height / 2 - panYRef.current) / zoomRef.current);
+
+    let nearestNode = null;
+    let minDist = 35;
+
+    nodesRef.current.forEach((node) => {
+      const dist = Math.sqrt((node.x - mouseX) ** 2 + (node.y - mouseY) ** 2);
+      if (dist < minDist) {
+        minDist = dist;
+        nearestNode = node;
+      }
+    });
+
+    if (nearestNode) {
+      nearestNode.isDragging = true;
+      draggedNodeRef.current = nearestNode;
+    }
+  };
+
+  const handleCanvasMouseUp = () => {
+    if (draggedNodeRef.current) {
+      draggedNodeRef.current.isDragging = false;
+      draggedNodeRef.current = null;
+    }
+    isPanningRef.current = false;
+  };
+
+  const handleWheel = (e) => {
+    e.preventDefault();
+    const zoomSpeed = 0.15;
+    const newZoom = Math.max(0.2, Math.min(5, zoom + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed)));
+    setZoom(newZoom);
+  };
+
+  const handleCanvasPanStart = (e) => {
+    // Right-click or middle-click for panning (or Ctrl+click)
+    if (e.button === 2 || e.button === 1 || (e.ctrlKey && e.button === 0)) {
+      isPanningRef.current = true;
+      panStartRef.current = { x: e.clientX - panX, y: e.clientY - panY };
+    }
+  };
+
+  const handleCanvasPanMove = (e) => {
+    if (isPanningRef.current) {
+      const newPanX = e.clientX - panStartRef.current.x;
+      const newPanY = e.clientY - panStartRef.current.y;
+      setPanX(newPanX);
+      setPanY(newPanY);
+    }
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -121,11 +221,6 @@ const TechStackGraph = () => {
       handleCanvasPanStart(e);
     };
 
-    // Combined mouse up handler
-    const handleMouseUp = () => {
-      handleCanvasMouseUp();
-    };
-
     // Mouse leave handler
     const handleMouseLeave = () => {
       setHoveredNode(null);
@@ -135,7 +230,7 @@ const TechStackGraph = () => {
     // Attach event listeners
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mousedown', handleMouseDown);
-    canvas.addEventListener('mouseup', handleMouseUp);
+    canvas.addEventListener('mouseup', handleCanvasMouseUp);
     canvas.addEventListener('mouseleave', handleMouseLeave);
     canvas.addEventListener('wheel', handleWheel, { passive: false });
     canvas.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -144,12 +239,12 @@ const TechStackGraph = () => {
     return () => {
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mousedown', handleMouseDown);
-      canvas.removeEventListener('mouseup', handleMouseUp);
+      canvas.removeEventListener('mouseup', handleCanvasMouseUp);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
       canvas.removeEventListener('wheel', handleWheel);
       canvas.removeEventListener('contextmenu', (e) => e.preventDefault());
     };
-  });
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -165,8 +260,8 @@ const TechStackGraph = () => {
     const scale = 3.5;
 
     const animate = () => {
-      // Clear canvas
-      ctx.fillStyle = 'rgba(10, 15, 30, 0.1)';
+      // Clear canvas COMPLETELY before any transformations
+      ctx.fillStyle = 'rgba(10, 15, 30, 1)';  // Fully opaque to clear properly
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Save context for transformations
@@ -307,109 +402,12 @@ const TechStackGraph = () => {
     };
   }, [hoveredNode]);
 
-  const draggedNodeRef = useRef(null);
-  const [zoom, setZoom] = useState(1);
-  const [panX, setPanX] = useState(0);
-  const [panY, setPanY] = useState(0);
-  const zoomRef = useRef(1);
-  const panXRef = useRef(0);
-  const panYRef = useRef(0);
-  const isPanningRef = useRef(false);
-  const panStartRef = useRef({ x: 0, y: 0 });
-
   // Update refs whenever state changes
   useEffect(() => {
     zoomRef.current = zoom;
     panXRef.current = panX;
     panYRef.current = panY;
   }, [zoom, panX, panY]);
-
-  const handleCanvasMouseMove = (e) => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    // Inverse of: translate(center + pan) then scale(zoom)
-    const mouseX = ((e.clientX - rect.left - canvas.width / 2 - panXRef.current) / zoomRef.current) / 3.5;
-    const mouseY = ((e.clientY - rect.top - canvas.height / 2 - panYRef.current) / zoomRef.current) / 3.5;
-
-    // Handle dragging
-    if (draggedNodeRef.current) {
-      const node = draggedNodeRef.current;
-      node.x = mouseX;
-      node.y = mouseY;
-      node.vx = 0;
-      node.vy = 0;
-      return;
-    }
-
-    // Find hovered node
-    let nearestNode = null;
-    let minDist = 35;
-
-    nodesRef.current.forEach((node) => {
-      const dist = Math.sqrt((node.x - mouseX) ** 2 + (node.y - mouseY) ** 2);
-      if (dist < minDist) {
-        minDist = dist;
-        nearestNode = node.id;
-      }
-    });
-
-    setHoveredNode(nearestNode);
-  };
-
-  const handleCanvasMouseDown = (e) => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = ((e.clientX - rect.left - canvas.width / 2 - panXRef.current) / zoomRef.current) / 3.5;
-    const mouseY = ((e.clientY - rect.top - canvas.height / 2 - panYRef.current) / zoomRef.current) / 3.5;
-
-    let nearestNode = null;
-    let minDist = 35;
-
-    nodesRef.current.forEach((node) => {
-      const dist = Math.sqrt((node.x - mouseX) ** 2 + (node.y - mouseY) ** 2);
-      if (dist < minDist) {
-        minDist = dist;
-        nearestNode = node;
-      }
-    });
-
-    if (nearestNode) {
-      nearestNode.isDragging = true;
-      draggedNodeRef.current = nearestNode;
-    }
-  };
-
-  const handleCanvasMouseUp = () => {
-    if (draggedNodeRef.current) {
-      draggedNodeRef.current.isDragging = false;
-      draggedNodeRef.current = null;
-    }
-    isPanningRef.current = false;
-  };
-
-  const handleWheel = (e) => {
-    e.preventDefault();
-    const zoomSpeed = 0.1;
-    const newZoom = Math.max(0.5, Math.min(3, zoom + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed)));
-    setZoom(newZoom);
-  };
-
-  const handleCanvasPanStart = (e) => {
-    // Right-click or middle-click for panning (or Ctrl+click)
-    if (e.button === 2 || e.button === 1 || (e.ctrlKey && e.button === 0)) {
-      isPanningRef.current = true;
-      panStartRef.current = { x: e.clientX - panX, y: e.clientY - panY };
-    }
-  };
-
-  const handleCanvasPanMove = (e) => {
-    if (isPanningRef.current) {
-      const newPanX = e.clientX - panStartRef.current.x;
-      const newPanY = e.clientY - panStartRef.current.y;
-      setPanX(newPanX);
-      setPanY(newPanY);
-    }
-  };
 
   return (
     <div className="tech-stack-graph">
@@ -429,27 +427,26 @@ const TechStackGraph = () => {
           if (!canvas) return null;
           const centerX = canvas.width / 2;
           const centerY = canvas.height / 2;
-          const scale = 3.5;
-          const x = centerX + panX + (node.x * scale * zoom);
-          const y = centerY + panY + (node.y * scale * zoom);
+          // Match canvas transformations: translate(center + pan) then scale(zoom)
+          // Node positions are already in world space, just apply pan and zoom
+          const x = centerX + panX + (node.x * zoom);
+          const y = centerY + panY + (node.y * zoom);
           const isHovered = hoveredNode === node.id;
 
           return (
-            <motion.div
+            <div
               key={node.id}
               className={`tech-stack-graph__label ${isHovered ? 'hovered' : ''}`}
               style={{
                 left: `${x}px`,
-                top: `${y + 50}px`,
+                top: `${y + 30}px`,
+                opacity: isHovered ? 1 : 0.7,
+                transform: isHovered ? 'scale(1.1)' : 'scale(1)',
+                transition: 'opacity 0.2s, transform 0.2s',
               }}
-              animate={{
-                opacity: isHovered ? 1 : 0.8,
-                scale: isHovered ? 1.1 : 1,
-              }}
-              transition={{ duration: 0.2 }}
             >
               {node.label}
-            </motion.div>
+            </div>
           );
         })}
       </div>
