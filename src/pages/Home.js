@@ -5,7 +5,7 @@ import { FadeIn, StaggerContainer } from "../components/animations";
 import PageTransition from "../components/PageTransition";
 import ContactIcons from "../components/ContactIcons";
 import ParticleBackground from "../components/effects/ParticleBackground";
-import TechBento from "../components/TechBento";
+import TechStackGraph from "../components/TechStackGraph";
 import GitHubWidget from "../components/GitHubWidget";
 import FeaturedProjects from "../components/FeaturedProjects";
 import StatsShowcase from "../components/StatsShowcase";
@@ -204,7 +204,7 @@ const Home = () => {
 
             <FadeIn direction="up" delay={0.8}>
               <p className="home__hero-description">
-                5+ years shipping AAA-quality games with Unreal Engine and Unity. Expert in gameplay programming, real-time optimization, and scalable multiplayer systems.
+                5+ years building immersive experiences with Unreal Engine and Unity. Shipped indie games, VR simulators, and developer tools. Specialized in gameplay systems, real-time optimization, and problem-solving at scale.
               </p>
             </FadeIn>
 
@@ -261,7 +261,7 @@ const Home = () => {
             </p>
           </FadeIn>
 
-          <TechBento technologies={technologies} getIconComponent={getIconComponent} />
+          <TechStackGraph />
         </div>
       </section>
 
