@@ -235,8 +235,8 @@ const TechStackGraph = () => {
         node.vy = (node.vy + fy) * 0.88;
 
         // Boundary constraints - allow nodes to spread across full canvas
-        const maxX = 800;
-        const maxY = 600;
+        const maxX = 1200;
+        const maxY = 900;
         node.x = Math.max(-maxX, Math.min(maxX, node.x));
         node.y = Math.max(-maxY, Math.min(maxY, node.y));
 
@@ -327,8 +327,9 @@ const TechStackGraph = () => {
   const handleCanvasMouseMove = (e) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
-    const mouseX = ((e.clientX - rect.left - canvas.width / 2) - panX) / zoom / 3.5;
-    const mouseY = ((e.clientY - rect.top - canvas.height / 2) - panY) / zoom / 3.5;
+    // Inverse of: translate(center + pan) then scale(zoom)
+    const mouseX = ((e.clientX - rect.left - canvas.width / 2 - panXRef.current) / zoomRef.current) / 3.5;
+    const mouseY = ((e.clientY - rect.top - canvas.height / 2 - panYRef.current) / zoomRef.current) / 3.5;
 
     // Handle dragging
     if (draggedNodeRef.current) {
@@ -358,8 +359,8 @@ const TechStackGraph = () => {
   const handleCanvasMouseDown = (e) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
-    const mouseX = ((e.clientX - rect.left - canvas.width / 2) - panX) / zoom / 3.5;
-    const mouseY = ((e.clientY - rect.top - canvas.height / 2) - panY) / zoom / 3.5;
+    const mouseX = ((e.clientX - rect.left - canvas.width / 2 - panXRef.current) / zoomRef.current) / 3.5;
+    const mouseY = ((e.clientY - rect.top - canvas.height / 2 - panYRef.current) / zoomRef.current) / 3.5;
 
     let nearestNode = null;
     let minDist = 35;
