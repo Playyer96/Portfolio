@@ -29,19 +29,20 @@ const TechStackGraph = () => {
     const initialNodes = nodeData.map((data, index) => {
       let angle, distance;
 
-      if (data.type === 'softSkill') {
+      if (data.category === 'softSkill') {
         // Soft skills in center
-        angle = (index / 3) * Math.PI * 2;
+        angle = (index / nodeData.filter(n => n.category === 'softSkill').length) * Math.PI * 2;
         distance = 50;
       } else {
-        // All other types in radial sectors away from center
-        const typeIndex = data.type === 'gamedev' ? 0 : data.type === 'web' ? 1 : 2;
-        const itemsPerType = data.type === 'gamedev' ? 7 : data.type === 'web' ? 4 : 3;
-        const indexInType = index - (data.type === 'gamedev' ? 3 : data.type === 'web' ? 10 : 14);
+        // All other categories in radial sectors away from center
+        const categories = ['gamedev', 'frontend', 'backend', 'database', 'tools'];
+        const categoryIndex = categories.indexOf(data.category);
+        const itemsInCategory = nodeData.filter(n => n.category === data.category).length;
+        const indexInCategory = nodeData.filter(n => n.category === data.category && nodeData.indexOf(n) < index).length;
 
-        // Spread types across 3 major sectors
-        const sectorAngle = (typeIndex / 3) * Math.PI * 2;
-        const itemAngle = (indexInType / itemsPerType) * (Math.PI * 0.8); // Spread within sector
+        // Spread categories across sectors
+        const sectorAngle = (categoryIndex / categories.length) * Math.PI * 2;
+        const itemAngle = (indexInCategory / Math.max(itemsInCategory, 1)) * (Math.PI * 0.8); // Spread within sector
         angle = sectorAngle + itemAngle - (Math.PI * 0.4); // Center within sector
 
         // Much larger distance to spread nodes out
@@ -61,7 +62,7 @@ const TechStackGraph = () => {
 
     nodesRef.current = initialNodes;
     setNodes(initialNodes);
-  }, []);
+  }, [nodeData]);
 
   // Handler functions
   const handleCanvasMouseMove = (e) => {
