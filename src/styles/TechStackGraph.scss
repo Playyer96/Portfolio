@@ -34,18 +34,42 @@
     bottom: $spacing-lg;
     left: $spacing-lg;
     display: flex;
-    gap: $spacing-md;
+    gap: $spacing-lg;
     flex-wrap: wrap;
     background: rgba(10, 15, 30, 0.8);
     padding: $spacing-md $spacing-lg;
     border-radius: $radius-md;
     border: 1px solid rgba(100, 150, 255, 0.2);
     backdrop-filter: blur(10px);
+    max-width: 600px;
+
+    @include respond-to(md) {
+      gap: $spacing-md;
+      max-width: 500px;
+      padding: $spacing-md;
+    }
 
     @include respond-to(sm) {
       gap: $spacing-sm;
       padding: $spacing-sm $spacing-md;
       font-size: 0.85rem;
+      max-width: 90vw;
+      flex-direction: column;
+    }
+  }
+
+  &__legend-section {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    h4 {
+      margin: 0 0 $spacing-sm 0;
+      color: rgba(100, 150, 255, 0.8);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
   }
 

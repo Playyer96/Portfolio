@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import '../styles/TechStackGraph.scss';
+import techStackData from '../data/techStack.json';
 
 const TechStackGraph = () => {
   const canvasRef = useRef(null);
@@ -20,62 +21,8 @@ const TechStackGraph = () => {
   const isPanningRef = useRef(false);
   const panStartRef = useRef({ x: 0, y: 0 });
 
-  const nodeData = [
-    // Core Soft Skills (center)
-    { id: 'problem-solving', label: 'Problem Solving', type: 'softSkill', color: '#00ff88' },
-    { id: 'leadership', label: 'Leadership', type: 'softSkill', color: '#00ff88' },
-    { id: 'communication', label: 'Communication', type: 'softSkill', color: '#00ff88' },
-
-    // Game Development
-    { id: 'unity', label: 'Unity', type: 'gamedev', color: '#fff34d' },
-    { id: 'unreal', label: 'Unreal', type: 'gamedev', color: '#fff34d' },
-    { id: 'c-sharp', label: 'C#', type: 'gamedev', color: '#fff34d' },
-    { id: 'c-plus', label: 'C++', type: 'gamedev', color: '#fff34d' },
-
-    // Web Development
-    { id: 'react', label: 'React', type: 'web', color: '#61dafb' },
-    { id: 'javascript', label: 'JavaScript', type: 'web', color: '#61dafb' },
-    { id: 'html-css', label: 'HTML/CSS', type: 'web', color: '#61dafb' },
-    { id: 'nodejs', label: 'Node.js', type: 'web', color: '#61dafb' },
-
-    // Tools & Workflow
-    { id: 'git', label: 'Git', type: 'tools', color: '#ff6b9d' },
-    { id: 'vcs', label: 'Version Control', type: 'tools', color: '#ff6b9d' },
-    { id: 'optimization', label: 'Optimization', type: 'tools', color: '#ff6b9d' },
-  ];
-
-  const connections = [
-    // Problem-Solving connects to everything
-    { from: 'problem-solving', to: 'unity' },
-    { from: 'problem-solving', to: 'unreal' },
-    { from: 'problem-solving', to: 'optimization' },
-    { from: 'problem-solving', to: 'c-sharp' },
-    { from: 'problem-solving', to: 'react' },
-
-    // Leadership connects to game dev and communication
-    { from: 'leadership', to: 'unity' },
-    { from: 'leadership', to: 'communication' },
-    { from: 'leadership', to: 'c-plus' },
-
-    // Communication connects to tools
-    { from: 'communication', to: 'git' },
-    { from: 'communication', to: 'vcs' },
-
-    // Game dev interconnections
-    { from: 'unity', to: 'c-sharp' },
-    { from: 'unreal', to: 'c-plus' },
-    { from: 'c-sharp', to: 'optimization' },
-    { from: 'c-plus', to: 'optimization' },
-
-    // Web tech interconnections
-    { from: 'react', to: 'javascript' },
-    { from: 'javascript', to: 'html-css' },
-    { from: 'nodejs', to: 'javascript' },
-    { from: 'nodejs', to: 'git' },
-
-    // Cross-domain
-    { from: 'optimization', to: 'nodejs' },
-  ];
+  const nodeData = techStackData.nodes;
+  const connections = techStackData.relationships;
 
   useEffect(() => {
     // Initialize nodes with radial layout - much more spread out
@@ -183,8 +130,8 @@ const TechStackGraph = () => {
 
   const handleWheel = (e) => {
     e.preventDefault();
-    const zoomSpeed = 0.15;
-    const newZoom = Math.max(0.2, Math.min(5, zoom + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed)));
+    const zoomSpeed = 0.1;
+    const newZoom = Math.max(0.05, Math.min(10, zoom + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed)));
     setZoom(newZoom);
   };
 
@@ -340,18 +287,29 @@ const TechStackGraph = () => {
       });
 
       // Draw connections
-      ctx.strokeStyle = 'rgba(100, 150, 255, 0.2)';
       ctx.lineWidth = 1 / zoomRef.current;  // Adjust line width for zoom
       connections.forEach((conn) => {
         const from = nodes.find((n) => n.id === conn.from);
         const to = nodes.find((n) => n.id === conn.to);
         if (from && to) {
+          // Different styles for different relationship types
+          if (conn.type === 'stack') {
+            // Dashed lines for technology stacks
+            ctx.strokeStyle = 'rgba(100, 150, 255, 0.15)';
+            ctx.setLineDash([5, 5]);
+          } else {
+            // Solid lines for dependencies
+            ctx.strokeStyle = 'rgba(100, 150, 255, 0.25)';
+            ctx.setLineDash([]);
+          }
+
           ctx.beginPath();
           ctx.moveTo(from.x, from.y);
           ctx.lineTo(to.x, to.y);
           ctx.stroke();
         }
       });
+      ctx.setLineDash([]);  // Reset line dash
 
       // Draw nodes with labels
       nodes.forEach((node) => {
@@ -452,21 +410,47 @@ const TechStackGraph = () => {
       </div>
 
       <div className="tech-stack-graph__legend">
-        <div className="tech-stack-graph__legend-item">
-          <div className="tech-stack-graph__legend-dot" style={{ backgroundColor: '#00ff88' }} />
-          <span>Soft Skills</span>
+        <div className="tech-stack-graph__legend-section">
+          <h4>Categories</h4>
+          <div className="tech-stack-graph__legend-item">
+            <div className="tech-stack-graph__legend-dot" style={{ backgroundColor: '#00ff88' }} />
+            <span>Soft Skills</span>
+          </div>
+          <div className="tech-stack-graph__legend-item">
+            <div className="tech-stack-graph__legend-dot" style={{ backgroundColor: '#fff34d' }} />
+            <span>Game Dev</span>
+          </div>
+          <div className="tech-stack-graph__legend-item">
+            <div className="tech-stack-graph__legend-dot" style={{ backgroundColor: '#61dafb' }} />
+            <span>Frontend</span>
+          </div>
+          <div className="tech-stack-graph__legend-item">
+            <div className="tech-stack-graph__legend-dot" style={{ backgroundColor: '#68a063' }} />
+            <span>Backend</span>
+          </div>
+          <div className="tech-stack-graph__legend-item">
+            <div className="tech-stack-graph__legend-dot" style={{ backgroundColor: '#13aa52' }} />
+            <span>Database</span>
+          </div>
+          <div className="tech-stack-graph__legend-item">
+            <div className="tech-stack-graph__legend-dot" style={{ backgroundColor: '#ff6b9d' }} />
+            <span>Tools</span>
+          </div>
         </div>
-        <div className="tech-stack-graph__legend-item">
-          <div className="tech-stack-graph__legend-dot" style={{ backgroundColor: '#fff34d' }} />
-          <span>Game Dev</span>
-        </div>
-        <div className="tech-stack-graph__legend-item">
-          <div className="tech-stack-graph__legend-dot" style={{ backgroundColor: '#61dafb' }} />
-          <span>Web Tech</span>
-        </div>
-        <div className="tech-stack-graph__legend-item">
-          <div className="tech-stack-graph__legend-dot" style={{ backgroundColor: '#ff6b9d' }} />
-          <span>Tools</span>
+        <div className="tech-stack-graph__legend-section">
+          <h4>Relationships</h4>
+          <div className="tech-stack-graph__legend-item">
+            <svg width="20" height="2" style={{ marginRight: '8px' }}>
+              <line x1="0" y1="1" x2="20" y2="1" stroke="rgba(100, 150, 255, 0.25)" strokeWidth="1" />
+            </svg>
+            <span>Dependency</span>
+          </div>
+          <div className="tech-stack-graph__legend-item">
+            <svg width="20" height="2" style={{ marginRight: '8px' }}>
+              <line x1="0" y1="1" x2="20" y2="1" stroke="rgba(100, 150, 255, 0.15)" strokeWidth="1" strokeDasharray="5,5" />
+            </svg>
+            <span>Stack/Group</span>
+          </div>
         </div>
       </div>
 

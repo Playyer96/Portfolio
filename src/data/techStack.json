@@ -1,0 +1,415 @@
+{
+  "nodes": [
+    {
+      "id": "problem-solving",
+      "label": "Problem Solving",
+      "category": "softSkill",
+      "color": "#00ff88"
+    },
+    {
+      "id": "leadership",
+      "label": "Leadership",
+      "category": "softSkill",
+      "color": "#00ff88"
+    },
+    {
+      "id": "communication",
+      "label": "Communication",
+      "category": "softSkill",
+      "color": "#00ff88"
+    },
+    {
+      "id": "collaboration",
+      "label": "Collaboration",
+      "category": "softSkill",
+      "color": "#00ff88"
+    },
+    {
+      "id": "critical-thinking",
+      "label": "Critical Thinking",
+      "category": "softSkill",
+      "color": "#00ff88"
+    },
+    {
+      "id": "unity",
+      "label": "Unity",
+      "category": "gamedev",
+      "color": "#fff34d"
+    },
+    {
+      "id": "unreal",
+      "label": "Unreal Engine",
+      "category": "gamedev",
+      "color": "#fff34d"
+    },
+    {
+      "id": "c-sharp",
+      "label": "C#",
+      "category": "gamedev",
+      "color": "#fff34d"
+    },
+    {
+      "id": "c-plus",
+      "label": "C++",
+      "category": "gamedev",
+      "color": "#fff34d"
+    },
+    {
+      "id": "gameplay-ability-system",
+      "label": "Gameplay Ability System",
+      "category": "gamedev",
+      "color": "#fff34d"
+    },
+    {
+      "id": "unity-input-system",
+      "label": "Unity Input System",
+      "category": "gamedev",
+      "color": "#fff34d"
+    },
+    {
+      "id": "linq",
+      "label": "LINQ",
+      "category": "gamedev",
+      "color": "#fff34d"
+    },
+    {
+      "id": "fmod",
+      "label": "FMOD",
+      "category": "gamedev",
+      "color": "#fff34d"
+    },
+    {
+      "id": "react",
+      "label": "React",
+      "category": "frontend",
+      "color": "#61dafb"
+    },
+    {
+      "id": "javascript",
+      "label": "JavaScript",
+      "category": "frontend",
+      "color": "#61dafb"
+    },
+    {
+      "id": "html-css",
+      "label": "HTML/CSS",
+      "category": "frontend",
+      "color": "#61dafb"
+    },
+    {
+      "id": "nextjs",
+      "label": "Next.js",
+      "category": "frontend",
+      "color": "#61dafb"
+    },
+    {
+      "id": "nodejs",
+      "label": "Node.js",
+      "category": "backend",
+      "color": "#68a063"
+    },
+    {
+      "id": "firebase",
+      "label": "Firebase",
+      "category": "backend",
+      "color": "#68a063"
+    },
+    {
+      "id": "aws",
+      "label": "AWS",
+      "category": "backend",
+      "color": "#68a063"
+    },
+    {
+      "id": "prisma",
+      "label": "Prisma",
+      "category": "backend",
+      "color": "#68a063"
+    },
+    {
+      "id": "mongodb",
+      "label": "MongoDB",
+      "category": "database",
+      "color": "#13aa52"
+    },
+    {
+      "id": "postgres",
+      "label": "PostgreSQL",
+      "category": "database",
+      "color": "#13aa52"
+    },
+    {
+      "id": "git",
+      "label": "Git",
+      "category": "tools",
+      "color": "#ff6b9d"
+    },
+    {
+      "id": "github-desktop",
+      "label": "GitHub Desktop",
+      "category": "tools",
+      "color": "#ff6b9d"
+    },
+    {
+      "id": "git-kraken",
+      "label": "GitKraken",
+      "category": "tools",
+      "color": "#ff6b9d"
+    },
+    {
+      "id": "gitea",
+      "label": "Gitea",
+      "category": "tools",
+      "color": "#ff6b9d"
+    },
+    {
+      "id": "jira",
+      "label": "Jira",
+      "category": "tools",
+      "color": "#ff6b9d"
+    },
+    {
+      "id": "confluence",
+      "label": "Confluence",
+      "category": "tools",
+      "color": "#ff6b9d"
+    },
+    {
+      "id": "bitbucket",
+      "label": "Bitbucket",
+      "category": "tools",
+      "color": "#ff6b9d"
+    },
+    {
+      "id": "optimization",
+      "label": "Performance Optimization",
+      "category": "tools",
+      "color": "#ff6b9d"
+    },
+    {
+      "id": "profiling",
+      "label": "Profiling & Debugging",
+      "category": "tools",
+      "color": "#ff6b9d"
+    }
+  ],
+  "relationships": [
+    {
+      "from": "problem-solving",
+      "to": "unity",
+      "type": "dependency"
+    },
+    {
+      "from": "problem-solving",
+      "to": "unreal",
+      "type": "dependency"
+    },
+    {
+      "from": "problem-solving",
+      "to": "react",
+      "type": "dependency"
+    },
+    {
+      "from": "problem-solving",
+      "to": "optimization",
+      "type": "dependency"
+    },
+    {
+      "from": "leadership",
+      "to": "communication",
+      "type": "dependency"
+    },
+    {
+      "from": "leadership",
+      "to": "collaboration",
+      "type": "dependency"
+    },
+    {
+      "from": "communication",
+      "to": "git",
+      "type": "dependency"
+    },
+    {
+      "from": "critical-thinking",
+      "to": "problem-solving",
+      "type": "dependency"
+    },
+    {
+      "from": "unity",
+      "to": "c-sharp",
+      "type": "dependency"
+    },
+    {
+      "from": "unity",
+      "to": "gameplay-ability-system",
+      "type": "stack",
+      "label": "GAS"
+    },
+    {
+      "from": "unity",
+      "to": "unity-input-system",
+      "type": "stack",
+      "label": "Input"
+    },
+    {
+      "from": "unity",
+      "to": "fmod",
+      "type": "dependency"
+    },
+    {
+      "from": "unreal",
+      "to": "c-plus",
+      "type": "dependency"
+    },
+    {
+      "from": "unreal",
+      "to": "gameplay-ability-system",
+      "type": "stack",
+      "label": "GAS"
+    },
+    {
+      "from": "c-sharp",
+      "to": "linq",
+      "type": "dependency"
+    },
+    {
+      "from": "c-sharp",
+      "to": "optimization",
+      "type": "dependency"
+    },
+    {
+      "from": "c-plus",
+      "to": "optimization",
+      "type": "dependency"
+    },
+    {
+      "from": "c-plus",
+      "to": "profiling",
+      "type": "dependency"
+    },
+    {
+      "from": "react",
+      "to": "javascript",
+      "type": "dependency"
+    },
+    {
+      "from": "react",
+      "to": "html-css",
+      "type": "dependency"
+    },
+    {
+      "from": "nextjs",
+      "to": "react",
+      "type": "dependency"
+    },
+    {
+      "from": "nextjs",
+      "to": "nodejs",
+      "type": "stack",
+      "label": "Full-Stack"
+    },
+    {
+      "from": "react",
+      "to": "firebase",
+      "type": "stack",
+      "label": "Frontend"
+    },
+    {
+      "from": "nodejs",
+      "to": "javascript",
+      "type": "dependency"
+    },
+    {
+      "from": "nodejs",
+      "to": "git",
+      "type": "dependency"
+    },
+    {
+      "from": "nodejs",
+      "to": "optimization",
+      "type": "dependency"
+    },
+    {
+      "from": "firebase",
+      "to": "mongodb",
+      "type": "stack",
+      "label": "NoSQL"
+    },
+    {
+      "from": "aws",
+      "to": "optimization",
+      "type": "dependency"
+    },
+    {
+      "from": "prisma",
+      "to": "nodejs",
+      "type": "dependency"
+    },
+    {
+      "from": "prisma",
+      "to": "postgres",
+      "type": "stack",
+      "label": "ORM"
+    },
+    {
+      "from": "prisma",
+      "to": "mongodb",
+      "type": "stack",
+      "label": "ORM"
+    },
+    {
+      "from": "mongodb",
+      "to": "optimization",
+      "type": "dependency"
+    },
+    {
+      "from": "postgres",
+      "to": "optimization",
+      "type": "dependency"
+    },
+    {
+      "from": "git",
+      "to": "github-desktop",
+      "type": "stack",
+      "label": "Git GUI"
+    },
+    {
+      "from": "git",
+      "to": "git-kraken",
+      "type": "stack",
+      "label": "Git GUI"
+    },
+    {
+      "from": "git",
+      "to": "gitea",
+      "type": "stack",
+      "label": "Git Host"
+    },
+    {
+      "from": "jira",
+      "to": "confluence",
+      "type": "stack",
+      "label": "Atlassian"
+    },
+    {
+      "from": "jira",
+      "to": "collaboration",
+      "type": "dependency"
+    },
+    {
+      "from": "optimization",
+      "to": "profiling",
+      "type": "dependency"
+    },
+    {
+      "from": "optimization",
+      "to": "nodejs",
+      "type": "dependency"
+    },
+    {
+      "from": "profiling",
+      "to": "critical-thinking",
+      "type": "dependency"
+    }
+  ]
+}
