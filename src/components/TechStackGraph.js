@@ -172,9 +172,9 @@ const TechStackGraph = () => {
       // Save context for transformations
       ctx.save();
 
-      // Apply pan and zoom
-      ctx.translate(canvas.width / 2 + panX, canvas.height / 2 + panY);
-      ctx.scale(zoom, zoom);
+      // Apply pan and zoom (use refs to get latest values)
+      ctx.translate(canvas.width / 2 + panXRef.current, canvas.height / 2 + panYRef.current);
+      ctx.scale(zoomRef.current, zoomRef.current);
 
       const nodes = nodesRef.current;
 
@@ -246,7 +246,7 @@ const TechStackGraph = () => {
 
       // Draw connections
       ctx.strokeStyle = 'rgba(100, 150, 255, 0.2)';
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 1 / zoomRef.current;  // Adjust line width for zoom
       connections.forEach((conn) => {
         const from = nodes.find((n) => n.id === conn.from);
         const to = nodes.find((n) => n.id === conn.to);
@@ -266,11 +266,11 @@ const TechStackGraph = () => {
         // Glow effect for hovered nodes
         if (isHovered) {
           ctx.shadowColor = node.color;
-          ctx.shadowBlur = 30;
+          ctx.shadowBlur = 30 / zoomRef.current;  // Adjust for zoom
           ctx.fillStyle = node.color;
           ctx.globalAlpha = 0.25;
           ctx.beginPath();
-          ctx.arc(node.x, node.y, 45, 0, Math.PI * 2);
+          ctx.arc(node.x, node.y, 45 / zoomRef.current, 0, Math.PI * 2);
           ctx.fill();
           ctx.globalAlpha = 1;
           ctx.shadowColor = 'transparent';
@@ -285,7 +285,7 @@ const TechStackGraph = () => {
 
         // Node circle border
         ctx.strokeStyle = node.color;
-        ctx.lineWidth = isHovered ? 2 : 1;
+        ctx.lineWidth = (isHovered ? 2 : 1) / zoomRef.current;  // Adjust for zoom
         ctx.globalAlpha = 1;
         ctx.beginPath();
         ctx.arc(node.x, node.y, nodeRadius, 0, Math.PI * 2);
@@ -311,8 +311,18 @@ const TechStackGraph = () => {
   const [zoom, setZoom] = useState(1);
   const [panX, setPanX] = useState(0);
   const [panY, setPanY] = useState(0);
+  const zoomRef = useRef(1);
+  const panXRef = useRef(0);
+  const panYRef = useRef(0);
   const isPanningRef = useRef(false);
   const panStartRef = useRef({ x: 0, y: 0 });
+
+  // Update refs whenever state changes
+  useEffect(() => {
+    zoomRef.current = zoom;
+    panXRef.current = panX;
+    panYRef.current = panY;
+  }, [zoom, panX, panY]);
 
   const handleCanvasMouseMove = (e) => {
     const canvas = canvasRef.current;
@@ -418,9 +428,9 @@ const TechStackGraph = () => {
           if (!canvas) return null;
           const centerX = canvas.width / 2;
           const centerY = canvas.height / 2;
-          const scale = 2.2;
-          const x = centerX + panX + node.x * scale * zoom;
-          const y = centerY + panY + node.y * scale * zoom;
+          const scale = 3.5;
+          const x = centerX + panX + (node.x * scale * zoom);
+          const y = centerY + panY + (node.y * scale * zoom);
           const isHovered = hoveredNode === node.id;
 
           return (
