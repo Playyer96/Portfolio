@@ -1,0 +1,118 @@
+@import '../styles/scss/_variables.scss';
+@import '../styles/scss/_mixins.scss';
+
+.tech-stack-graph {
+  position: relative;
+  width: 100%;
+  height: 1000px;
+  margin: $spacing-3xl 0;
+  border-radius: $radius-lg;
+  background: linear-gradient(135deg, rgba(20, 30, 60, 0.4) 0%, rgba(30, 40, 80, 0.3) 100%);
+  border: 1px solid rgba(100, 150, 255, 0.2);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+
+  @include respond-to(md) {
+    height: 800px;
+  }
+
+  @include respond-to(sm) {
+    height: 600px;
+    margin: $spacing-2xl 0;
+  }
+
+  &__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  &__legend {
+    position: absolute;
+    bottom: $spacing-lg;
+    left: $spacing-lg;
+    display: flex;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+    background: rgba(10, 15, 30, 0.8);
+    padding: $spacing-md $spacing-lg;
+    border-radius: $radius-md;
+    border: 1px solid rgba(100, 150, 255, 0.2);
+    backdrop-filter: blur(10px);
+
+    @include respond-to(sm) {
+      gap: $spacing-sm;
+      padding: $spacing-sm $spacing-md;
+      font-size: 0.85rem;
+    }
+  }
+
+  &__legend-item {
+    @include flex-center;
+    gap: $spacing-sm;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  &__legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &__info {
+    position: absolute;
+    top: $spacing-lg;
+    right: $spacing-lg;
+    max-width: 300px;
+    background: rgba(10, 15, 30, 0.8);
+    padding: $spacing-md $spacing-lg;
+    border-radius: $radius-md;
+    border: 1px solid rgba(100, 150, 255, 0.2);
+    backdrop-filter: blur(10px);
+
+    @include respond-to(sm) {
+      display: none;
+    }
+  }
+
+  &__caption {
+    margin: 0;
+    color: rgba(100, 150, 255, 0.8);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  &__labels {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  &__label {
+    position: absolute;
+    transform: translate(-50%, 0);
+    background: rgba(10, 15, 30, 0.9);
+    border: 1px solid rgba(100, 150, 255, 0.3);
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-sm;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+    z-index: 10;
+
+    &.hovered {
+      border-color: rgba(100, 150, 255, 0.8);
+      box-shadow: 0 0 20px rgba(100, 150, 255, 0.3);
+    }
+  }
+}
