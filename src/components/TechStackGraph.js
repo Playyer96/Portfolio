@@ -9,6 +9,17 @@ const TechStackGraph = () => {
   const animationFrameRef = useRef(null);
   const nodesRef = useRef([]);
 
+  // Define state variables first (before any code that uses them)
+  const [zoom, setZoom] = useState(1);
+  const [panX, setPanX] = useState(0);
+  const [panY, setPanY] = useState(0);
+  const zoomRef = useRef(1);
+  const panXRef = useRef(0);
+  const panYRef = useRef(0);
+  const draggedNodeRef = useRef(null);
+  const isPanningRef = useRef(false);
+  const panStartRef = useRef({ x: 0, y: 0 });
+
   const nodeData = [
     // Core Soft Skills (center)
     { id: 'problem-solving', label: 'Problem Solving', type: 'softSkill', color: '#00ff88' },
@@ -104,17 +115,6 @@ const TechStackGraph = () => {
     nodesRef.current = initialNodes;
     setNodes(initialNodes);
   }, []);
-
-  // Define state variables first
-  const [zoom, setZoom] = useState(1);
-  const [panX, setPanX] = useState(0);
-  const [panY, setPanY] = useState(0);
-  const zoomRef = useRef(1);
-  const panXRef = useRef(0);
-  const panYRef = useRef(0);
-  const draggedNodeRef = useRef(null);
-  const isPanningRef = useRef(false);
-  const panStartRef = useRef({ x: 0, y: 0 });
 
   // Handler functions
   const handleCanvasMouseMove = (e) => {
