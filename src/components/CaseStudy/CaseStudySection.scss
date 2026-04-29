@@ -1,0 +1,231 @@
+/**
+ * Case Study Section Styles
+ *
+ * Main container styling for the complete case study
+ */
+
+.case-study {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+
+  &__section {
+    margin-bottom: 4rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 1rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        var(--color-primary),
+        var(--color-secondary)
+      );
+      border-radius: 2px;
+    }
+  }
+
+  &__subheading {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+  }
+
+  &__problem {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: var(--color-bg-secondary);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 8px;
+  }
+
+  &__context {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--color-bg-secondary);
+    border-radius: 8px;
+
+    p {
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+
+  &__details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  &__detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--color-bg-secondary);
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  &__detail-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__detail-value {
+    font-size: 1.125rem;
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
+
+  &__challenges,
+  &__solutions {
+    display: grid;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  &__improvements {
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+  }
+
+  &__improvement {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    background: var(--color-bg-secondary);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 4px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--color-bg-card);
+      transform: translateX(4px);
+    }
+
+    &::before {
+      content: '→';
+      color: var(--color-primary);
+      margin-right: 0.75rem;
+      font-weight: bold;
+    }
+  }
+
+  &__testimonial {
+    margin-top: 2rem;
+    padding: 2.5rem;
+    background: linear-gradient(
+      135deg,
+      var(--color-bg-secondary),
+      var(--color-bg-card)
+    );
+    border-radius: 12px;
+    border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '"';
+      position: absolute;
+      top: -1rem;
+      left: 1rem;
+      font-size: 8rem;
+      font-family: Georgia, serif;
+      color: var(--color-primary);
+      opacity: 0.1;
+    }
+  }
+
+  &__quote {
+    font-size: 1.25rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--color-text-primary);
+    margin: 0 0 1.5rem 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__author {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__author-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 0.25rem 0;
+  }
+
+  &__author-role {
+    font-size: 0.938rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .case-study {
+    &__heading {
+      font-size: 2rem;
+    }
+
+    &__problem {
+      font-size: 1.125rem;
+      padding: 1.5rem;
+    }
+
+    &__details {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    &__testimonial {
+      padding: 1.5rem;
+
+      &::before {
+        font-size: 5rem;
+      }
+    }
+
+    &__quote {
+      font-size: 1.125rem;
+    }
+  }
+}

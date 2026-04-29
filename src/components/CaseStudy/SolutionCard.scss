@@ -1,0 +1,226 @@
+/**
+ * Solution Card Styles
+ *
+ * Individual solution with technical details and code snippets
+ */
+
+.solution-card {
+  padding: 2rem;
+  background: var(--color-bg-secondary);
+  border-radius: 12px;
+  border: 1px solid rgba(var(--color-secondary-rgb), 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 0;
+    background: linear-gradient(
+      180deg,
+      var(--color-secondary),
+      var(--color-accent-cyan)
+    );
+    transition: height 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(var(--color-secondary-rgb), 0.3);
+
+    &::before {
+      height: 100%;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &__number {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+      135deg,
+      var(--color-secondary),
+      var(--color-accent-cyan)
+    );
+    color: var(--color-bg-primary);
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(var(--color-secondary-rgb), 0.3);
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+    flex: 1;
+  }
+
+  &__description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+  }
+
+  &__approach {
+    padding: 1rem 1.25rem;
+    background: rgba(var(--color-secondary-rgb), 0.1);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  &__approach-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  &__approach-value {
+    font-size: 0.938rem;
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  &__technical {
+    padding: 1.5rem;
+    background: var(--color-bg-card);
+    border-radius: 8px;
+    border-left: 3px solid var(--color-secondary);
+    margin-bottom: 1.5rem;
+  }
+
+  &__technical-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 0.75rem 0;
+  }
+
+  &__technical-details {
+    font-size: 0.938rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  &__code {
+    margin-top: 1.5rem;
+  }
+
+  &__code-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: linear-gradient(
+      135deg,
+      rgba(var(--color-secondary-rgb), 0.2),
+      rgba(var(--color-accent-cyan-rgb), 0.2)
+    );
+    color: var(--color-text-primary);
+    border: 1px solid rgba(var(--color-secondary-rgb), 0.3);
+    border-radius: 6px;
+    font-size: 0.938rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+
+    svg {
+      font-size: 1.125rem;
+      color: var(--color-secondary);
+    }
+
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(var(--color-secondary-rgb), 0.3),
+        rgba(var(--color-accent-cyan-rgb), 0.3)
+      );
+      border-color: var(--color-secondary);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &[aria-expanded='true'] {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  &__code-container {
+    margin-top: 0;
+    overflow: hidden;
+    border: 1px solid rgba(var(--color-secondary-rgb), 0.3);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+
+    // Override syntax highlighter styles
+    pre {
+      margin: 0 !important;
+      border-radius: 0 0 8px 8px !important;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace !important;
+      font-size: 0.875rem !important;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .solution-card {
+    padding: 1.5rem;
+
+    &__number {
+      width: 40px;
+      height: 40px;
+      font-size: 1.125rem;
+    }
+
+    &__title {
+      font-size: 1.25rem;
+    }
+
+    &__description {
+      font-size: 0.938rem;
+    }
+
+    &__technical,
+    &__approach {
+      padding: 1rem;
+    }
+
+    &__code-container {
+      code {
+        font-size: 0.75rem !important;
+      }
+    }
+  }
+}

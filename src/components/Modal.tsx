@@ -1,0 +1,191 @@
+import React, { useState, useEffect, useMemo } from "react";
+import { FaReact, FaNodeJs, FaPython, FaJira, FaJava, FaHtml5, FaCss3Alt, FaJs, FaDocker, FaGithub, FaDatabase, FaSlack, FaMicrosoft } from "react-icons/fa";
+import { SiTypescript, SiPerforce, SiMongodb, SiPostgresql, SiSpring, SiExpress, SiDjango, SiTailwindcss, SiUnity, SiUnrealengine, SiSharp, SiCplusplus } from "react-icons/si";
+import { IconType } from "react-icons";
+import { ModalProps } from "../types";
+import "../styles/Modal.css";
+
+/**
+ * Icon Map Type
+ */
+type IconMap = Record<string, IconType>;
+
+/**
+ * Modal Component
+ *
+ * Legacy modal component for displaying project details
+ * Features image carousel, technologies with icons, and responsibilities
+ * Note: ProjectModal is the newer, more feature-rich version
+ */
+const Modal: React.FC<ModalProps> = ({ isOpen, closeModal, project }) => {
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+
+  const getIconComponent = (techName: string): IconType | null => {
+    const normalizedTechName = techName.toLowerCase().trim();
+    const iconMap: IconMap = {
+      'react': FaReact,
+      'nodejs': FaNodeJs,
+      'python': FaPython,
+      'java': FaJava,
+      'html': FaHtml5,
+      'html5': FaHtml5,
+      'css': FaCss3Alt,
+      'css3': FaCss3Alt,
+      'javascript': FaJs,
+      'js': FaJs,
+      'jira': FaJira,
+      'typescript': SiTypescript,
+      'ts': SiTypescript,
+      'mongodb': SiMongodb,
+      'postgresql': SiPostgresql,
+      'postgres': SiPostgresql,
+      'spring': SiSpring,
+      'spring boot': SiSpring,
+      'springboot': SiSpring,
+      'express': SiExpress,
+      'expressjs': SiExpress,
+      'django': SiDjango,
+      'docker': FaDocker,
+      'github': FaGithub,
+      'git': FaGithub,
+      'sql': FaDatabase,
+      'database': FaDatabase,
+      'tailwind': SiTailwindcss,
+      'tailwindcss': SiTailwindcss,
+      'unity': SiUnity,
+      'unreal': SiUnrealengine,
+      'c#': SiSharp,
+      'c++': SiCplusplus,
+      'csharp': SiSharp,
+      'slack': FaSlack,
+      'dev ops': FaMicrosoft,
+      'devops': FaMicrosoft,
+      'visual studio': FaMicrosoft,
+      'perforce': SiPerforce
+    };
+    const Icon = iconMap[normalizedTechName];
+    return Icon || null;
+  };
+
+  const techIcons = useMemo(() => {
+    if (!project?.technologies) return [];
+    return project.technologies.map((tech) => {
+      const Icon = tech?.name ? getIconComponent(tech.name) : null;
+      return (
+        <div className="techIcon" key={tech?.name || 'unknown'} data-tooltip={tech?.name || 'Unknown Technology'}>
+          {Icon ? <Icon size={24} /> : <span>{tech?.name || 'Unknown Technology'}</span>}
+        </div>
+      );
+    });
+  }, [project?.technologies]);
+
+  // Handle carousel navigation
+  const nextItem = (): void => {
+    if (!project) return;
+    setIsTransitioning(true);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % (project.images.length + (project.videoUrl ? 1 : 0)));
+  };
+
+  const prevItem = (): void => {
+    if (!project) return;
+    setIsTransitioning(true);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + (project.images.length + (project.videoUrl ? 1 : 0))) % (project.images.length + (project.videoUrl ? 1 : 0)));
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentIndex(0);
+      document.body.style.overflow = "hidden";
+      setIsAnimating(true);
+    } else {
+      document.body.style.overflow = "";
+      setIsAnimating(false);
+    }
+  }, [isOpen]);
+
+  const handleClose = (): void => {
+    setIsAnimating(false);
+    setTimeout(closeModal, 300);
+  };
+
+  useEffect(() => {
+    if (!isTransitioning) return;
+    const timer = setTimeout(() => setIsTransitioning(false), 300);
+    return () => clearTimeout(timer);
+  }, [isTransitioning]);
+
+  if (!isOpen && !isAnimating) return null;
+  if (!project) return null;
+
+  return (
+    <div className={`modalOverlay ${isAnimating ? "fadeIn" : "fadeOut"}`} onClick={handleClose}>
+      <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+        <h1>{project.name}</h1>
+        <div className="modalCarousel">
+          <div className="carouselNavigation prev">
+            <button onClick={prevItem}>&lt;</button>
+          </div>
+
+          <div className="carouselContent">
+            <div className={`carouselItem ${isTransitioning ? "fadeOut" : "fadeIn"}`}>
+              {currentIndex < project.images.length && (
+                <img
+                  src={project.images[currentIndex].image}
+                  alt={project.name}
+                  className="carouselImage"
+                />
+              )}
+              {currentIndex === project.images.length && project.videoUrl && (
+                <div className="videoWrapper">
+                  <iframe
+                    src={project.videoUrl}
+                    title={project.name}
+                    allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="carouselVideo"
+                  ></iframe>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="carouselNavigation next">
+            <button onClick={nextItem}>&gt;</button>
+          </div>
+        </div>
+
+        <div className="modalDescription">
+          <h3>Description</h3>
+          <p>{project.descriptions && project.descriptions.join(" ")}</p>
+        </div>
+
+        <div className="modalTechnologies">
+          <h3>Technologies</h3>
+          <div className="techIcons">
+            {techIcons}
+          </div>
+        </div>
+
+        <div className="modalResponsabilities">
+          <h3>Responsibilities</h3>
+          <ul>
+            {project.responsibilities?.map((task, index) => (
+              <li key={index}>{task}</li>
+            ))}
+          </ul>
+          {project.link && (
+            <div className="projectLink">
+              <a href={project.link} target="_blank" rel="noopener noreferrer">
+                View Project
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Modal;

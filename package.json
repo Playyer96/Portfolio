@@ -7,9 +7,7 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.1",
-    "@testing-library/user-event": "^14.6.1",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "@vercel/analytics": "^1.6.1",
     "@vercel/speed-insights": "^1.3.1",
     "axios": "^1.13.2",
@@ -22,6 +20,7 @@
     "react-player": "^3.4.0",
     "react-router-dom": "^7.11.0",
     "react-scripts": "5.0.1",
+    "react-syntax-highlighter": "^16.1.0",
     "react-transition-group": "^4.4.5",
     "react-vertical-timeline-component": "^3.6.0",
     "sass": "^1.97.1",
@@ -50,5 +49,19 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@mswjs/http-middleware": "^0.10.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@types/react-router-dom": "^5.3.3",
+    "msw": "^2.12.4",
+    "typescript": "^5.9.3"
   }
 }

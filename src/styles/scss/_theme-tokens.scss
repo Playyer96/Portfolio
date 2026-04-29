@@ -1,0 +1,161 @@
+// ============================================
+// THEME TOKENS - CSS Custom Properties
+// ============================================
+// Supports dark/light/auto theme switching
+
+:root {
+  /* ============================================
+   * DARK THEME (DEFAULT)
+   * Cyberpunk/Gaming Inspired
+   * ============================================ */
+
+  /* Primary Colors - Neon Green */
+  --color-primary: #00ff88;
+  --color-primary-dark: #00cc6a;
+  --color-primary-light: #4dffaa;
+  --color-primary-rgb: 0, 255, 136;
+
+  /* Secondary Colors - Neon Magenta */
+  --color-secondary: #ff00ff;
+  --color-secondary-dark: #cc00cc;
+  --color-secondary-light: #ff4dff;
+  --color-secondary-rgb: 255, 0, 255;
+
+  /* Accent Colors - Cyan */
+  --color-accent: #00d9ff;
+  --color-accent-dark: #00afd9;
+  --color-accent-light: #4de3ff;
+  --color-accent-rgb: 0, 217, 255;
+
+  /* Background Colors */
+  --color-bg-primary: #0a0e27;        // Main background
+  --color-bg-secondary: #050812;      // Deeper sections
+  --color-bg-tertiary: #141b3a;       // Cards/panels
+  --color-bg-hover: #1a2347;          // Hover states
+  --color-bg-overlay: rgba(10, 14, 39, 0.95);
+
+  /* Text Colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a0aec0;
+  --color-text-muted: #718096;
+  --color-text-inverse: #0a0e27;
+
+  /* Border Colors */
+  --color-border-primary: rgba(255, 255, 255, 0.1);
+  --color-border-secondary: rgba(255, 255, 255, 0.05);
+  --color-border-accent: var(--color-primary);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.4);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.5);
+
+  /* Glow Effects */
+  --glow-primary: 0 0 20px rgba(var(--color-primary-rgb), 0.5);
+  --glow-secondary: 0 0 20px rgba(var(--color-secondary-rgb), 0.5);
+  --glow-accent: 0 0 20px rgba(var(--color-accent-rgb), 0.5);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+  --gradient-dark: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+  --gradient-card: linear-gradient(135deg, rgba(20, 27, 58, 0.8) 0%, rgba(26, 35, 71, 0.6) 100%);
+}
+
+/* ============================================
+ * LIGHT THEME
+ * Professional/Clean Design
+ * ============================================ */
+[data-theme="light"] {
+  /* Primary Colors - Adjusted for light background */
+  --color-primary: #00a86b;           // Darker green for better contrast
+  --color-primary-dark: #008055;
+  --color-primary-light: #00cc88;
+  --color-primary-rgb: 0, 168, 107;
+
+  /* Secondary Colors */
+  --color-secondary: #cc00cc;         // Darker magenta
+  --color-secondary-dark: #9900a3;
+  --color-secondary-light: #e600e6;
+  --color-secondary-rgb: 204, 0, 204;
+
+  /* Accent Colors */
+  --color-accent: #0099cc;            // Darker cyan
+  --color-accent-dark: #007399;
+  --color-accent-light: #00b3e6;
+  --color-accent-rgb: 0, 153, 204;
+
+  /* Background Colors */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f7fafc;
+  --color-bg-tertiary: #edf2f7;
+  --color-bg-hover: #e2e8f0;
+  --color-bg-overlay: rgba(255, 255, 255, 0.95);
+
+  /* Text Colors */
+  --color-text-primary: #1a202c;
+  --color-text-secondary: #4a5568;
+  --color-text-muted: #718096;
+  --color-text-inverse: #ffffff;
+
+  /* Border Colors */
+  --color-border-primary: rgba(0, 0, 0, 0.1);
+  --color-border-secondary: rgba(0, 0, 0, 0.05);
+  --color-border-accent: var(--color-primary);
+
+  /* Shadows - Softer for light theme */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.2);
+
+  /* Glow Effects - Subtle for light theme */
+  --glow-primary: 0 0 10px rgba(var(--color-primary-rgb), 0.3);
+  --glow-secondary: 0 0 10px rgba(var(--color-secondary-rgb), 0.3);
+  --glow-accent: 0 0 10px rgba(var(--color-accent-rgb), 0.3);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+  --gradient-dark: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+  --gradient-card: linear-gradient(135deg, rgba(237, 242, 247, 0.8) 0%, rgba(226, 232, 240, 0.6) 100%);
+}
+
+/* ============================================
+ * THEME TRANSITION
+ * Smooth color transitions when switching themes
+ * ============================================ */
+*,
+*::before,
+*::after {
+  transition: background-color 300ms ease,
+              color 300ms ease,
+              border-color 300ms ease,
+              box-shadow 300ms ease;
+}
+
+/* Exclude elements that should not transition */
+.no-theme-transition,
+.no-theme-transition * {
+  transition: none !important;
+}
+
+/* ============================================
+ * PREFERS COLOR SCHEME
+ * System preference detection for auto mode
+ * ============================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* Dark theme is already default */
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    /* Apply light theme variables if data-theme is not explicitly set to dark */
+    /* This only affects auto mode */
+  }
+}

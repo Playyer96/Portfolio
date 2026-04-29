@@ -42,6 +42,40 @@
     transition: transform $transition-slow;
   }
 
+  &__badge {
+    position: absolute;
+    top: $spacing-md;
+    right: $spacing-md;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-md;
+    background: linear-gradient(
+      135deg,
+      rgba(var(--color-accent-cyan-rgb), 0.9),
+      rgba(var(--color-primary-rgb), 0.9)
+    );
+    color: $color-bg-dark;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: $radius-full;
+    z-index: 3;
+    @include glow(var(--color-accent-cyan), 0.5);
+    backdrop-filter: blur(4px);
+
+    svg {
+      font-size: $font-size-sm;
+    }
+
+    span {
+      @media (max-width: 480px) {
+        display: none;
+      }
+    }
+  }
+
   &__overlay {
     @include absolute-cover;
     @include flex-center;

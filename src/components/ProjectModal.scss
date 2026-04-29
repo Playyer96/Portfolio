@@ -157,6 +157,57 @@
     }
   }
 
+  &__tabs {
+    display: flex;
+    gap: $spacing-sm;
+    padding: $spacing-lg $spacing-2xl 0;
+    border-bottom: 1px solid rgba($color-text-muted, 0.2);
+    background: var(--color-bg-secondary);
+
+    @include respond-to(md) {
+      padding: $spacing-2xl $spacing-3xl 0;
+    }
+  }
+
+  &__tab {
+    flex: 1;
+    padding: $spacing-md $spacing-lg;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: $color-text-secondary;
+    font-size: $font-size-base;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all $transition-base;
+    position: relative;
+
+    &:hover {
+      color: $color-text-primary;
+      background: rgba(var(--color-primary-rgb), 0.05);
+    }
+
+    &.active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--color-primary),
+          var(--color-secondary)
+        );
+        @include glow(var(--color-primary), 0.4);
+      }
+    }
+  }
+
   &__info {
     padding: $spacing-2xl;
     overflow-y: auto;

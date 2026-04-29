@@ -6,7 +6,10 @@
 // 1. Variables first (colors, spacing, etc.)
 @import './variables';
 
-// 2. Mixins (reusable patterns)
+// 2. Theme tokens (CSS custom properties for theming)
+@import './theme-tokens';
+
+// 3. Mixins (reusable patterns)
 @import './mixins';
 
 // 3. Animations (keyframes)

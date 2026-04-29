@@ -21,7 +21,11 @@
       "Bash(npm uninstall:*)",
       "Bash(node scripts/generate-og-image.js:*)",
       "Bash(wc:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npx tsc:*)",
+      "Bash(ls:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(npm test:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
