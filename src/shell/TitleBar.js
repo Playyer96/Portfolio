@@ -3,7 +3,7 @@ import './TitleBar.css';
 import useTheme from '../hooks/useTheme';
 
 const TitleBar = () => {
-  const { theme, accent, toggleTheme, setAccent } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const [openMenu, setOpenMenu] = useState(null);
   const menuRef = useRef(null);
 
