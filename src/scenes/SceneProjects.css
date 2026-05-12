@@ -150,7 +150,7 @@
   perspective: 1400;
   padding: 60px;
   z-index: 100;
-  background: radial-gradient(circle at 30% 20%, rgba(168, 255, 96, 0.05), transparent 60%);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
 }
 
 .detail-card-container {

@@ -75,7 +75,7 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
                 className="detail-card"
                 style={{
                   transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`,
-                  background: `linear-gradient(135deg, ${selectedProject.color}, ${selectedProject.color}66)`,
+                  background: `linear-gradient(135deg, ${selectedProject.color || '#a8ff60'}, ${selectedProject.color || '#a8ff60'}cc)`,
                 }}
               >
                 <div className="detail-card-grid" />
