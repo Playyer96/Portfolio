@@ -28,6 +28,8 @@ const HierarchyPanel = ({
     { name: 'About', path: '/about' },
     { name: 'Projects', path: '/projects', children: projects },
     { name: 'Experience', path: '/experience', children: experience },
+    { name: 'Stack', path: '/stack' },
+    { name: 'Contact', path: '/contact' },
     { name: 'Resume', path: '/cv' },
   ];
 

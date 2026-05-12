@@ -17,6 +17,8 @@ import SceneAbout from './scenes/SceneAbout';
 import SceneProjects from './scenes/SceneProjects';
 import SceneExperience from './scenes/SceneExperience';
 import SceneCV from './scenes/SceneCV';
+import SceneStack from './scenes/SceneStack';
+import SceneContact from './scenes/SceneContact';
 import './App.css';
 
 const AppContent = () => {
@@ -62,6 +64,8 @@ const AppContent = () => {
                   <Route path="/about" element={<SceneAbout />} />
                   <Route path="/projects" element={<SceneProjects selectedProject={selectedProject} setSelectedProject={setSelectedProject} />} />
                   <Route path="/experience" element={<SceneExperience selectedExperience={selectedExperience} setSelectedExperience={setSelectedExperience} />} />
+                  <Route path="/stack" element={<SceneStack />} />
+                  <Route path="/contact" element={<SceneContact />} />
                   <Route path="/cv" element={<SceneCV />} />
                 </Routes>
               </motion.div>
