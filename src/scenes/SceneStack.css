@@ -76,8 +76,18 @@
 }
 
 .category-icon {
-  font-size: 24px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--category-color);
+  color: #000;
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 700;
   flex-shrink: 0;
+  font-family: var(--pb-mono);
 }
 
 .category-name {

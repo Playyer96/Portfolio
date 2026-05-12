@@ -326,6 +326,25 @@
   color: var(--pb-accent);
 }
 
+.images-section {
+  grid-column: 1 / -1;
+}
+
+.project-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.project-image {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid var(--pb-line);
+  background: var(--pb-bg);
+  object-fit: cover;
+}
+
 @media (max-width: 768px) {
   .projects-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

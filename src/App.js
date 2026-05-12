@@ -45,9 +45,18 @@ const AppContent = () => {
 
         if (expRes.ok) {
           const raw = await expRes.json();
-          const transformed = raw[0]?.experience?.map((e) => ({
-            company: e.title || '',
-          })) || [];
+          const transformed = raw[0]?.experience?.map((e) => {
+            const startYear = parseInt(e.date?.split(' ')[0]) || 2020;
+            const endYear = e.date?.includes('Present') ? 2026 : (parseInt(e.date?.split('-').pop()?.trim()) || startYear + 1);
+            return {
+              company: e.title || '',
+              role: e.subtitle || '',
+              period: e.date || '',
+              location: e.responsibilities?.[e.responsibilities.length - 1] || '',
+              startYear,
+              endYear,
+            };
+          }) || [];
           setExperience(transformed);
         }
       } catch (err) {

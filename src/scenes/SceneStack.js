@@ -29,31 +29,31 @@ const SceneStack = () => {
   const categories = [
     {
       name: 'Engines',
-      icon: '🎮',
+      icon: 'E',
       color: '#3b82f6',
       items: ['Unity', 'Unreal Engine', 'Custom engines'],
     },
     {
       name: 'Languages',
-      icon: '⚡',
+      icon: 'L',
       color: '#f59e0b',
       items: ['C#', 'C++', 'TypeScript', 'JavaScript', 'Python'],
     },
     {
       name: 'Web',
-      icon: '🌐',
+      icon: 'W',
       color: '#10b981',
       items: ['React', 'Next.js', 'Three.js', 'WebGL', 'Node.js'],
     },
     {
       name: 'XR/3D',
-      icon: '🥽',
+      icon: 'X',
       color: '#8b5cf6',
       items: ['OpenXR', 'Spatial Computing', 'VR Platforms', 'AR'],
     },
     {
       name: 'Tools',
-      icon: '🛠',
+      icon: 'T',
       color: '#ec4899',
       items: ['Git', 'CI/CD', 'Docker', 'AWS', 'Vercel', 'Database Design'],
     },

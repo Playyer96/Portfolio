@@ -198,11 +198,6 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
         </div>
         <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center", fontSize: 11 }}>
           <span style={{ color: "var(--pb-accent)" }}>● available · Q3 '26</span>
-          <button onClick={toggleTheme} style={{
-            fontFamily: "var(--pb-mono)", fontSize: 10, padding: "3px 10px",
-            background: "transparent", border: "1px solid var(--pb-line)",
-            color: "var(--pb-fg)", cursor: "pointer",
-          }}>{dark ? "☼ light" : "☾ dark"}</button>
         </div>
       </div>
 

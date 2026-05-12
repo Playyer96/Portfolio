@@ -1,15 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import './SceneProjects.css';
 import GridBackground from '../ui/GridBackground';
-import useMouseRotation from '../hooks/useMouseRotation';
 import useConsoleLog from '../hooks/useConsoleLog';
 import { fetchProjects as fetchProjectsFromApi } from '../data/api';
 
 const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }) => {
   const [projects, setProjects] = useState([]);
-  const [expanded, setExpanded] = useState(selectedProject?.id || null);
   const [loading, setLoading] = useState(true);
-  const containerRef = useRef(null);
   const { emit } = useConsoleLog();
 
   useEffect(() => {
@@ -38,11 +35,10 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
 
   const handleCardClick = (project) => {
     setSelectedProject(selectedProject?.id === project.id ? null : project);
-    setExpanded(selectedProject?.id === project.id ? null : project.id);
   };
 
   return (
-    <div className="scene-projects" ref={containerRef}>
+    <div className="scene-projects">
       <GridBackground />
       <div className="scene-content">
         <h1 className="section-heading">Projects</h1>
@@ -111,6 +107,16 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
               </button>
             </div>
             <div className="details-content">
+              {selectedProject.images && selectedProject.images.length > 0 && (
+                <div className="detail-col images-section">
+                  <h4>Project</h4>
+                  <div className="project-images">
+                    {selectedProject.images.map((img, i) => (
+                      <img key={i} src={img} alt={`${selectedProject.name} ${i + 1}`} className="project-image" />
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="detail-col">
                 <h4>About</h4>
                 <p>{selectedProject.summary || selectedProject.description}</p>
