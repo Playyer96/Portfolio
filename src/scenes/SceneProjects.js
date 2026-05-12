@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './SceneProjects.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
@@ -9,6 +9,7 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const { emit } = useConsoleLog();
+  const detailRef = useRef(null);
 
   useEffect(() => {
     emit('info', '> Scene loaded: Projects');
@@ -34,6 +35,14 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
     return () => clearTimeout(timeoutId);
   }, [emit]);
 
+  useEffect(() => {
+    if (selectedProject && detailRef.current) {
+      setTimeout(() => {
+        detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }, [selectedProject]);
+
   const handleCardClick = (project) => {
     setSelectedProject(selectedProject?.id === project.id ? null : project);
   };
@@ -49,8 +58,16 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
         ) : (
           <div className="projects-grid">
             {projects.map((project, idx) => (
-              <React.Fragment key={project.id}>
+              selectedProject?.id === project.id ? (
+                <div key={project.id} ref={detailRef}>
+                  <ProjectDetail
+                    project={project}
+                    onClose={() => setSelectedProject(null)}
+                  />
+                </div>
+              ) : (
                 <div
+                  key={project.id}
                   className="project-card"
                   style={{
                     '--project-color': project.color || 'var(--pb-accent)',
@@ -72,14 +89,7 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
                     </div>
                   </div>
                 </div>
-
-                {selectedProject?.id === project.id && (
-                  <ProjectDetail
-                    project={project}
-                    onClose={() => setSelectedProject(null)}
-                  />
-                )}
-              </React.Fragment>
+              )
             ))}
           </div>
         )}
