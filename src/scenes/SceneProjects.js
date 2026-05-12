@@ -71,6 +71,9 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
 
         {selectedProject && (
           <div className="project-split-panel">
+            <button className="close-x" onClick={() => setSelectedProject(null)} aria-label="Close">
+              ✕
+            </button>
             <div className="split-images">
               {selectedProject.images && selectedProject.images.length > 0 && (
                 <div className="carousel-container">
@@ -113,7 +116,6 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
               <div>{selectedProject.technologies?.join(' • ')}</div>
               <h3 style={{marginTop:'16px'}}>Key Work</h3>
               <ul>{selectedProject.responsibilities?.map((r,i)=><li key={i}>{r}</li>)}</ul>
-              <button onClick={()=>setSelectedProject(null)} style={{marginTop:'24px'}}>Close</button>
             </div>
           </div>
         )}
