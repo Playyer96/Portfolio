@@ -169,7 +169,6 @@
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   position: relative;
-  background: linear-gradient(135deg, #a8ff60, #a8ff6099) !important;
 }
 
 .detail-card::before {
