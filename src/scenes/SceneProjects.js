@@ -43,6 +43,29 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
       <div className="scene-content">
         <h1 className="section-heading">Projects</h1>
 
+        {selectedProject && (
+          <div className="project-image-strip">
+            {selectedProject.images && selectedProject.images.length > 0 ? (
+              selectedProject.images.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt={`${selectedProject.name} ${i + 1}`}
+                  className="strip-image"
+                  onError={e => { e.currentTarget.style.display = 'none'; }}
+                />
+              ))
+            ) : (
+              <div
+                className="strip-placeholder"
+                style={{ background: `linear-gradient(135deg, ${selectedProject.color || 'var(--pb-accent)'} 0%, var(--pb-bg) 100%)` }}
+              >
+                <span className="strip-label">{selectedProject.name}</span>
+              </div>
+            )}
+          </div>
+        )}
+
         {loading ? (
           <div className="loading-state">Compiling project data...</div>
         ) : (
@@ -95,51 +118,6 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
                 </div>
               </div>
             ))}
-          </div>
-        )}
-
-        {selectedProject && (
-          <div className="project-details-panel">
-            <div className="details-header">
-              <h2>{selectedProject.name}</h2>
-              <button className="close-btn" onClick={() => setSelectedProject(null)}>
-                ✕
-              </button>
-            </div>
-            <div className="details-content">
-              {selectedProject.images && selectedProject.images.length > 0 && (
-                <div className="detail-col images-section">
-                  <h4>Project</h4>
-                  <div className="project-images">
-                    {selectedProject.images.map((img, i) => (
-                      <img key={i} src={img} alt={`${selectedProject.name} ${i + 1}`} className="project-image" />
-                    ))}
-                  </div>
-                </div>
-              )}
-              <div className="detail-col">
-                <h4>About</h4>
-                <p>{selectedProject.summary || selectedProject.description}</p>
-              </div>
-              <div className="detail-col">
-                <h4>Technologies</h4>
-                <div className="full-tech-list">
-                  {selectedProject.technologies?.map((tech, i) => (
-                    <span key={i} className="tech-full-badge">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div className="detail-col">
-                <h4>Responsibilities</h4>
-                <ul className="resp-list">
-                  {selectedProject.responsibilities?.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
           </div>
         )}
       </div>
