@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SceneProjects.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
+import ProjectDetail from '../components/ProjectDetail';
 import { fetchProjects as fetchProjectsFromApi } from '../data/api';
 
 const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }) => {
@@ -43,44 +44,20 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
       <div className="scene-content">
         <h1 className="section-heading">Projects</h1>
 
-        {selectedProject && (
-          <div className="project-image-strip">
-            {selectedProject.images && selectedProject.images.length > 0 ? (
-              selectedProject.images.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  alt={`${selectedProject.name} ${i + 1}`}
-                  className="strip-image"
-                  onError={e => { e.currentTarget.style.display = 'none'; }}
-                />
-              ))
-            ) : (
-              <div
-                className="strip-placeholder"
-                style={{ background: `linear-gradient(135deg, ${selectedProject.color || 'var(--pb-accent)'} 0%, var(--pb-bg) 100%)` }}
-              >
-                <span className="strip-label">{selectedProject.name}</span>
-              </div>
-            )}
-          </div>
-        )}
-
         {loading ? (
           <div className="loading-state">Compiling project data...</div>
         ) : (
           <div className="projects-grid">
             {projects.map((project, idx) => (
-              <div
-                key={project.id}
-                className={`project-card ${selectedProject?.id === project.id ? 'selected' : ''}`}
-                style={{
-                  '--project-color': project.color || 'var(--pb-accent)',
-                  '--card-delay': `${idx * 50}ms`,
-                }}
-                onClick={() => handleCardClick(project)}
-              >
-                <div className="card-inner">
+              <React.Fragment key={project.id}>
+                <div
+                  className="project-card"
+                  style={{
+                    '--project-color': project.color || 'var(--pb-accent)',
+                    '--card-delay': `${idx * 50}ms`,
+                  }}
+                  onClick={() => handleCardClick(project)}
+                >
                   <div className="card-front">
                     <div className="card-header">
                       <h3 className="card-title">{project.name}</h3>
@@ -91,32 +68,18 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
                       <span className="tech-count">
                         {project.technologies?.length || 0} tech
                       </span>
-                    </div>
-                  </div>
-
-                  <div className="card-back">
-                    <div className="back-content">
-                      <h4 className="back-label">Technologies</h4>
-                      <div className="tech-grid">
-                        {project.technologies?.slice(0, 4).map((tech, i) => (
-                          <span key={i} className="tech-tag">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-
-                      <h4 className="back-label" style={{ marginTop: '16px' }}>
-                        Key Work
-                      </h4>
-                      <ul className="work-list">
-                        {project.responsibilities?.slice(0, 2).map((item, i) => (
-                          <li key={i}>{item}</li>
-                        ))}
-                      </ul>
+                      <span className="click-hint">Expand</span>
                     </div>
                   </div>
                 </div>
-              </div>
+
+                {selectedProject?.id === project.id && (
+                  <ProjectDetail
+                    project={project}
+                    onClose={() => setSelectedProject(null)}
+                  />
+                )}
+              </React.Fragment>
             ))}
           </div>
         )}
