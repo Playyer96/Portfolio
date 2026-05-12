@@ -282,8 +282,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
-  margin-top: 60px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   padding: 40px;
   border: 2px solid var(--pb-accent);
   border-radius: 4px;

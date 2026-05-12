@@ -53,6 +53,23 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
       <div className="scene-content">
         <h1 className="section-heading">Projects</h1>
 
+        {selectedProject && (
+          <div className="project-split-panel">
+            <div className="split-images">
+              {selectedProject.images?.[0] && <img src={selectedProject.images[0]} alt={selectedProject.name} />}
+            </div>
+            <div className="split-details">
+              <h2>{selectedProject.name}</h2>
+              <p>{selectedProject.description}</p>
+              <h3>Technologies</h3>
+              <div>{selectedProject.technologies?.join(' • ')}</div>
+              <h3 style={{marginTop:'16px'}}>Key Work</h3>
+              <ul>{selectedProject.responsibilities?.map((r,i)=><li key={i}>{r}</li>)}</ul>
+              <button onClick={()=>setSelectedProject(null)} style={{marginTop:'24px'}}>Close</button>
+            </div>
+          </div>
+        )}
+
         {loading ? (
           <div className="loading-state">Compiling project data...</div>
         ) : (
@@ -87,23 +104,6 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
           </div>
         )}
       </div>
-
-      {selectedProject && (
-        <div className="project-split-panel">
-          <div className="split-images">
-            {selectedProject.images?.[0] && <img src={selectedProject.images[0]} alt={selectedProject.name} />}
-          </div>
-          <div className="split-details">
-            <h2>{selectedProject.name}</h2>
-            <p>{selectedProject.description}</p>
-            <h3>Technologies</h3>
-            <div>{selectedProject.technologies?.join(' • ')}</div>
-            <h3 style={{marginTop:'16px'}}>Key Work</h3>
-            <ul>{selectedProject.responsibilities?.map((r,i)=><li key={i}>{r}</li>)}</ul>
-            <button onClick={()=>setSelectedProject(null)} style={{marginTop:'24px'}}>Close</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
