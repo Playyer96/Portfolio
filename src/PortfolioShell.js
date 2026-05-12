@@ -23,6 +23,349 @@ function HItem({ icon, label, depth = 0, active, onClick, badge, color }) {
   );
 }
 
+function InspGroup({ icon, iconColor, title, badge, defaultOpen = true, children }) {
+  const [open, setOpen] = React.useState(defaultOpen);
+  return (
+    <div style={{ borderBottom: "1px solid var(--pb-line)" }}>
+      <button onClick={() => setOpen(o => !o)} style={{
+        width: "100%", display: "flex", alignItems: "center", gap: 6,
+        padding: "6px 10px", background: "var(--pb-panel)", color: "var(--pb-fg)",
+        border: "none", cursor: "pointer", fontFamily: "var(--pb-mono)", fontSize: 11, textAlign: "left",
+      }}>
+        <span style={{ color: "var(--pb-dim)", width: 10, fontSize: 9 }}>{open ? "▾" : "▸"}</span>
+        {icon && (
+          <span style={{
+            width: 14, height: 14, borderRadius: 2, fontSize: 8,
+            background: iconColor || "var(--pb-accent)", color: "#000",
+            display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+          }}>{icon}</span>
+        )}
+        <span style={{ flex: 1, fontWeight: 600 }}>{title}</span>
+        {badge !== undefined && (
+          <span style={{ fontSize: 9, padding: "1px 5px", background: "var(--pb-line)", color: "var(--pb-dim)" }}>{badge}</span>
+        )}
+      </button>
+      {open && <div style={{ background: "var(--pb-bg)" }}>{children}</div>}
+    </div>
+  );
+}
+
+function InspField({ label, value, accent }) {
+  return (
+    <div style={{
+      display: "grid", gridTemplateColumns: "100px 1fr",
+      padding: "4px 10px", borderBottom: "1px solid var(--pb-line)",
+      fontFamily: "var(--pb-mono)", fontSize: 10, gap: 8,
+    }}>
+      <span style={{ color: "var(--pb-dim)" }}>{label}</span>
+      <span style={{ color: accent ? "var(--pb-accent)" : "var(--pb-fg)", textAlign: "right" }}>{value}</span>
+    </div>
+  );
+}
+
+function AnimatorView({ experience }) {
+  if (!experience || experience.length === 0)
+    return <div style={{ padding: 40, color: "var(--pb-dim)", fontFamily: "var(--pb-mono)", fontSize: 11 }}>No timeline data.</div>;
+  const colors = ["var(--pb-accent)", "#10b981", "#f59e0b", "#06b6d4", "#8b5cf6", "#ec4899"];
+  const allStart = experience.map(e => e.startYear || 2017).filter(Boolean);
+  const allEnd = experience.map(e => e.endYear || 2026).filter(Boolean);
+  const minY = Math.min(...allStart, 2017);
+  const maxY = Math.max(...allEnd, 2026);
+  const range = maxY - minY || 1;
+  const years = Array.from({ length: range + 1 }, (_, i) => minY + i);
+  return (
+    <div style={{ padding: "20px 28px", height: "100%", overflow: "auto", fontFamily: "var(--pb-mono)" }}>
+      <div style={{ fontSize: 10, color: "var(--pb-dim)", letterSpacing: "0.1em", marginBottom: 14 }}>ANIMATOR · CAREER TIMELINE</div>
+      <div style={{ position: "relative", height: 24, marginBottom: 6, display: "flex" }}>
+        {years.map(y => (
+          <div key={y} style={{ flex: 1, fontSize: 9, color: "var(--pb-dim)", borderLeft: "1px solid var(--pb-line)", paddingLeft: 2 }}>{y}</div>
+        ))}
+      </div>
+      {experience.map((e, i) => {
+        const s = Math.max(((e.startYear || minY) - minY) / range * 100, 0);
+        const w = Math.max(((e.endYear || maxY) - (e.startYear || minY)) / range * 100, 2);
+        return (
+          <div key={i} style={{ display: "flex", alignItems: "center", marginBottom: 6, gap: 8 }}>
+            <div style={{ width: 110, fontSize: 10, color: "var(--pb-dim)", flexShrink: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.company}</div>
+            <div style={{ flex: 1, height: 18, position: "relative" }}>
+              <div style={{
+                position: "absolute", left: `${s}%`, width: `${w}%`,
+                height: "100%", background: colors[i % colors.length], opacity: 0.85,
+                display: "flex", alignItems: "center", paddingLeft: 6, overflow: "hidden",
+              }}>
+                <span style={{ fontSize: 9, color: "#000", whiteSpace: "nowrap" }}>{e.role}</span>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function AssetStoreView({ projects, onSelect }) {
+  return (
+    <div style={{ padding: 20, height: "100%", overflow: "auto" }}>
+      <div style={{ fontSize: 10, color: "var(--pb-dim)", letterSpacing: "0.1em", marginBottom: 14, fontFamily: "var(--pb-mono)" }}>ASSET STORE · PROJECT PREFABS</div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: 12 }}>
+        {projects.map((p, i) => (
+          <button key={i} onClick={() => onSelect(p)} style={{
+            background: "var(--pb-panel)", border: "1px solid var(--pb-line)",
+            cursor: "pointer", padding: 0, overflow: "hidden", display: "flex", flexDirection: "column",
+            transition: "border-color 0.15s",
+          }}
+          onMouseEnter={e => e.currentTarget.style.borderColor = p.color || "var(--pb-accent)"}
+          onMouseLeave={e => e.currentTarget.style.borderColor = "var(--pb-line)"}
+          >
+            <div style={{ aspectRatio: "1", background: p.color || "var(--pb-accent)", position: "relative" }}>
+              <div style={{ position: "absolute", top: 4, left: 6, fontSize: 8, color: "rgba(0,0,0,.5)", fontFamily: "var(--pb-mono)", letterSpacing: "0.05em" }}>
+                {(p.id || '').toUpperCase()}
+              </div>
+            </div>
+            <div style={{ padding: "6px 8px" }}>
+              <div style={{ fontFamily: "var(--pb-mono)", fontSize: 10, color: "var(--pb-fg)", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name || p.title}</div>
+              <div style={{ fontFamily: "var(--pb-mono)", fontSize: 9, color: "var(--pb-dim)", marginTop: 1 }}>.prefab</div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProfilerView() {
+  const metrics = [
+    { label: "CPU · main thread", value: 2.1, max: 16, unit: "ms", color: "#10b981" },
+    { label: "GPU · render",       value: 4.8, max: 16, unit: "ms", color: "#06b6d4" },
+    { label: "Memory · runtime",   value: 142, max: 512, unit: "MB", color: "#f59e0b" },
+    { label: "Audio · mixer",      value: 0.2, max: 4,  unit: "ms", color: "#8b5cf6" },
+    { label: "Physics · step",     value: 0.9, max: 8,  unit: "ms", color: "#ec4899" },
+    { label: "Network · ping",     value: 0.0, max: 4,  unit: "ms", color: "#ef4444" },
+  ];
+  return (
+    <div style={{ padding: "20px 28px", height: "100%", overflow: "auto", fontFamily: "var(--pb-mono)" }}>
+      <div style={{ fontSize: 10, color: "var(--pb-dim)", letterSpacing: "0.1em", marginBottom: 14 }}>PROFILER · RUNTIME METRICS</div>
+      {metrics.map((m, i) => (
+        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+          <div style={{ width: 140, fontSize: 10, color: "var(--pb-dim)", flexShrink: 0 }}>{m.label}</div>
+          <div style={{ flex: 1, height: 10, background: "var(--pb-panel)", position: "relative" }}>
+            <div style={{ position: "absolute", left: 0, top: 0, height: "100%", width: `${(m.value / m.max) * 100}%`, background: m.color, opacity: 0.8 }} />
+          </div>
+          <div style={{ width: 56, fontSize: 10, color: "var(--pb-fg)", textAlign: "right", flexShrink: 0 }}>{m.value} {m.unit}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BottomProfiler() {
+  const phaseRef = React.useRef(0);
+  const rafRef = React.useRef(null);
+  const [bars, setBars] = React.useState(() => Array.from({ length: 80 }, (_, i) => Math.sin((i / 80) * Math.PI * 4) * 0.5 + 0.5));
+  React.useEffect(() => {
+    const animate = () => {
+      phaseRef.current += 0.04;
+      setBars(Array.from({ length: 80 }, (_, i) => Math.sin((i / 80) * Math.PI * 4 + phaseRef.current) * 0.5 + 0.5));
+      rafRef.current = requestAnimationFrame(animate);
+    };
+    rafRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+  const metrics = [
+    { label: "CPU", value: "2.1ms", color: "#10b981" },
+    { label: "GPU", value: "4.8ms", color: "#06b6d4" },
+    { label: "Memory", value: "142MB", color: "#f59e0b" },
+    { label: "Draw calls", value: "48", color: "var(--pb-accent)" },
+  ];
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", fontFamily: "var(--pb-mono)" }}>
+      <div style={{ height: 60, display: "flex", alignItems: "flex-end", gap: 1, padding: "6px 12px", borderBottom: "1px solid var(--pb-line)" }}>
+        {bars.map((v, i) => (
+          <div key={i} style={{ flex: 1, height: `${Math.max(v * 46, 2)}px`, background: v > 0.7 ? "#f59e0b" : "var(--pb-accent)", opacity: 0.75 }} />
+        ))}
+      </div>
+      <div style={{ flex: 1, display: "grid", gridTemplateColumns: "repeat(4, 1fr)", padding: "8px 12px", gap: 8, alignItems: "center" }}>
+        {metrics.map((m, i) => (
+          <div key={i}>
+            <div style={{ fontSize: 9, color: "var(--pb-dim)", letterSpacing: "0.1em" }}>{m.label}</div>
+            <div style={{ fontSize: 14, color: m.color, fontWeight: 600, marginTop: 2 }}>{m.value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BottomAssets({ projects, navigate, setSelectedProject }) {
+  return (
+    <div style={{ height: "100%", overflow: "auto", display: "flex", gap: 10, padding: "10px 12px", alignItems: "flex-start", flexWrap: "wrap" }}>
+      {projects.map((p, i) => (
+        <button key={i} onClick={() => { setSelectedProject(p); navigate('/projects'); }}
+          style={{ background: "var(--pb-panel)", border: "1px solid var(--pb-line)", cursor: "pointer", padding: 8, display: "flex", flexDirection: "column", alignItems: "center", gap: 5, width: 72, fontFamily: "var(--pb-mono)", transition: "border-color 0.15s" }}
+          onMouseEnter={e => e.currentTarget.style.borderColor = p.color || "var(--pb-accent)"}
+          onMouseLeave={e => e.currentTarget.style.borderColor = "var(--pb-line)"}
+        >
+          <div style={{ width: 40, height: 40, background: p.color || "var(--pb-accent)", borderRadius: 2 }} />
+          <div style={{ fontSize: 9, color: "var(--pb-fg)", textAlign: "center", wordBreak: "break-word", lineHeight: 1.3 }}>{p.name || p.title}</div>
+          <div style={{ fontSize: 8, color: "var(--pb-dim)" }}>.prefab</div>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function InspectorIntro() {
+  return (
+    <div>
+      <InspGroup icon="👤" iconColor="var(--pb-accent)" title="Identity">
+        <InspField label="Name" value="Danilo Vanegas" />
+        <InspField label="Role" value="Engineer" />
+        <InspField label="Location" value="Colombia, UTC-5" />
+        <InspField label="Experience" value="8+ years" accent />
+      </InspGroup>
+      <InspGroup icon="✉" iconColor="#0a66c2" title="Engagement">
+        <InspField label="Status" value="Available" accent />
+        <InspField label="Start" value="Q3 2026" />
+        <InspField label="Contact" value="vanegasdanilo7@gmail.com" />
+      </InspGroup>
+      <InspGroup icon="◆" iconColor="#888" title="Transform" defaultOpen={false}>
+        <InspField label="Position" value="(0, 0, 0)" />
+        <InspField label="Rotation" value="(0, 0, 0)" />
+        <InspField label="Scale" value="(1, 1, 1)" />
+      </InspGroup>
+    </div>
+  );
+}
+
+function InspectorAbout() {
+  return (
+    <div>
+      <InspGroup icon="📖" iconColor="var(--pb-accent)" title="Document">
+        <InspField label="Content" value="Full bio on /about" />
+      </InspGroup>
+      <InspGroup icon="🎓" iconColor="#f59e0b" title="Education">
+        <InspField label="Focus" value="CS, interactive systems" />
+      </InspGroup>
+      <InspGroup icon="💼" iconColor="#10b981" title="Working At">
+        <InspField label="Last" value="See /experience" />
+      </InspGroup>
+    </div>
+  );
+}
+
+function InspectorProject({ project }) {
+  return (
+    <div>
+      <InspGroup icon="◆" iconColor={project.color || "var(--pb-accent)"} title={project.name || project.title}>
+        <InspField label="ID" value={project.id || 'N/A'} />
+        <InspField label="Year" value={project.year || 'N/A'} />
+      </InspGroup>
+      <InspGroup icon="📝" iconColor="var(--pb-accent)" title="Highlights">
+        <div style={{ padding: "8px 10px", fontSize: 10, color: "var(--pb-fg)", lineHeight: 1.5 }}>
+          {project.summary || project.description || 'No description'}
+        </div>
+      </InspGroup>
+      <InspGroup icon="⚙" iconColor="#06b6d4" title="Stack">
+        <div style={{ padding: "8px 10px", display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {(project.technologies || []).map((t, i) => (
+            <span key={i} style={{
+              fontSize: 9, background: "var(--pb-panel)", color: "var(--pb-fg)",
+              padding: "3px 6px", borderRadius: 2,
+            }}>{t}</span>
+          ))}
+        </div>
+      </InspGroup>
+      <InspGroup icon="▶" iconColor="#f59e0b" title="Process" defaultOpen={false}>
+        <InspField label="Phase" value="3 stages" />
+      </InspGroup>
+    </div>
+  );
+}
+
+function InspectorExperience({ experience }) {
+  return (
+    <div>
+      <InspGroup icon="📈" iconColor="var(--pb-accent)" title={`Timeline · ${experience.length} roles`}>
+        <InspField label="Span" value={`${experience.length} positions`} />
+      </InspGroup>
+      {experience.map((e, i) => (
+        <InspGroup key={i} icon="◆" iconColor="#888" title={e.company} defaultOpen={false}>
+          <InspField label="Role" value={e.role} />
+          <InspField label="Period" value={e.period} />
+          <InspField label="Location" value={e.location} />
+        </InspGroup>
+      ))}
+    </div>
+  );
+}
+
+function InspectorStack() {
+  return (
+    <div>
+      <InspGroup icon="📊" iconColor="var(--pb-accent)" title="Graph Statistics">
+        <InspField label="Categories" value="5" />
+        <InspField label="Total items" value="40+" accent />
+      </InspGroup>
+      <InspGroup icon="⚡" iconColor="#3b82f6" title="Engines" defaultOpen={false}>
+        <InspField label="Count" value="3" />
+      </InspGroup>
+      <InspGroup icon="🔤" iconColor="#f59e0b" title="Languages" defaultOpen={false}>
+        <InspField label="Count" value="7" />
+      </InspGroup>
+      <InspGroup icon="🌐" iconColor="#10b981" title="Web" defaultOpen={false}>
+        <InspField label="Count" value="8" />
+      </InspGroup>
+      <InspGroup icon="🎮" iconColor="#8b5cf6" title="XR/3D" defaultOpen={false}>
+        <InspField label="Count" value="8" />
+      </InspGroup>
+      <InspGroup icon="🛠" iconColor="#ec4899" title="Tools" defaultOpen={false}>
+        <InspField label="Count" value="12+" />
+      </InspGroup>
+    </div>
+  );
+}
+
+function InspectorContact() {
+  return (
+    <div>
+      <InspGroup icon="⏰" iconColor="var(--pb-accent)" title="Availability">
+        <InspField label="Status" value="Open" accent />
+        <InspField label="Start date" value="Q3 2026" />
+      </InspGroup>
+      <InspGroup icon="📞" iconColor="#0a66c2" title="Channels">
+        <InspField label="Email" value="Email preferred" />
+        <InspField label="Chat" value="LinkedIn/X" />
+      </InspGroup>
+      <InspGroup icon="🎯" iconColor="#10b981" title="Engagement Types">
+        <InspField label="Roles" value="Full-time, contract" />
+        <InspField label="Focus" value="Real problems" />
+      </InspGroup>
+    </div>
+  );
+}
+
+function InspectorCV() {
+  return (
+    <div>
+      <InspGroup icon="📄" iconColor="var(--pb-accent)" title="CV · 2025">
+        <InspField label="Format" value="PDF" />
+        <InspField label="Pages" value="1" />
+        <InspField label="Size" value="240 KB" />
+      </InspGroup>
+      <InspGroup icon="✓" iconColor="#10b981" title="Download">
+        <div style={{ padding: "10px", textAlign: "center" }}>
+          <a href="/CV-Danilo-Vanegas-2025.pdf" download style={{
+            background: "var(--pb-accent)", color: "#000", padding: "8px 16px",
+            fontFamily: "var(--pb-mono)", fontSize: 10, fontWeight: 600,
+            textDecoration: "none", display: "inline-block", borderRadius: 2,
+            cursor: "pointer",
+          }}>Download</a>
+        </div>
+      </InspGroup>
+    </div>
+  );
+}
+
 function PortfolioShell({ children, projects = [], experience = [], selectedProject, setSelectedProject }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -198,6 +541,18 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
         </div>
         <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center", fontSize: 11 }}>
           <span style={{ color: "var(--pb-accent)" }}>● available · Q3 '26</span>
+          <button
+            onClick={toggleTheme}
+            title={dark ? "Switch to light" : "Switch to dark"}
+            style={{
+              background: "transparent", border: "1px solid var(--pb-line)",
+              color: "var(--pb-dim)", padding: "2px 8px",
+              fontFamily: "var(--pb-mono)", fontSize: 10, cursor: "pointer",
+              letterSpacing: "0.05em",
+            }}
+          >
+            {dark ? "◑" : "○"}
+          </button>
         </div>
       </div>
 
@@ -223,7 +578,10 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
         ))}
         <div style={{ width: 12 }} />
         <button
-          onClick={() => { setPlaying(true); setSceneTab("Game"); }}
+          onClick={() => {
+            if (playing) { setPlaying(false); setSceneTab("Scene"); }
+            else { setPlaying(true); setSceneTab("Game"); }
+          }}
           style={{
             padding: "4px 12px", background: playing ? "var(--pb-line)" : "var(--pb-accent)",
             color: playing ? "var(--pb-fg)" : "#000",
@@ -319,7 +677,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
 
             <div style={{ height: 14 }} />
             <div style={{ padding: "4px 10px", fontSize: 9, color: "var(--pb-dim)", letterSpacing: "0.1em" }}>CAMERAS</div>
-            <HItem icon="📷" label="main_camera" depth={1} />
+            <HItem icon="◎" label="main_camera" depth={1} />
           </div>
         </div>
 
@@ -378,6 +736,26 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
               }}>● REC · RUNTIME</div>
             )}
             {sceneTab === "Scene" && children}
+
+            {sceneTab === "Game" && (
+              <div style={{ position: "relative", width: "100%", height: "100%" }}>
+                {children}
+                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", border: "2px solid var(--pb-accent)", zIndex: 20 }} />
+                <div style={{ position: "absolute", top: 8, left: 10, zIndex: 21, fontFamily: "var(--pb-mono)", fontSize: 10, color: "var(--pb-accent)", letterSpacing: "0.1em" }}>GAME VIEW</div>
+                <div style={{ position: "absolute", top: 8, right: 10, zIndex: 21, fontFamily: "var(--pb-mono)", fontSize: 10, color: "var(--pb-dim)" }}>1920×1080</div>
+              </div>
+            )}
+
+            {sceneTab === "Animator" && <AnimatorView experience={experience} />}
+
+            {sceneTab === "Asset Store" && (
+              <AssetStoreView
+                projects={projects}
+                onSelect={(p) => { setSelectedProject(p); navigate('/projects'); }}
+              />
+            )}
+
+            {sceneTab === "Profiler" && <ProfilerView />}
           </div>
 
           {/* Bottom dock */}
@@ -413,16 +791,22 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
                 {bottomTab === "assets" && `${projects.length} prefabs`}
               </span>
             </div>
-            <div style={{ flex: 1, overflow: "auto", background: "var(--pb-panel)", padding: "12px" }}>
+            <div style={{ flex: 1, overflow: "auto", background: "var(--pb-panel)", padding: bottomTab === "profiler" ? 0 : 0 }}>
               {bottomTab === "console" && (
-                <div style={{ fontFamily: "var(--pb-mono)", fontSize: 10, color: "var(--pb-dim)" }}>
-                  {logs.map((log, i) => (
-                    <div key={i} style={{ marginBottom: 4, color: log.type === 'error' ? '#ff6b6b' : 'inherit' }}>
-                      {log.message}
-                    </div>
-                  ))}
+                <div style={{ fontFamily: "var(--pb-mono)", fontSize: 10, color: "var(--pb-dim)", padding: 12 }}>
+                  {logs.length === 0 ? (
+                    <div style={{ color: "var(--pb-dim)", fontStyle: "italic" }}>No logs yet. Navigate to a scene.</div>
+                  ) : (
+                    logs.map((log, i) => (
+                      <div key={i} style={{ marginBottom: 4, color: log.type === 'error' ? '#ff6b6b' : log.type === 'ok' ? 'var(--pb-accent)' : 'inherit' }}>
+                        {log.message}
+                      </div>
+                    ))
+                  )}
                 </div>
               )}
+              {bottomTab === "profiler" && <BottomProfiler />}
+              {bottomTab === "assets" && <BottomAssets projects={projects} navigate={navigate} setSelectedProject={setSelectedProject} />}
             </div>
           </div>
         </div>
@@ -440,22 +824,19 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
             <span>Inspector</span>
             <span style={{ marginLeft: "auto", color: "var(--pb-dim)", fontSize: 10 }}>◇ ⊕</span>
           </div>
-          <div style={{ flex: 1, overflow: "auto", padding: "12px" }}>
-            <div style={{ fontFamily: "var(--pb-mono)", fontSize: 10, color: "var(--pb-dim)" }}>
-              <div>Scene: {sceneLabel}</div>
-              {selectedProject && (
-                <>
-                  <div style={{ marginTop: 12, color: "var(--pb-fg)" }}>
-                    Project: {selectedProject.name || selectedProject.title}
-                  </div>
-                  {selectedProject.description && (
-                    <div style={{ marginTop: 8, fontSize: 9, color: "var(--pb-fg)" }}>
-                      {selectedProject.description}
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
+          <div style={{ flex: 1, overflow: "auto" }}>
+            {scene === "intro"       && <InspectorIntro />}
+            {scene === "about"       && <InspectorAbout />}
+            {scene === "projects"    && selectedProject  && <InspectorProject project={selectedProject} />}
+            {scene === "projects"    && !selectedProject && (
+              <div style={{ padding: 40, textAlign: "center", fontFamily: "var(--pb-mono)", fontSize: 11, color: "var(--pb-dim)" }}>
+                Select a project ↑
+              </div>
+            )}
+            {scene === "experience"  && <InspectorExperience experience={experience} />}
+            {scene === "stack"       && <InspectorStack />}
+            {scene === "contact"     && <InspectorContact />}
+            {scene === "cv"          && <InspectorCV />}
           </div>
           <div style={{ borderTop: "1px solid var(--pb-line)", background: "var(--pb-panel)", padding: 16, textAlign: "center" }}>
             <div style={{ color: "var(--pb-dim)", fontFamily: "var(--pb-mono)", fontSize: 11 }}>Drag a brief here, or</div>

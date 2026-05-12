@@ -130,6 +130,13 @@
   white-space: nowrap;
 }
 
+.copy-inner {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #000;
+}
+
 .divider {
   height: 1px;
   background: var(--pb-line);
@@ -176,7 +183,9 @@
 }
 
 .social-icon {
-  font-size: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
   flex-shrink: 0;
 }
 

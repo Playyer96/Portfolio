@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import './SceneContact.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
+import { FiDownload, FiCopy, FiCheck } from 'react-icons/fi';
 
 const SceneContact = () => {
   const [copied, setCopied] = useState(false);
@@ -44,31 +47,10 @@ const SceneContact = () => {
   };
 
   const socials = [
-    {
-      name: 'GitHub',
-      url: 'https://github.com/danivanegas',
-      icon: '🐙',
-      color: '#000',
-    },
-    {
-      name: 'LinkedIn',
-      url: 'https://linkedin.com/in/danilo-vanegas',
-      icon: '💼',
-      color: '#0a66c2',
-    },
-    {
-      name: 'X / Twitter',
-      url: 'https://x.com',
-      icon: '𝕏',
-      color: '#000',
-    },
-    {
-      name: 'Download CV',
-      url: '/CV-Danilo-Vanegas-2025.pdf',
-      icon: '📄',
-      color: '#f59e0b',
-      download: true,
-    },
+    { name: 'GitHub',      url: 'https://github.com/danivanegas',         icon: <FaGithub />,   color: 'var(--pb-fg)' },
+    { name: 'LinkedIn',    url: 'https://linkedin.com/in/danilo-vanegas', icon: <FaLinkedin />, color: '#0a66c2' },
+    { name: 'X',           url: 'https://x.com/danivanegas',              icon: <FaXTwitter />, color: 'var(--pb-fg)' },
+    { name: 'CV',          url: '/CV-Danilo-Vanegas-2025.pdf',            icon: <FiDownload />, color: 'var(--pb-accent)', download: true },
   ];
 
   return (
@@ -80,7 +62,7 @@ const SceneContact = () => {
 
           <div className="contact-card">
             <p className="contact-intro">
-              Building software that matters. Interested in collaboration or just want to chat?
+              8+ years across game dev, XR, and web. Looking for real problems to solve.
             </p>
 
             <div className="email-section">
@@ -93,8 +75,9 @@ const SceneContact = () => {
                 onMouseLeave={handleMagneticLeave}
               >
                 <span className="email-text">{email}</span>
-                <span className="copy-indicator">
-                  {copied ? '✓ Copied' : '📋 Copy'}
+                <span className="copy-inner">
+                  {copied ? <FiCheck /> : <FiCopy />}
+                  <span>{copied ? 'Copied' : 'Copy'}</span>
                 </span>
               </button>
             </div>
@@ -110,7 +93,7 @@ const SceneContact = () => {
                     href={social.url}
                     target={social.download ? undefined : '_blank'}
                     rel={social.download ? undefined : 'noopener noreferrer'}
-                    download={social.download ? 'CV-Danilo-Vanegas-2025.pdf' : undefined}
+                    download={social.download || undefined}
                     className="social-link"
                     style={{ '--social-color': social.color }}
                   >

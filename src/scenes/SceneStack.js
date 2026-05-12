@@ -59,6 +59,35 @@ const SceneStack = () => {
     },
   ];
 
+  const categorizeApiTech = (techArray) => {
+    const keywordMap = {
+      'Engines':   ['unity', 'unreal', 'engine', 'godot'],
+      'Languages': ['c#', 'c++', 'typescript', 'javascript', 'python', 'rust', 'go', 'glsl', 'hlsl'],
+      'Web':       ['react', 'next', 'three', 'webgl', 'node', 'vue', 'angular', 'svelte', 'html', 'css'],
+      'XR/3D':     ['openxr', 'vr', 'ar', 'xr', 'spatial', 'hololens', 'quest', 'blender', 'substance'],
+      'Tools':     ['git', 'docker', 'aws', 'vercel', 'ci', 'cd', 'sql', 'postgres', 'redis', 'jira', 'jenkins'],
+    };
+    const result = {};
+    categories.forEach(cat => { result[cat.name] = { color: cat.color, items: [] }; });
+    const uncategorized = [];
+    techArray.forEach(t => {
+      const name = (t.name || String(t)).toLowerCase();
+      let placed = false;
+      for (const [catName, kws] of Object.entries(keywordMap)) {
+        if (kws.some(kw => name.includes(kw))) {
+          result[catName].items.push(t.name || String(t));
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) uncategorized.push(t.name || String(t));
+    });
+    result['Tools'].items.push(...uncategorized);
+    return result;
+  };
+
+  const categorized = tech.length > 0 ? categorizeApiTech(tech) : null;
+
   return (
     <div className="scene-stack">
       <GridBackground />
@@ -68,41 +97,33 @@ const SceneStack = () => {
         {loading ? (
           <div className="loading-state">Compiling technology stack...</div>
         ) : (
-          <div className="stack-grid">
-            {categories.map((category, idx) => (
-              <div
-                key={category.name}
-                className="tech-category"
-                style={{
-                  '--category-color': category.color,
-                  '--category-delay': `${idx * 50}ms`,
-                }}
-              >
-                <div className="category-header">
-                  <span className="category-icon">{category.icon}</span>
-                  <h2 className="category-name">{category.name}</h2>
+          <div className="asset-manifest">
+            <div className="manifest-head">
+              <span className="manifest-title">TECHNOLOGY MANIFEST</span>
+              <span className="manifest-total">{tech.length > 0 ? `${tech.length} items` : `${categories.reduce((n, c) => n + c.items.length, 0)} items`}</span>
+            </div>
+            {categories.map((cat) => {
+              const items = categorized ? categorized[cat.name].items : cat.items;
+              if (items.length === 0) return null;
+              return (
+                <div key={cat.name} className="manifest-section">
+                  <div className="manifest-section-head" style={{ '--cat-color': cat.color }}>
+                    <span className="manifest-cat-name">{cat.name.toUpperCase()}</span>
+                    <span className="manifest-cat-count">{items.length}</span>
+                  </div>
+                  <div className="manifest-items">
+                    {items.map((item, i) => (
+                      <div key={i} className="manifest-item">
+                        <span className="manifest-diamond">◆</span>
+                        <span className="manifest-item-name">{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="tech-items">
-                  {category.items.map((item, i) => (
-                    <div
-                      key={i}
-                      className="tech-item"
-                      style={{ '--item-delay': `${i * 30}ms` }}
-                    >
-                      <span className="tech-name">{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
-
-        <div className="stack-footer">
-          <p className="footer-text">
-            Tech evolves. Focus stays on shipping quality software, learning fast, and solving hard problems.
-          </p>
-        </div>
       </div>
     </div>
   );
