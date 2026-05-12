@@ -73,6 +73,10 @@ const SceneExperience = () => {
       { threshold: 0.1 }
     );
 
+    Object.values(itemRefs.current).forEach(el => {
+      if (el) observer.observe(el);
+    });
+
     return () => observer.disconnect();
   }, [emit]);
 
