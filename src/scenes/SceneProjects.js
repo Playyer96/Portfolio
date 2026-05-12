@@ -56,7 +56,9 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
         {selectedProject && (
           <div className="project-split-panel">
             <div className="split-images">
-              {selectedProject.images?.[0] && <img src={selectedProject.images[0]} alt={selectedProject.name} />}
+              {selectedProject.images?.map((img, idx) => (
+                <img key={idx} src={img} alt={`${selectedProject.name} ${idx + 1}`} />
+              ))}
             </div>
             <div className="split-details">
               <h2>{selectedProject.name}</h2>
