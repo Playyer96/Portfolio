@@ -11,12 +11,7 @@ import SceneExperience from './scenes/SceneExperience';
 import SceneCV from './scenes/SceneCV';
 import SceneStack from './scenes/SceneStack';
 import SceneContact from './scenes/SceneContact';
-
-const PROJECT_COLORS = [
-  'oklch(72% 0.18 35)', 'oklch(72% 0.18 200)', 'oklch(72% 0.18 295)',
-  'oklch(72% 0.18 145)', 'oklch(72% 0.18 85)', 'oklch(72% 0.18 340)',
-  'oklch(72% 0.18 50)', 'oklch(72% 0.18 240)',
-];
+import { fetchProjects, fetchExperience } from './data/api';
 
 const AppContent = () => {
   const location = useLocation();
@@ -27,38 +22,12 @@ const AppContent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
-        const [projRes, expRes] = await Promise.all([
-          fetch(`${apiUrl}/projects`),
-          fetch(`${apiUrl}/experience`),
+        const [proj, exp] = await Promise.all([
+          fetchProjects(),
+          fetchExperience(),
         ]);
-
-        if (projRes.ok) {
-          const raw = await projRes.json();
-          const transformed = raw[0]?.projects?.map((p, i) => ({
-            id: String(p.id),
-            name: p.name,
-            color: PROJECT_COLORS[i % PROJECT_COLORS.length],
-          })) || [];
-          setProjects(transformed);
-        }
-
-        if (expRes.ok) {
-          const raw = await expRes.json();
-          const transformed = raw[0]?.experience?.map((e) => {
-            const startYear = parseInt(e.date?.split(' ')[0]) || 2020;
-            const endYear = e.date?.includes('Present') ? 2026 : (parseInt(e.date?.split('-').pop()?.trim()) || startYear + 1);
-            return {
-              company: e.title || '',
-              role: e.subtitle || '',
-              period: e.date || '',
-              location: e.responsibilities?.[e.responsibilities.length - 1] || '',
-              startYear,
-              endYear,
-            };
-          }) || [];
-          setExperience(transformed);
-        }
+        setProjects(proj);
+        setExperience(exp);
       } catch (err) {
         console.error('API fetch error:', err);
       }
