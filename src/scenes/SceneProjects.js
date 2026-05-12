@@ -5,12 +5,34 @@ import useConsoleLog from '../hooks/useConsoleLog';
 import ProjectModal from '../components/ProjectModal';
 import { fetchProjects as fetchProjectsFromApi } from '../data/api';
 
+const use3D = (strength = 12) => {
+  const ref = useRef(null);
+  const [rot, setRot] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let raf;
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => setRot({ x: -py * strength, y: px * strength * 1.4 }));
+    };
+    el.addEventListener('mousemove', onMove);
+    return () => {
+      el.removeEventListener('mousemove', onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+  return [ref, rot];
+};
+
 const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentImageIdx, setCurrentImageIdx] = useState(0);
   const { emit } = useConsoleLog();
-  const detailRef = useRef(null);
+  const [ref, rot] = use3D(14);
 
   useEffect(() => {
     emit('info', '> Scene loaded: Projects');
@@ -36,31 +58,8 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
     return () => clearTimeout(timeoutId);
   }, [emit]);
 
-  useEffect(() => {
-    if (selectedProject) {
-      setCurrentImageIdx(0);
-      if (detailRef.current) {
-        setTimeout(() => {
-          detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 100);
-      }
-    }
-  }, [selectedProject]);
-
   const handleCardClick = (project) => {
     setSelectedProject(selectedProject?.id === project.id ? null : project);
-  };
-
-  const handlePrevImage = () => {
-    setCurrentImageIdx((prev) =>
-      prev === 0 ? (selectedProject.images?.length || 1) - 1 : prev - 1
-    );
-  };
-
-  const handleNextImage = () => {
-    setCurrentImageIdx((prev) =>
-      prev === (selectedProject.images?.length || 1) - 1 ? 0 : prev + 1
-    );
   };
 
   return (
@@ -70,52 +69,36 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
         <h1 className="section-heading">Projects</h1>
 
         {selectedProject && (
-          <div className="project-split-panel">
-            <button className="close-x" onClick={() => setSelectedProject(null)} aria-label="Close">
-              ✕
-            </button>
-            <div className="split-images">
-              {selectedProject.images && selectedProject.images.length > 0 && (
-                <div className="carousel-container">
-                  <button
-                    className="carousel-btn carousel-prev"
-                    onClick={handlePrevImage}
-                    aria-label="Previous image"
-                  >
-                    ‹
-                  </button>
-                  <img
-                    key={currentImageIdx}
-                    src={selectedProject.images[currentImageIdx]}
-                    alt={`${selectedProject.name} ${currentImageIdx + 1}`}
-                  />
-                  <button
-                    className="carousel-btn carousel-next"
-                    onClick={handleNextImage}
-                    aria-label="Next image"
-                  >
-                    ›
-                  </button>
-                  <div className="carousel-dots">
-                    {selectedProject.images.map((_, idx) => (
-                      <button
-                        key={idx}
-                        className={`dot ${idx === currentImageIdx ? 'active' : ''}`}
-                        onClick={() => setCurrentImageIdx(idx)}
-                        aria-label={`Go to image ${idx + 1}`}
-                      />
-                    ))}
+          <div className="project-detail-overlay" ref={ref}>
+            <div className="detail-card-container">
+              <div
+                className="detail-card"
+                style={{
+                  transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`,
+                  background: `linear-gradient(135deg, ${selectedProject.color}, ${selectedProject.color}66)`,
+                }}
+              >
+                <div className="detail-card-grid" />
+                <button
+                  className="detail-close-btn"
+                  onClick={() => setSelectedProject(null)}
+                  aria-label="Close"
+                >
+                  ✕
+                </button>
+                <div className="detail-header">ASSET / {selectedProject.id?.toUpperCase() || 'PROJECT'}.PREFAB</div>
+                <div className="detail-content">
+                  <div className="detail-text">
+                    <div className="detail-name">{selectedProject.name}</div>
+                    <div className="detail-tagline">{selectedProject.description}</div>
+                  </div>
+                  <div className="detail-meta">
+                    <div>{selectedProject.year || '—'}</div>
+                    <div>{selectedProject.technologies?.[0] || 'Dev'}</div>
+                    <div>{selectedProject.responsibilities?.[0] || '—'}</div>
                   </div>
                 </div>
-              )}
-            </div>
-            <div className="split-details">
-              <h2>{selectedProject.name}</h2>
-              <p>{selectedProject.description}</p>
-              <h3>Technologies</h3>
-              <div>{selectedProject.technologies?.join(' • ')}</div>
-              <h3 style={{marginTop:'16px'}}>Key Work</h3>
-              <ul>{selectedProject.responsibilities?.map((r,i)=><li key={i}>{r}</li>)}</ul>
+              </div>
             </div>
           </div>
         )}
