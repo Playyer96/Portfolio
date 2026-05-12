@@ -12,6 +12,12 @@ import SceneCV from './scenes/SceneCV';
 import SceneStack from './scenes/SceneStack';
 import SceneContact from './scenes/SceneContact';
 
+const PROJECT_COLORS = [
+  'oklch(72% 0.18 35)', 'oklch(72% 0.18 200)', 'oklch(72% 0.18 295)',
+  'oklch(72% 0.18 145)', 'oklch(72% 0.18 85)', 'oklch(72% 0.18 340)',
+  'oklch(72% 0.18 50)', 'oklch(72% 0.18 240)',
+];
+
 const AppContent = () => {
   const location = useLocation();
   const [selectedProject, setSelectedProject] = useState(null);
@@ -26,8 +32,24 @@ const AppContent = () => {
           fetch(`${apiUrl}/projects`),
           fetch(`${apiUrl}/experience`),
         ]);
-        if (projRes.ok) setProjects(await projRes.json());
-        if (expRes.ok) setExperience(await expRes.json());
+
+        if (projRes.ok) {
+          const raw = await projRes.json();
+          const transformed = raw[0]?.projects?.map((p, i) => ({
+            id: String(p.id),
+            name: p.name,
+            color: PROJECT_COLORS[i % PROJECT_COLORS.length],
+          })) || [];
+          setProjects(transformed);
+        }
+
+        if (expRes.ok) {
+          const raw = await expRes.json();
+          const transformed = raw[0]?.experience?.map((e) => ({
+            company: e.title || '',
+          })) || [];
+          setExperience(transformed);
+        }
       } catch (err) {
         console.error('API fetch error:', err);
       }
