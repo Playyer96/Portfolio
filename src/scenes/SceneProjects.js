@@ -89,19 +89,20 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
       </div>
 
       {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-          allProjects={projects}
-          onNext={() => {
-            const idx = projects.findIndex(p => p.id === selectedProject.id);
-            setSelectedProject(projects[(idx + 1) % projects.length]);
-          }}
-          onPrev={() => {
-            const idx = projects.findIndex(p => p.id === selectedProject.id);
-            setSelectedProject(projects[idx === 0 ? projects.length - 1 : idx - 1]);
-          }}
-        />
+        <div className="project-split-panel">
+          <div className="split-images">
+            {selectedProject.images?.[0] && <img src={selectedProject.images[0]} alt={selectedProject.name} />}
+          </div>
+          <div className="split-details">
+            <h2>{selectedProject.name}</h2>
+            <p>{selectedProject.description}</p>
+            <h3>Technologies</h3>
+            <div>{selectedProject.technologies?.join(' • ')}</div>
+            <h3 style={{marginTop:'16px'}}>Key Work</h3>
+            <ul>{selectedProject.responsibilities?.map((r,i)=><li key={i}>{r}</li>)}</ul>
+            <button onClick={()=>setSelectedProject(null)} style={{marginTop:'24px'}}>Close</button>
+          </div>
+        </div>
       )}
     </div>
   );

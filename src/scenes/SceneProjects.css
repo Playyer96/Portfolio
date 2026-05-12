@@ -278,6 +278,65 @@
   object-fit: cover;
 }
 
+.project-split-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding: 40px;
+  border: 2px solid var(--pb-accent);
+  border-radius: 4px;
+  background: linear-gradient(135deg, var(--pb-panel) 0%, var(--pb-panel-h) 100%);
+}
+
+.split-images img {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid var(--pb-line);
+}
+
+.split-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.split-details h2 {
+  font-size: 32px;
+  color: var(--pb-fg);
+  margin: 0;
+}
+
+.split-details h3 {
+  font-size: 12px;
+  color: var(--pb-accent);
+  text-transform: uppercase;
+  margin: 16px 0 8px 0;
+}
+
+.split-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  color: var(--pb-fg);
+}
+
+.split-details li {
+  padding: 4px 0;
+}
+
+.split-details button {
+  padding: 8px 16px;
+  background: var(--pb-accent);
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .projects-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
