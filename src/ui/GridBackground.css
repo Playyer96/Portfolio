@@ -1,0 +1,11 @@
+.grid-background {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--pb-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pb-grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  transition: background-position 0.1s linear;
+}

@@ -1,21 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
+import { ThemeProvider } from './context/ThemeContext';
 import App from './App';
-import ErrorBoundary from './components/ErrorBoundary';
-import './styles/scss/index.scss';
-import { displayConsoleArt } from './utils/consoleArt';
-
-// Display console easter egg for curious developers
-displayConsoleArt();
+import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ErrorBoundary>
+    <ThemeProvider>
       <HelmetProvider>
         <App />
       </HelmetProvider>
-    </ErrorBoundary>
+    </ThemeProvider>
   </React.StrictMode>
 );

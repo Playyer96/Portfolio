@@ -1,296 +1,100 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaReact, FaUnity, FaTimes, FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight, FaHtml5, FaCss3Alt, FaJs, FaNodeJs, FaPython, FaGitAlt, FaGitlab, FaDocker } from "react-icons/fa";
-import { SiUnrealengine, SiCplusplus, SiSharp, SiPerforce } from "react-icons/si";
-import ReactPlayer from "react-player";
-import FadeIn from "./animations/FadeIn";
-import { CaseStudySection, MetricsGrid, Timeline } from "./CaseStudy";
-import "./ProjectModal.scss";
+import { useEffect, useState } from 'react';
+import '../styles/ProjectModal.css';
 
-const ProjectModal = ({ project, isOpen, onClose }) => {
+const ProjectModal = ({ project, onClose, allProjects, onNext, onPrev }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      setCurrentImageIndex(0);
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') onClose();
     };
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-
-    if (isOpen) {
-      window.addEventListener("keydown", handleEsc);
-    }
-
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [isOpen, onClose]);
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
 
   if (!project) return null;
 
   const images = project.images || [];
-  const hasVideo = project.videoUrl || project.video;
-  const media = hasVideo ? [{type: 'video', url: project.videoUrl || project.video}, ...images.map(img => ({type: 'image', ...img}))] : images.map(img => ({type: 'image', ...img}));
+  const currentImage = images[currentImageIndex];
+  const hasMultipleImages = images.length > 1;
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % media.length);
+  const handlePrevImage = () => {
+    setCurrentImageIndex((i) => (i === 0 ? images.length - 1 : i - 1));
   };
 
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + media.length) % media.length);
-  };
-
-  const getIconComponent = (techName) => {
-    const iconMap = {
-      'react': FaReact,
-      'unity engine': FaUnity,
-      'unity': FaUnity,
-      'unreal engine': SiUnrealengine,
-      'unreal': SiUnrealengine,
-      'html5': FaHtml5,
-      'css 3': FaCss3Alt,
-      'css3': FaCss3Alt,
-      'javascript': FaJs,
-      'nodejs': FaNodeJs,
-      'node': FaNodeJs,
-      'python': FaPython,
-      'c++': SiCplusplus,
-      'c#': SiSharp,
-      'git': FaGitAlt,
-      'github': FaGithub,
-      'gitlab': FaGitlab,
-      'docker': FaDocker,
-      'perforce': SiPerforce
-    };
-    return iconMap[(techName || '').toLowerCase()];
+  const handleNextImage = () => {
+    setCurrentImageIndex((i) => (i === images.length - 1 ? 0 : i + 1));
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className="project-modal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-        >
-          {/* Backdrop */}
-          <motion.div
-            className="project-modal__backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
+    <div className="project-modal-overlay" onClick={onClose}>
+      <div className="project-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose} title="Close (Esc)">✕</button>
 
-          {/* Modal Content */}
-          <motion.div
-            className="project-modal__content"
-            initial={{ scale: 0.8, y: 100 }}
-            animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.8, y: 100 }}
-            transition={{ type: "spring", damping: 25 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <motion.button
-              className="project-modal__close"
-              onClick={onClose}
-              whileHover={{ scale: 1.1, rotate: 90 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <FaTimes />
-            </motion.button>
+        <div className="modal-header">
+          <h2 className="modal-title">{project.name}</h2>
+          <span className="modal-year">{project.year || '—'}</span>
+        </div>
 
-            {/* Image Carousel */}
-            <div className="project-modal__carousel">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentImageIndex}
-                  className="project-modal__media-wrapper"
-                  initial={{ opacity: 0, x: 100, y: -20 }}
-                  animate={{ opacity: 1, x: 0, y: 0 }}
-                  exit={{ opacity: 0, x: -100, y: 20 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  {media[currentImageIndex]?.type === 'video' ? (
-                    <div className="project-modal__video">
-                      <ReactPlayer
-                        url={media[currentImageIndex].url}
-                        controls
-                        width="100%"
-                        height="100%"
-                        playing={false}
-                      />
-                    </div>
-                  ) : (
-                    <img
-                      src={media[currentImageIndex]?.image}
-                      alt={`${project.name} ${currentImageIndex + 1}`}
-                      className="project-modal__image"
-                      loading="lazy"
-                    />
-                  )}
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Navigation Arrows */}
-              {media.length > 1 && (
-                <>
-                  <motion.button
-                    className="project-modal__nav project-modal__nav--prev"
-                    onClick={prevImage}
-                    whileHover={{ scale: 1.1, x: -5 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FaChevronLeft />
-                  </motion.button>
-                  <motion.button
-                    className="project-modal__nav project-modal__nav--next"
-                    onClick={nextImage}
-                    whileHover={{ scale: 1.1, x: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FaChevronRight />
-                  </motion.button>
-                </>
-              )}
-
-              {/* Image Indicators */}
-              {media.length > 1 && (
-                <div className="project-modal__indicators">
-                  {media.map((_, index) => (
-                    <button
-                      key={index}
-                      className={`project-modal__indicator ${
-                        index === currentImageIndex ? "active" : ""
-                      }`}
-                      onClick={() => setCurrentImageIndex(index)}
-                    />
-                  ))}
+        <div className="modal-content">
+          <div className="modal-images">
+            {images.length > 0 ? (
+              <>
+                <div className="image-container">
+                  <img src={currentImage} alt={`${project.name} ${currentImageIndex + 1}`} className="modal-image" />
                 </div>
-              )}
-            </div>
-
-            {/* Project Info */}
-            <div className="project-modal__info">
-              <div className="project-modal__header">
-                <h2 className="project-modal__title">{project.name}</h2>
-                {project.githubLink && (
-                  <a
-                    href={project.githubLink}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="project-modal__link"
-                  >
-                    <FaGithub /> GitHub
-                  </a>
-                )}
-                {project.liveLink && (
-                  <a
-                    href={project.liveLink}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="project-modal__link project-modal__link--primary"
-                  >
-                    <FaExternalLinkAlt /> Live Demo
-                  </a>
-                )}
-              </div>
-
-              {/* Description */}
-              {(project.descriptions || project.description) && (
-                <motion.div
-                  className="project-modal__section"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4, duration: 0.4 }}
-                >
-                  <h3 className="project-modal__section-title">About</h3>
-                  {project.descriptions ? (
-                    project.descriptions.map((desc, idx) => (
-                      <p key={idx} className="project-modal__description">
-                        {desc}
-                      </p>
-                    ))
-                  ) : (
-                    <p className="project-modal__description">
-                      {project.description || "No description available."}
-                    </p>
-                  )}
-                </motion.div>
-              )}
-
-              {/* Technologies */}
-              {project.technologies && project.technologies.length > 0 && (
-                <motion.div
-                  className="project-modal__section"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.4 }}
-                >
-                  <h3 className="project-modal__section-title">Technologies</h3>
-                  <div className="project-modal__tech-grid">
-                    {project.technologies.map((tech, index) => {
-                      const techName = tech.name || tech.text || '';
-                      const IconComponent = getIconComponent(techName);
-                      return (
-                        <motion.div
-                          key={index}
-                          className="project-modal__tech-badge"
-                          initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                          transition={{ delay: 0.3 + index * 0.06, duration: 0.4 }}
-                          whileHover={{ scale: 1.1, y: -4, rotate: 2 }}
-                        >
-                          {IconComponent && <IconComponent className="project-modal__tech-icon" />}
-                          <span>{techName}</span>
-                        </motion.div>
-                      );
-                    })}
+                {hasMultipleImages && (
+                  <div className="image-nav">
+                    <button className="nav-btn prev" onClick={handlePrevImage}>‹</button>
+                    <div className="image-counter">
+                      {currentImageIndex + 1} / {images.length}
+                    </div>
+                    <button className="nav-btn next" onClick={handleNextImage}>›</button>
                   </div>
-                </motion.div>
-              )}
+                )}
+              </>
+            ) : (
+              <div className="image-placeholder" style={{ background: `linear-gradient(135deg, ${project.color || 'var(--pb-accent)'} 0%, var(--pb-bg) 100%)` }}>
+                <span className="placeholder-text">{project.name}</span>
+              </div>
+            )}
+          </div>
 
-              {/* Responsibilities */}
-              {project.responsibilities && project.responsibilities.length > 0 && (
-                <motion.div
-                  className="project-modal__section"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5, duration: 0.4 }}
-                >
-                  <h3 className="project-modal__section-title">Key Features & Responsibilities</h3>
-                  <ul className="project-modal__list">
-                    {project.responsibilities.map((item, index) => (
-                      <motion.li
-                        key={index}
-                        className="project-modal__list-item"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                      >
-                        <span className="project-modal__list-bullet">▸</span>
-                        {item}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )}
+          <div className="modal-details">
+            <div className="detail-section">
+              <h3 className="detail-title">Description</h3>
+              <p className="detail-text">{project.description}</p>
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+
+            <div className="detail-section">
+              <h3 className="detail-title">Technologies</h3>
+              <div className="tech-list">
+                {project.technologies?.map((tech, i) => (
+                  <span key={i} className="tech-badge">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="detail-section">
+              <h3 className="detail-title">Key Work</h3>
+              <ul className="responsibilities-list">
+                {project.responsibilities?.map((resp, i) => (
+                  <li key={i}>{resp}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="modal-footer">
+          <button className="nav-project-btn" onClick={onPrev} title="Previous project">←</button>
+          <span className="project-counter">{project.id}</span>
+          <button className="nav-project-btn" onClick={onNext} title="Next project">→</button>
+        </div>
+      </div>
+    </div>
   );
 };
 

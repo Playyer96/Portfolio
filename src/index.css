@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --pb-bg: #1a1a1c;
+  --pb-panel: #222226;
+  --pb-panel-h: #2c2c30;
+  --pb-fg: #e8e6e1;
+  --pb-dim: #888880;
+  --pb-line: #34343a;
+  --pb-accent: oklch(82% 0.20 130);
+  --pb-grid: rgba(255, 255, 255, 0.04);
+  --pb-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+  --pb-display: 'Space Grotesk', system-ui, sans-serif;
+}
+
+[data-theme="light"] {
+  --pb-bg: #cfcec8;
+  --pb-panel: #e6e4dd;
+  --pb-panel-h: #d8d6cf;
+  --pb-fg: #1a1a18;
+  --pb-dim: #666660;
+  --pb-line: #b8b6af;
+  --pb-grid: rgba(0, 0, 0, 0.06);
+}
+
+[data-accent="cyan"] { --pb-accent: oklch(80% 0.16 200); }
+[data-accent="amber"] { --pb-accent: oklch(82% 0.18 80); }
+[data-accent="magenta"] { --pb-accent: oklch(75% 0.22 340); }
+
+[data-theme="light"][data-accent="lime"] { --pb-accent: oklch(50% 0.18 130); }
+[data-theme="light"][data-accent="cyan"] { --pb-accent: oklch(48% 0.17 200); }
+[data-theme="light"][data-accent="amber"] { --pb-accent: oklch(55% 0.17 80); }
+[data-theme="light"][data-accent="magenta"] { --pb-accent: oklch(48% 0.20 340); }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  background: var(--pb-bg);
+  color: var(--pb-fg);
+  font-family: var(--pb-mono);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+body {
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Keyframes */
+
+@keyframes pb-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@keyframes inspFieldIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-33.333%); }
+}
+
+@keyframes letterSplitIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sceneEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sceneExit {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes timelineLineDraw {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes timelineItemSlide {
+  from {
+    opacity: 0;
+    transform: translateX(var(--x, -24px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes counterCount {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes consoleLogIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Typography */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--pb-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: 48px; line-height: 1.1; }
+h2 { font-size: 40px; line-height: 1.15; }
+h3 { font-size: 32px; line-height: 1.2; }
+
+button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: var(--pb-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
