@@ -1,0 +1,20 @@
+.insp-field {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  padding: 5px 12px;
+  border-bottom: 1px solid var(--pb-line);
+  font-size: 11px;
+  font-family: var(--pb-mono);
+  animation: inspFieldIn 0.25s ease forwards;
+  animation-delay: calc(var(--i, 0) * 30ms);
+}
+
+.insp-label {
+  color: var(--pb-dim);
+  font-weight: 500;
+}
+
+.insp-value {
+  color: var(--pb-fg);
+  text-align: right;
+}

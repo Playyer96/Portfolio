@@ -1,0 +1,173 @@
+.scene-experience {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--pb-bg);
+  padding: 60px 40px;
+}
+
+.scene-content {
+  max-width: 900px;
+  margin: 0 auto;
+  z-index: 1;
+  position: relative;
+}
+
+.section-heading {
+  font-family: var(--pb-display);
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--pb-fg);
+  margin-bottom: 60px;
+}
+
+.timeline {
+  position: relative;
+  padding: 20px 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--pb-line);
+  transform: translateX(-50%);
+  transform-origin: top;
+  animation: timelineLineDraw 1s ease-out forwards;
+}
+
+.timeline-item {
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: timelineItemSlide 0.6s ease-out forwards;
+}
+
+.timeline-item.left {
+  --x: -24px;
+}
+
+.timeline-item.right {
+  --x: 24px;
+}
+
+.timeline-item.visible {
+  opacity: 1;
+  animation-delay: 0s;
+}
+
+.timeline-item:not(.visible) {
+  opacity: 0;
+}
+
+.timeline-content {
+  position: relative;
+  width: 50%;
+  padding: 0 30px;
+}
+
+.timeline-item.left .timeline-content {
+  margin-left: 0;
+  text-align: right;
+}
+
+.timeline-item.right .timeline-content {
+  margin-left: 50%;
+  text-align: left;
+}
+
+.timeline-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--pb-accent);
+  border: 2px solid var(--pb-bg);
+  border-radius: 50%;
+  top: 6px;
+  z-index: 2;
+}
+
+.timeline-item.left .timeline-dot {
+  right: -36px;
+}
+
+.timeline-item.right .timeline-dot {
+  left: -36px;
+}
+
+.timeline-card {
+  padding: 20px;
+  background: var(--pb-panel);
+  border: 1px solid var(--pb-line);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.timeline-card:hover {
+  background: var(--pb-panel-h);
+  border-color: var(--pb-accent);
+  transform: translateY(-4px);
+}
+
+.card-title {
+  font-family: var(--pb-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--pb-fg);
+  margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
+}
+
+.card-role {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: var(--pb-accent);
+  font-weight: 600;
+}
+
+.card-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.timeline-item.left .card-meta {
+  justify-content: flex-end;
+}
+
+.card-period {
+  font-size: 10px;
+  color: var(--pb-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-type {
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-type.work {
+  background: rgba(168, 255, 96, 0.1);
+  color: var(--pb-accent);
+}
+
+.card-type.education {
+  background: rgba(96, 216, 255, 0.1);
+  color: #60d8ff;
+}
+
+.card-location {
+  margin: 0;
+  font-size: 11px;
+  color: var(--pb-dim);
+}

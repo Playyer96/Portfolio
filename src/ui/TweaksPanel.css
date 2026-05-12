@@ -1,0 +1,73 @@
+.tweaks-panel {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--pb-panel);
+  border: 1px solid var(--pb-line);
+  border-radius: 4px;
+  padding: 12px;
+  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+  font-size: 11px;
+  font-family: var(--pb-mono);
+}
+
+.tweaks-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tweaks-label {
+  color: var(--pb-dim);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tweaks-btn {
+  padding: 6px 10px;
+  background: var(--pb-panel-h);
+  color: var(--pb-fg);
+  border: 1px solid var(--pb-line);
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: var(--pb-mono);
+  transition: all 0.15s ease;
+}
+
+.tweaks-btn:hover {
+  background: var(--pb-line);
+}
+
+.tweaks-btn.active {
+  background: var(--pb-accent);
+  color: #000;
+  border-color: var(--pb-accent);
+}
+
+.tweaks-swatches {
+  display: flex;
+  gap: 4px;
+}
+
+.tweaks-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tweaks-swatch:hover {
+  transform: scale(1.1);
+}
+
+.tweaks-swatch.active {
+  border-color: var(--pb-fg);
+  box-shadow: 0 0 0 1px var(--pb-fg);
+}

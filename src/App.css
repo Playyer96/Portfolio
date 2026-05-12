@@ -1,0 +1,82 @@
+.app-shell {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  background: var(--pb-bg);
+  color: var(--pb-fg);
+  font-family: var(--pb-mono);
+  overflow: hidden;
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.center-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--pb-bg);
+  overflow: hidden;
+}
+
+.scene-tabs {
+  height: 26px;
+  background: var(--pb-panel);
+  border-bottom: 1px solid var(--pb-line);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 11px;
+  gap: 8px;
+}
+
+.tab-item {
+  padding: 4px 12px;
+  background: var(--pb-panel-h);
+  border: 1px solid var(--pb-line);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  color: var(--pb-dim);
+  cursor: pointer;
+}
+
+.scene-viewport {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--pb-bg);
+}
+
+.scene-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Scene transition animations */
+.scene-enter {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.scene-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.scene-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.scene-exit-active {
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
