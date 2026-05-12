@@ -3,61 +3,11 @@ import './SceneProjects.css';
 import GridBackground from '../ui/GridBackground';
 import useMouseRotation from '../hooks/useMouseRotation';
 import useConsoleLog from '../hooks/useConsoleLog';
+import { fetchProjects as fetchProjectsFromApi } from '../data/api';
 
-const defaultProjects = [
-  {
-    id: 'atlas',
-    name: 'Atlas VR Training Platform',
-    year: '2024',
-    role: 'Lead Unity Engineer',
-    color: 'oklch(72% 0.18 35)',
-    description: 'Multi-tenant VR training for high-risk industrial procedures.',
-    summary: 'A Unity 6 platform delivering OSHA-aligned VR training to operators in mining, oil & gas, and manufacturing.',
-    technologies: ['Unity 6', 'C#', 'OpenXR', 'Quest 3', 'Next.js', 'PostgreSQL'],
-    responsibilities: [
-      'Architected the simulation runtime',
-      'Authored the procedure DSL',
-      'Built the C# → React telemetry bridge',
-    ],
-    featured: true,
-  },
-  {
-    id: 'pulse',
-    name: 'Pulse Engine Tools',
-    year: '2024',
-    role: 'Tools Engineer',
-    color: 'oklch(72% 0.18 200)',
-    description: 'An in-engine authoring suite that replaced six external tools.',
-    summary: 'Custom Unity Editor extension consolidating shader graph, animation timelines, and procedural-content authoring.',
-    technologies: ['Unity Editor', 'C#', 'UI Toolkit', 'GraphView API'],
-    responsibilities: [
-      'Designed the docking system',
-      'Created IMGUI editor surfaces',
-      'Integrated asset-database',
-    ],
-    featured: true,
-  },
-  {
-    id: 'drift',
-    name: 'Drift Arcade',
-    year: '2023',
-    role: 'Solo Developer',
-    color: 'oklch(72% 0.18 295)',
-    description: 'Unreal 5 arcade racer prototype with Niagara particle wizardry.',
-    summary: 'Vehicle physics built from scratch, Niagara-driven smoke and tire systems, and a custom replay system.',
-    technologies: ['Unreal 5', 'C++', 'Blueprints', 'Niagara', 'Chaos'],
-    responsibilities: [
-      'Gameplay and VFX programming',
-      'Level design and iteration',
-      'Audio integration and optimization',
-    ],
-    featured: true,
-  },
-];
-
-const SceneProjects = () => {
-  const [projects, setProjects] = useState(defaultProjects);
-  const [expanded, setExpanded] = useState(null);
+const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }) => {
+  const [projects, setProjects] = useState([]);
+  const [expanded, setExpanded] = useState(selectedProject?.id || null);
   const [loading, setLoading] = useState(true);
   const containerRef = useRef(null);
   const { emit } = useConsoleLog();
@@ -66,27 +16,34 @@ const SceneProjects = () => {
     emit('info', '> Scene loaded: Projects');
     emit('info', '> Fetching project data...');
 
-    const fetchProjects = async () => {
+    const loadProjects = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-        const response = await fetch(`${apiUrl}/projects`, { timeout: 2000 });
-        if (response.ok) {
-          const data = await response.json();
-          setProjects(data);
-          emit('ok', '✓ Projects loaded from API');
+        const data = await fetchProjectsFromApi();
+        setProjects(data);
+        if (data.length > 0) {
+          emit('ok', `✓ Loaded ${data.length} projects from API`);
+        } else {
+          emit('warn', '⚠ No projects returned from API');
         }
       } catch (err) {
-        emit('ok', '✓ Projects loaded (local)');
+        emit('error', `✗ Failed to load projects: ${err.message}`);
       } finally {
         setLoading(false);
       }
     };
 
-    setTimeout(fetchProjects, 200);
+    const timeoutId = setTimeout(loadProjects, 200);
+    return () => clearTimeout(timeoutId);
   }, [emit]);
 
-  const toggleExpand = (id) => {
-    setExpanded(expanded === id ? null : id);
+  const toggleExpand = (project) => {
+    const newExpanded = expanded === project.id ? null : project.id;
+    setExpanded(newExpanded);
+    if (newExpanded) {
+      setSelectedProject(project);
+    } else {
+      setSelectedProject(null);
+    }
   };
 
   return (
@@ -109,7 +66,7 @@ const SceneProjects = () => {
               >
                 <button
                   className="project-header"
-                  onClick={() => toggleExpand(project.id)}
+                  onClick={() => toggleExpand(project)}
                 >
                   <span className="project-toggle">
                     {expanded === project.id ? '▼' : '▶'}

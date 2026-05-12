@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transformStyle: preserve-3d;
+  transform-style: preserve-3d;
 }
 
 .scene-content {

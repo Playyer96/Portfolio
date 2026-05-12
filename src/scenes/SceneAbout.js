@@ -10,18 +10,6 @@ const SceneAbout = () => {
   useEffect(() => {
     emit('info', '> Scene loaded: About');
 
-    const fetchAbout = async () => {
-      try {
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-        await fetch(`${apiUrl}/about`);
-        // If API available, can extend this later
-      } catch (err) {
-        // Graceful fallback to mock data
-      }
-    };
-
-    fetchAbout();
-
     const animate = () => {
       const targets = { projects: 5, years: 4, tech: 15, coffees: 42 };
       const duration = 1200;

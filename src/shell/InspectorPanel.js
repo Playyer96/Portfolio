@@ -1,12 +1,30 @@
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './InspectorPanel.css';
 import PanelSection from '../ui/PanelSection';
 import InspField from '../ui/InspField';
 import useTheme from '../hooks/useTheme';
+import { fetchProjects, fetchExperience, fetchTechnologies } from '../data/api';
 
 const InspectorPanel = ({ selectedProject = null, selectedExperience = null }) => {
   const location = useLocation();
   const { theme, accent, toggleTheme, setAccent } = useTheme();
+  const [projectCount, setProjectCount] = useState(0);
+  const [experienceCount, setExperienceCount] = useState(0);
+  const [techCount, setTechCount] = useState(0);
+
+  useEffect(() => {
+    Promise.all([
+      fetchProjects().then(data => setProjectCount(data.length)),
+      fetchExperience().then(data => setExperienceCount(data.length)),
+      fetchTechnologies().then(data => setTechCount(data.length)),
+    ]).catch(() => {
+      // Fallback counts if API fails
+      setProjectCount(8);
+      setExperienceCount(10);
+      setTechCount(16);
+    });
+  }, []);
 
   const renderContent = () => {
     switch (location.pathname) {
@@ -41,13 +59,13 @@ const InspectorPanel = ({ selectedProject = null, selectedExperience = null }) =
         return selectedProject ? (
           <PanelSection title="GameObject">
             <InspField label="Name" value={selectedProject.name} index={0} />
-            <InspField label="Status" value={selectedProject.status || 'Live'} index={1} />
-            <InspField label="Year" value={selectedProject.year || '2024'} index={2} />
-            <InspField label="Role" value={selectedProject.role || 'Developer'} index={3} />
+            <InspField label="Description" value={selectedProject.description || ''} index={1} />
+            <InspField label="Year" value={selectedProject.year || '—'} index={2} />
+            <InspField label="Tech Count" value={String(selectedProject.technologies?.length || 0)} index={3} />
           </PanelSection>
         ) : (
           <PanelSection title="Projects">
-            <InspField label="Count" value="5" index={0} />
+            <InspField label="Count" value={String(projectCount)} index={0} />
             <InspField label="Status" value="Select a project" index={1} />
           </PanelSection>
         );
@@ -62,7 +80,7 @@ const InspectorPanel = ({ selectedProject = null, selectedExperience = null }) =
           </PanelSection>
         ) : (
           <PanelSection title="Experience">
-            <InspField label="Items" value="6" index={0} />
+            <InspField label="Items" value={String(experienceCount)} index={0} />
             <InspField label="Status" value="Select an item" index={1} />
           </PanelSection>
         );
