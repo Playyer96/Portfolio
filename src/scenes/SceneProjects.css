@@ -169,6 +169,17 @@
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   position: relative;
+  background: linear-gradient(135deg, #a8ff60, #a8ff6099) !important;
+}
+
+.detail-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateZ(10px);
+  background: inherit;
+  border-radius: 6px;
+  z-index: 1;
 }
 
 .detail-card-grid {
