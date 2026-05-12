@@ -303,35 +303,82 @@
 
 .split-images {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
   gap: 16px;
 }
 
-.split-images img {
+.carousel-container img {
   width: 100%;
   border-radius: 4px;
   border: 1px solid var(--pb-line);
   animation: imageZoom 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-.split-images img:nth-child(1) {
-  animation-delay: 0.1s;
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--pb-accent);
+  background: rgba(168, 255, 96, 0.1);
+  color: var(--pb-accent);
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
 }
 
-.split-images img:nth-child(2) {
-  animation-delay: 0.2s;
+.carousel-btn:hover {
+  background: var(--pb-accent);
+  color: #000;
 }
 
-.split-images img:nth-child(3) {
-  animation-delay: 0.3s;
+.carousel-prev {
+  left: -60px;
 }
 
-.split-images img:nth-child(4) {
-  animation-delay: 0.4s;
+.carousel-next {
+  right: -60px;
 }
 
-.split-images img:nth-child(n+5) {
-  animation-delay: 0.5s;
+.carousel-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.carousel-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--pb-accent);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.carousel-dots .dot.active {
+  background: var(--pb-accent);
+}
+
+.carousel-dots .dot:hover {
+  background: var(--pb-accent);
 }
 
 @keyframes imageZoom {
@@ -429,5 +476,25 @@
 
   .details-content {
     grid-template-columns: 1fr;
+  }
+
+  .project-split-panel {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .carousel-btn {
+    position: static;
+    transform: none;
+  }
+
+  .carousel-prev,
+  .carousel-next {
+    left: auto;
+    right: auto;
+  }
+
+  .carousel-container {
+    gap: 12px;
   }
 }

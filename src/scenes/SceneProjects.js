@@ -8,6 +8,7 @@ import { fetchProjects as fetchProjectsFromApi } from '../data/api';
 const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentImageIdx, setCurrentImageIdx] = useState(0);
   const { emit } = useConsoleLog();
   const detailRef = useRef(null);
 
@@ -36,15 +37,30 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
   }, [emit]);
 
   useEffect(() => {
-    if (selectedProject && detailRef.current) {
-      setTimeout(() => {
-        detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
+    if (selectedProject) {
+      setCurrentImageIdx(0);
+      if (detailRef.current) {
+        setTimeout(() => {
+          detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      }
     }
   }, [selectedProject]);
 
   const handleCardClick = (project) => {
     setSelectedProject(selectedProject?.id === project.id ? null : project);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIdx((prev) =>
+      prev === 0 ? (selectedProject.images?.length || 1) - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIdx((prev) =>
+      prev === (selectedProject.images?.length || 1) - 1 ? 0 : prev + 1
+    );
   };
 
   return (
@@ -56,9 +72,39 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
         {selectedProject && (
           <div className="project-split-panel">
             <div className="split-images">
-              {selectedProject.images?.map((img, idx) => (
-                <img key={idx} src={img} alt={`${selectedProject.name} ${idx + 1}`} />
-              ))}
+              {selectedProject.images && selectedProject.images.length > 0 && (
+                <div className="carousel-container">
+                  <button
+                    className="carousel-btn carousel-prev"
+                    onClick={handlePrevImage}
+                    aria-label="Previous image"
+                  >
+                    ‹
+                  </button>
+                  <img
+                    key={currentImageIdx}
+                    src={selectedProject.images[currentImageIdx]}
+                    alt={`${selectedProject.name} ${currentImageIdx + 1}`}
+                  />
+                  <button
+                    className="carousel-btn carousel-next"
+                    onClick={handleNextImage}
+                    aria-label="Next image"
+                  >
+                    ›
+                  </button>
+                  <div className="carousel-dots">
+                    {selectedProject.images.map((_, idx) => (
+                      <button
+                        key={idx}
+                        className={`dot ${idx === currentImageIdx ? 'active' : ''}`}
+                        onClick={() => setCurrentImageIdx(idx)}
+                        aria-label={`Go to image ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="split-details">
               <h2>{selectedProject.name}</h2>
