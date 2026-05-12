@@ -3,31 +3,39 @@ import './SceneHome.css';
 import GridBackground from '../ui/GridBackground';
 import useMouseRotation from '../hooks/useMouseRotation';
 import useConsoleLog from '../hooks/useConsoleLog';
+import { fetchProjects, fetchExperience, fetchTechnologies } from '../data/api';
 
 const SceneHome = () => {
   const containerRef = useRef(null);
   const { style, handlers } = useMouseRotation(containerRef);
   const { emit } = useConsoleLog();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [stats, setStats] = useState({ projects: 0, years: 0, tech: 0 });
   const trailRef = useRef(null);
 
   const heroText = 'Danilo Vanegas';
 
   useEffect(() => {
     emit('info', '> Scene loaded: Home');
-    emit('info', '> Initializing typewriter...');
 
-    const bootLogs = [
-      'Loading portfolio engine...',
-      'Compiling assets...',
-      'Initializing 3D context...',
-      'Ready to render.',
-    ];
+    Promise.all([
+      fetchProjects(),
+      fetchExperience(),
+      fetchTechnologies(),
+    ]).then(([projects, experience, tech]) => {
+      const startYear = 2017;
+      const currentYear = new Date().getFullYear();
+      const yearsActive = currentYear - startYear;
 
-    bootLogs.forEach((log, i) => {
-      setTimeout(() => {
-        emit('ok', `✓ ${log}`);
-      }, 240 * (i + 1));
+      setStats({
+        projects: projects.length || 8,
+        years: yearsActive,
+        tech: tech.length || 16,
+      });
+      emit('ok', '✓ Portfolio stats loaded');
+    }).catch(() => {
+      setStats({ projects: 8, years: 9, tech: 16 });
+      emit('ok', '✓ Using default stats');
     });
   }, [emit]);
 
@@ -88,15 +96,15 @@ const SceneHome = () => {
 
         <div className="floating-card">
           <div className="card-stat">
-            <div className="stat-number">5</div>
+            <div className="stat-number">{stats.projects}</div>
             <div className="stat-label">Projects</div>
           </div>
           <div className="card-stat">
-            <div className="stat-number">4+</div>
+            <div className="stat-number">{stats.years}+</div>
             <div className="stat-label">Years</div>
           </div>
           <div className="card-stat">
-            <div className="stat-number">15+</div>
+            <div className="stat-number">{stats.tech}+</div>
             <div className="stat-label">Technologies</div>
           </div>
         </div>

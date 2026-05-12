@@ -2,16 +2,30 @@ import { useState, useEffect } from 'react';
 import './SceneAbout.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
+import { fetchProjects, fetchExperience, fetchTechnologies } from '../data/api';
 
 const SceneAbout = () => {
-  const [stats, setStats] = useState({ projects: 0, years: 0, tech: 0, coffees: 0 });
+  const [stats, setStats] = useState({ projects: 0, years: 0, tech: 0 });
   const { emit } = useConsoleLog();
 
   useEffect(() => {
     emit('info', '> Scene loaded: About');
 
-    const animate = () => {
-      const targets = { projects: 5, years: 4, tech: 15, coffees: 42 };
+    Promise.all([
+      fetchProjects(),
+      fetchExperience(),
+      fetchTechnologies(),
+    ]).then(([projects, experience, tech]) => {
+      const startYear = 2017;
+      const currentYear = new Date().getFullYear();
+      const yearsActive = currentYear - startYear;
+
+      const targets = {
+        projects: projects.length || 8,
+        years: yearsActive,
+        tech: tech.length || 16,
+      };
+
       const duration = 1200;
       const start = Date.now();
 
@@ -23,7 +37,6 @@ const SceneAbout = () => {
           projects: Math.floor(targets.projects * progress),
           years: Math.floor(targets.years * progress),
           tech: Math.floor(targets.tech * progress),
-          coffees: Math.floor(targets.coffees * progress),
         });
 
         if (progress < 1) {
@@ -32,9 +45,9 @@ const SceneAbout = () => {
       };
 
       requestAnimationFrame(step);
-    };
-
-    animate();
+    }).catch(() => {
+      setStats({ projects: 8, years: 9, tech: 16 });
+    });
   }, [emit]);
 
   return (
@@ -45,7 +58,10 @@ const SceneAbout = () => {
 
         <div className="about-bio">
           <p>
-            I'm a full-stack developer and creative technologist passionate about building interactive experiences that blend design, engineering, and artistic vision. With expertise in modern web technologies and game development, I create tools and applications that push the boundaries of what's possible on the web.
+            Passionate full-stack developer & creative technologist building interactive experiences at the intersection of web, game development, and design. Expertise spans React, Three.js, game engines (Unity/Unreal), and XR platforms. I craft tools that empower teams and experiences that push boundaries.
+          </p>
+          <p style={{ marginTop: '16px' }}>
+            Started coding in 2017. Built production systems at companies like Optic Power, shipped indie games, and shipped commercial tools. Focused on code quality, team velocity, and user impact.
           </p>
         </div>
 
@@ -63,22 +79,31 @@ const SceneAbout = () => {
             <div className="stat-label">Technologies</div>
           </div>
           <div className="stat-card">
-            <div className="stat-big">☕ {stats.coffees}</div>
-            <div className="stat-label">Coffees</div>
+            <div className="stat-big">🌎</div>
+            <div className="stat-label">Colombia, UTC-5</div>
           </div>
         </div>
 
-        <div className="about-section">
-          <h2>Skills & Expertise</h2>
-          <div className="skills-list">
-            <div className="skill-tag">React</div>
-            <div className="skill-tag">TypeScript</div>
-            <div className="skill-tag">Three.js</div>
-            <div className="skill-tag">WebGL</div>
-            <div className="skill-tag">Node.js</div>
-            <div className="skill-tag">Game Development</div>
-            <div className="skill-tag">Creative Coding</div>
-            <div className="skill-tag">UI/UX Design</div>
+        <div className="values-grid">
+          <div className="value-card">
+            <div className="value-icon">⚡</div>
+            <div className="value-title">Ship</div>
+            <div className="value-desc">Bias toward shipping. Working code beats perfect plans.</div>
+          </div>
+          <div className="value-card">
+            <div className="value-icon">🛠</div>
+            <div className="value-title">Tools</div>
+            <div className="value-desc">Build abstractions that multiply team productivity.</div>
+          </div>
+          <div className="value-card">
+            <div className="value-icon">🔄</div>
+            <div className="value-title">Cross-discipline</div>
+            <div className="value-desc">Collaborate across domains. Best solutions emerge at boundaries.</div>
+          </div>
+          <div className="value-card">
+            <div className="value-icon">📊</div>
+            <div className="value-title">Performance</div>
+            <div className="value-desc">Measure impact. Optimize ruthlessly. Details compound.</div>
           </div>
         </div>
       </div>

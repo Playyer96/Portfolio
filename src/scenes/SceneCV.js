@@ -53,11 +53,11 @@ const SceneCV = () => {
 
         <div className="cv-container">
           <div className="cv-preview">
-            <div className="pdf-placeholder">
-              <div className="pdf-icon">📄</div>
-              <p className="pdf-text">CV-Danilo-Vanegas-2025.pdf</p>
-              <p className="pdf-info">1 page • Last updated May 2025</p>
-            </div>
+            <iframe
+              src="/CV-Danilo-Vanegas-2025.pdf"
+              className="pdf-viewer"
+              title="CV-Danilo-Vanegas-2025.pdf"
+            />
           </div>
 
           <div className="cv-actions">

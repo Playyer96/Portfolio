@@ -55,44 +55,101 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
     setSelectedExperience(item);
   };
 
+  const minYear = items.length > 0 ? Math.min(...items.map(i => i.startYear)) : 2017;
+  const maxYear = items.length > 0 ? Math.max(...items.map(i => i.endYear)) : 2026;
+  const yearRange = maxYear - minYear;
+  const years = Array.from({ length: yearRange + 1 }, (_, i) => minYear + i);
+
   return (
     <div className="scene-experience">
       <GridBackground />
       <div className="scene-content">
         <h1 className="section-heading">Experience</h1>
 
-        <div className="timeline">
-          <div className="timeline-line" />
+        <div className="timeline-ruler">
+          <div className="ruler-track">
+            {years.map(year => {
+              const position = ((year - minYear) / yearRange) * 100;
+              return (
+                <div
+                  key={year}
+                  className="ruler-tick"
+                  style={{ left: `${position}%` }}
+                >
+                  <div className="tick-line" />
+                  <div className="tick-label">{year}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
+        <div className="timeline">
           {items.map((item, idx) => {
-            const isLeft = idx % 2 === 0;
+            const startPos = ((item.startYear - minYear) / yearRange) * 100;
+            const endPos = ((item.endYear - minYear) / yearRange) * 100;
+            const width = endPos - startPos;
+            const colors = [
+              'var(--pb-accent)',
+              '#10b981',
+              '#f59e0b',
+              '#ef4444',
+              '#06b6d4',
+              '#8b5cf6',
+              '#ec4899',
+              '#f97316',
+            ];
+            const color = colors[idx % colors.length];
+
             return (
               <div
                 key={item.id}
-                className={`timeline-item ${isLeft ? 'left' : 'right'} ${
-                  visibleItems.has(String(item.id)) ? 'visible' : ''
-                } ${selectedExperience?.id === item.id ? 'selected' : ''}`}
+                className={`timeline-item ${visibleItems.has(String(item.id)) ? 'visible' : ''} ${
+                  selectedExperience?.id === item.id ? 'selected' : ''
+                }`}
                 data-id={item.id}
                 ref={el => (itemRefs.current[item.id] = el)}
               >
                 <button
-                  className="timeline-content"
+                  className="timeline-bar"
                   onClick={() => handleSelectItem(item)}
-                  style={{ cursor: 'pointer' }}
+                  style={{
+                    left: `${startPos}%`,
+                    width: `${width}%`,
+                    backgroundColor: color,
+                  }}
                 >
-                  <div className="timeline-dot" />
-                  <div className="timeline-card">
+                  <div className="bar-label">
+                    <div className="label-title">{item.company}</div>
+                    <div className="label-role">{item.role}</div>
+                  </div>
+                </button>
+
+                <div className="timeline-card">
+                  <div className="card-header" style={{ borderLeftColor: color }}>
                     <h3 className="card-title">{item.company}</h3>
+                    <span className={`card-type ${item.type.toLowerCase()}`}>
+                      {item.type}
+                    </span>
+                  </div>
+                  <div className="card-content">
                     <p className="card-role">{item.role}</p>
                     <div className="card-meta">
                       <span className="card-period">{item.period}</span>
-                      <span className={`card-type ${item.type.toLowerCase()}`}>
-                        {item.type}
-                      </span>
+                      <span className="card-location">📍 {item.location}</span>
                     </div>
-                    <p className="card-location">{item.location}</p>
                   </div>
-                </button>
+                  {item.highlights && item.highlights.length > 0 && (
+                    <div className="card-highlights">
+                      <h4>Key Activities</h4>
+                      <ul>
+                        {item.highlights.slice(0, 2).map((h, i) => (
+                          <li key={i}>{h}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })}
