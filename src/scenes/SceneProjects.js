@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './SceneProjects.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
-import ProjectDetail from '../components/ProjectDetail';
+import ProjectModal from '../components/ProjectModal';
 import { fetchProjects as fetchProjectsFromApi } from '../data/api';
 
 const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }) => {
@@ -58,14 +58,7 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
         ) : (
           <div className="projects-grid">
             {projects.map((project, idx) => (
-              selectedProject?.id === project.id ? (
-                <div key={project.id} ref={detailRef}>
-                  <ProjectDetail
-                    project={project}
-                    onClose={() => setSelectedProject(null)}
-                  />
-                </div>
-              ) : (
+              (
                 <div
                   key={project.id}
                   className="project-card"
@@ -94,6 +87,22 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
           </div>
         )}
       </div>
+
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+          allProjects={projects}
+          onNext={() => {
+            const idx = projects.findIndex(p => p.id === selectedProject.id);
+            setSelectedProject(projects[(idx + 1) % projects.length]);
+          }}
+          onPrev={() => {
+            const idx = projects.findIndex(p => p.id === selectedProject.id);
+            setSelectedProject(projects[idx === 0 ? projects.length - 1 : idx - 1]);
+          }}
+        />
+      )}
     </div>
   );
 };
