@@ -31,6 +31,7 @@ const use3D = (strength = 12) => {
 const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [carouselIdx, setCarouselIdx] = useState(0);
   const { emit } = useConsoleLog();
   const [ref, rot] = use3D(14);
 
@@ -59,7 +60,14 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
   }, [emit]);
 
   const handleCardClick = (project) => {
+    setCarouselIdx(0);
     setSelectedProject(selectedProject?.id === project.id ? null : project);
+  };
+
+  const carouselStep = (e, dir) => {
+    e.stopPropagation();
+    const len = selectedProject?.images?.length || 0;
+    if (len > 1) setCarouselIdx(i => (i + dir + len) % len);
   };
 
   return (
@@ -69,8 +77,8 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
         <h1 className="section-heading">Projects</h1>
 
         {selectedProject && (
-          <div className="project-detail-overlay" ref={ref}>
-            <div className="detail-card-container">
+          <div className="project-detail-overlay" ref={ref} onClick={() => setSelectedProject(null)}>
+            <div className="detail-card-container" onClick={(e) => e.stopPropagation()}>
               <div
                 className="detail-card"
                 style={{
@@ -79,23 +87,61 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
                 }}
               >
                 <div className="detail-card-grid" />
-                <button
-                  className="detail-close-btn"
-                  onClick={() => setSelectedProject(null)}
-                  aria-label="Close"
-                >
-                  ✕
-                </button>
-                <div className="detail-header">ASSET / {selectedProject.id?.toUpperCase() || 'PROJECT'}.PREFAB</div>
-                <div className="detail-content">
-                  <div className="detail-text">
+                <div className="detail-header">
+                  <span>ASSET / {selectedProject.id?.toUpperCase() || 'PROJECT'}.PREFAB</span>
+                  <button
+                    className="detail-close-btn"
+                    onClick={() => setSelectedProject(null)}
+                    aria-label="Close"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Body: carousel left, content right */}
+                <div className="detail-body">
+                  {selectedProject.images?.length > 0 && (
+                    <div className="detail-carousel">
+                      <img
+                        className="carousel-img"
+                        src={selectedProject.images[carouselIdx]}
+                        alt={`${selectedProject.name} ${carouselIdx + 1}`}
+                      />
+                      {selectedProject.images.length > 1 && (
+                        <>
+                          <button className="carousel-btn carousel-prev" onClick={(e) => carouselStep(e, -1)}>‹</button>
+                          <button className="carousel-btn carousel-next" onClick={(e) => carouselStep(e, 1)}>›</button>
+                          <div className="carousel-dots">
+                            {selectedProject.images.map((_, i) => (
+                              <span
+                                key={i}
+                                className={`carousel-dot${i === carouselIdx ? ' active' : ''}`}
+                                onClick={(e) => { e.stopPropagation(); setCarouselIdx(i); }}
+                              />
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="detail-content">
                     <div className="detail-name">{selectedProject.name}</div>
                     <div className="detail-tagline">{selectedProject.description}</div>
-                  </div>
-                  <div className="detail-meta">
-                    <div>{selectedProject.year || '—'}</div>
-                    <div>{selectedProject.technologies?.[0] || 'Dev'}</div>
-                    <div>{selectedProject.responsibilities?.[0] || '—'}</div>
+                    {selectedProject.technologies?.length > 0 && (
+                      <div className="detail-tags">
+                        {selectedProject.technologies.map(t => (
+                          <span key={t} className="detail-tag">{t}</span>
+                        ))}
+                      </div>
+                    )}
+                    {selectedProject.responsibilities?.length > 0 && (
+                      <ul className="detail-responsibilities">
+                        {selectedProject.responsibilities.map((r, i) => (
+                          <li key={i}>{r}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
               </div>
