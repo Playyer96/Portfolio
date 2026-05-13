@@ -4,7 +4,10 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState('dark');
-  const [accent, setAccent] = useState('lime');
+  const [accent, setAccent] = useState(() => {
+    const colors = ['lime', 'cyan', 'amber', 'magenta'];
+    return colors[Math.floor(Math.random() * colors.length)];
+  });
 
   const toggleTheme = () => {
     setTheme(t => t === 'dark' ? 'light' : 'dark');

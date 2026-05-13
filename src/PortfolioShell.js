@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useTheme from './hooks/useTheme';
-import TweaksPanel from './ui/TweaksPanel';
 
 function HItem({ icon, label, depth = 0, active, onClick, badge, color }) {
   return (
@@ -369,7 +368,7 @@ function InspectorCV() {
 function PortfolioShell({ children, projects = [], experience = [], selectedProject, setSelectedProject }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, accent, toggleTheme, setAccent } = useTheme();
   const [bottomTab, setBottomTab] = React.useState("console");
   const [sceneTab, setSceneTab] = React.useState("Scene");
   const [hier, setHier] = React.useState({ projects: true, experience: false, lighting: false });
@@ -400,7 +399,6 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
     amber: ["oklch(82% 0.18 80)", "oklch(55% 0.17 80)"],
     magenta: ["oklch(75% 0.22 340)", "oklch(48% 0.20 340)"],
   };
-  const accent = "lime"; // TODO: wire to tweaks
   const [accentDark, accentLight] = accentMap[accent] || accentMap.lime;
 
   const vars = dark ? {
@@ -541,18 +539,66 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
         </div>
         <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center", fontSize: 11 }}>
           <span style={{ color: "var(--pb-accent)" }}>● available · Q3 '26</span>
-          <button
-            onClick={toggleTheme}
-            title={dark ? "Switch to light" : "Switch to dark"}
-            style={{
-              background: "transparent", border: "1px solid var(--pb-line)",
-              color: "var(--pb-dim)", padding: "2px 8px",
-              fontFamily: "var(--pb-mono)", fontSize: 10, cursor: "pointer",
-              letterSpacing: "0.05em",
-            }}
-          >
-            {dark ? "◑" : "○"}
-          </button>
+          <div style={{ position: "relative" }} data-pb-menu>
+            <button
+              onClick={() => setOpenMenu(openMenu === "settings" ? null : "settings")}
+              title="Settings"
+              style={{
+                background: openMenu === "settings" ? "var(--pb-panel-h)" : "transparent",
+                border: "1px solid var(--pb-line)", color: "var(--pb-dim)", padding: "2px 8px",
+                fontFamily: "var(--pb-mono)", fontSize: 10, cursor: "pointer",
+                letterSpacing: "0.05em",
+              }}
+            >
+              {dark ? "◑" : "○"}
+            </button>
+            {openMenu === "settings" && (
+              <div style={{
+                position: "absolute", top: "100%", right: 0, minWidth: 180,
+                background: "var(--pb-panel)", border: "1px solid var(--pb-line)",
+                boxShadow: "0 8px 24px rgba(0,0,0,.4)", zIndex: 200, padding: "10px 14px",
+              }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                    <span style={{ color: "var(--pb-dim)", fontSize: 9, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "var(--pb-mono)" }}>Theme</span>
+                    <button
+                      onClick={toggleTheme}
+                      style={{
+                        padding: "4px 10px", background: "var(--pb-panel-h)", color: "var(--pb-fg)",
+                        border: "1px solid var(--pb-line)", cursor: "pointer", fontSize: 11,
+                        fontFamily: "var(--pb-mono)", textAlign: "left",
+                      }}
+                    >
+                      {theme === "dark" ? "◐ Dark" : "☀ Light"}
+                    </button>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                    <span style={{ color: "var(--pb-dim)", fontSize: 9, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "var(--pb-mono)" }}>Accent</span>
+                    <div style={{ display: "flex", gap: 6 }}>
+                      {['lime', 'cyan', 'amber', 'magenta'].map(color => (
+                        <button
+                          key={color}
+                          onClick={() => setAccent(color)}
+                          style={{
+                            width: 22, height: 22, borderRadius: 2,
+                            border: accent === color ? "2px solid var(--pb-fg)" : "2px solid transparent",
+                            cursor: "pointer",
+                            backgroundColor: {
+                              lime: '#a8ff60',
+                              cyan: '#60d8ff',
+                              amber: '#ffc060',
+                              magenta: '#ff60c8',
+                            }[color],
+                          }}
+                          title={color}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -864,8 +910,6 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
         <a href="https://github.com/danilovanegas" target="_blank" rel="noreferrer"
           style={{ color: "var(--pb-fg)", textDecoration: "none" }}>Unity 6 / Next 15 ↗</a>
       </div>
-
-      <TweaksPanel />
     </div>
   );
 }
