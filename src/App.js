@@ -17,6 +17,7 @@ import CustomCursor from './components/CustomCursor';
 const AppContent = () => {
   const location = useLocation();
   const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedExperience, setSelectedExperience] = useState(null);
   const [projects, setProjects] = useState([]);
   const [experience, setExperience] = useState([]);
 
@@ -42,6 +43,7 @@ const AppContent = () => {
       experience={experience}
       selectedProject={selectedProject}
       setSelectedProject={setSelectedProject}
+      selectedExperience={selectedExperience}
     >
       <AnimatePresence mode="wait">
         <motion.div
@@ -56,7 +58,7 @@ const AppContent = () => {
             <Route path="/" element={<SceneHome />} />
             <Route path="/about" element={<SceneAbout />} />
             <Route path="/projects" element={<SceneProjects selectedProject={selectedProject} setSelectedProject={setSelectedProject} />} />
-            <Route path="/experience" element={<SceneExperience />} />
+            <Route path="/experience" element={<SceneExperience selectedExperience={selectedExperience} setSelectedExperience={setSelectedExperience} />} />
             <Route path="/stack" element={<SceneStack />} />
             <Route path="/contact" element={<SceneContact />} />
             <Route path="/cv" element={<SceneCV />} />

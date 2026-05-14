@@ -315,19 +315,105 @@ function InspectorProject({ project }) {
   );
 }
 
+function calcInspDuration(period) {
+  if (!period) return '';
+  const sep = period.indexOf(' - ');
+  if (sep === -1) return '';
+  const monthMap = { jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11 };
+  const parseDate = (s) => {
+    s = s.trim().toLowerCase();
+    if (s === 'present') return new Date(2026, 4);
+    const year = parseInt(s.match(/\d{4}/)?.[0]);
+    if (!year) return null;
+    for (const [a, mo] of Object.entries(monthMap)) { if (s.includes(a)) return new Date(year, mo); }
+    return new Date(year, 0);
+  };
+  const start = parseDate(period.slice(0, sep));
+  const end   = parseDate(period.slice(sep + 3));
+  if (!start || !end) return '';
+  const total = (end.getFullYear() - start.getFullYear()) * 12 + end.getMonth() - start.getMonth();
+  if (total < 1) return '';
+  const y = Math.floor(total / 12), m = total % 12;
+  return y === 0 ? `${m} months` : m === 0 ? `${y} years` : `${y}y ${m}mo`;
+}
+
+function inferInspEngines(role) {
+  const r = role.toLowerCase();
+  const tags = [];
+  if (r.includes('unity'))   tags.push('Unity');
+  if (r.includes('unreal'))  tags.push('Unreal');
+  if (r.includes('hololens') || (r.includes('ar') && r.includes('unity'))) tags.push('HoloLens AR');
+  return tags;
+}
+
 function InspectorExperience({ experience }) {
+  const work = experience.filter(e => e.type === 'Work');
+  const edu  = experience.filter(e => e.type === 'Education');
+  const totalYears = work.reduce((acc, e) => {
+    const d = calcInspDuration(e.period);
+    const m = d.match(/(\d+)y/);
+    return acc + (m ? parseInt(m[1]) : 0);
+  }, 0);
   return (
     <div>
-      <InspGroup icon="↑" iconColor="var(--pb-accent)" title={`Timeline · ${experience.length} roles`}>
-        <InspField label="Span" value={`${experience.length} positions`} />
+      <InspGroup icon="↑" iconColor="var(--pb-accent)" title="Career · Overview">
+        <InspField label="Work roles"  value={`${work.length} positions`} />
+        <InspField label="Education"   value={`${edu.length} entries`} />
+        <InspField label="Total exp."  value={`${totalYears}+ years`} accent />
+        <InspField label="Status"      value="Available Now" accent />
       </InspGroup>
-      {experience.map((e, i) => (
-        <InspGroup key={i} icon="◆" iconColor="#888" title={e.company} defaultOpen={false}>
-          <InspField label="Role" value={e.role} />
-          <InspField label="Period" value={e.period} />
-          <InspField label="Location" value={e.location} />
+      <InspGroup icon="≡" iconColor="#888" title="Engines & Tools" defaultOpen={false}>
+        <InspField label="Primary"  value="Unity, Unreal" />
+        <InspField label="XR / AR"  value="HoloLens, ARCore" />
+        <InspField label="3D"       value="Blender, Maya" />
+        <InspField label="Web"      value="React, Node.js" />
+      </InspGroup>
+      <div style={{ padding: "8px 10px 4px", fontFamily: "var(--pb-mono)", fontSize: 9, color: "var(--pb-dim)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+        — click any card to inspect —
+      </div>
+    </div>
+  );
+}
+
+function InspectorExperienceItem({ item }) {
+  const duration = calcInspDuration(item.period);
+  const engines  = inferInspEngines(item.role);
+  const isCurrent = item.period.toLowerCase().includes('present');
+  const isWork = item.type === 'Work';
+  const iconColor = isWork ? 'var(--pb-accent)' : '#3b82f6';
+
+  return (
+    <div>
+      <InspGroup icon={isWork ? '◆' : '▣'} iconColor={iconColor} title={item.company}>
+        <InspField label="Role"     value={item.role} />
+        <InspField label="Type"     value={item.type} />
+        <InspField label="Period"   value={item.period} />
+        {duration && <InspField label="Duration" value={duration} accent />}
+        {isCurrent && <InspField label="Status" value="Active" accent />}
+      </InspGroup>
+
+      {isWork && item.highlights.length > 0 && (
+        <InspGroup icon="◈" iconColor="var(--pb-accent)" title="Shipped Titles">
+          {item.highlights.map((h, i) => (
+            <InspField key={i} label={`Title ${i + 1}`} value={h} />
+          ))}
         </InspGroup>
-      ))}
+      )}
+
+      {isWork && engines.length > 0 && (
+        <InspGroup icon="!" iconColor="#f59e0b" title="Engines" defaultOpen={false}>
+          {engines.map((e, i) => (
+            <InspField key={i} label={`Engine ${i + 1}`} value={e} />
+          ))}
+        </InspGroup>
+      )}
+
+      {!isWork && (
+        <InspGroup icon="@" iconColor="#3b82f6" title="Details" defaultOpen={false}>
+          <InspField label="Institution" value={item.role} />
+          {item.highlights[0] && <InspField label="Location" value={item.highlights[0]} />}
+        </InspGroup>
+      )}
     </div>
   );
 }
@@ -401,7 +487,7 @@ function InspectorCV() {
   );
 }
 
-function PortfolioShell({ children, projects = [], experience = [], selectedProject, setSelectedProject }) {
+function PortfolioShell({ children, projects = [], experience = [], selectedProject, setSelectedProject, selectedExperience }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, accent, toggleTheme, setAccent } = useTheme();
@@ -412,7 +498,6 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
   const [playing, setPlaying] = React.useState(false);
   const [hSearch, setHSearch] = React.useState("");
   const [openMenu, setOpenMenu] = React.useState(null);
-  const [transformTool, setTransformTool] = React.useState(1);
   const ts = () => new Date().toLocaleTimeString('en-US', { hour12: false });
   const [logs, setLogs] = React.useState(() => [
     { id: 'boot-1', type: 'ok',   msg: '> portfolio_main  Awake ()', timestamp: ts() },
@@ -691,22 +776,6 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
         height: 38, background: "var(--pb-panel)", borderBottom: "1px solid var(--pb-line)",
         display: "flex", alignItems: "center", padding: "0 12px", gap: 8, fontSize: 11, flexShrink: 0,
       }}>
-        {[
-          { i: "⤧", title: "Pan (Q)" },
-          { i: "⤨", title: "Move (W)" },
-          { i: "⤩", title: "Rotate (E)" },
-          { i: "⤪", title: "Scale (R)" },
-          { i: "⤫", title: "Rect (T)" },
-        ].map((t, idx) => (
-          <button key={idx} title={t.title}
-            onClick={() => setTransformTool(idx)}
-            style={{
-              width: 28, height: 24, background: transformTool === idx ? "var(--pb-accent)" : "transparent",
-              color: transformTool === idx ? "#000" : "var(--pb-fg)",
-              border: "1px solid var(--pb-line)", cursor: "pointer", fontSize: 12,
-            }}>{t.i}</button>
-        ))}
-        <div style={{ width: 12 }} />
         <button
           onClick={() => {
             if (playing) { setPlaying(false); setSceneTab("Scene"); }
@@ -899,7 +968,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
                 <div style={{
                   position: "absolute", top: 8, right: 10,
                   fontFamily: "var(--pb-mono)", fontSize: 9, color: "var(--pb-dim)", letterSpacing: "0.06em",
-                }}>{["Pan","Move","Rotate","Scale","Rect"][transformTool]} mode &nbsp;·&nbsp; SPACE to play</div>
+                }}>SPACE to play</div>
                 <div style={{
                   position: "absolute", bottom: 8, left: 10,
                   fontFamily: "var(--pb-mono)", fontSize: 9, color: "var(--pb-dim)", opacity: 0.45, letterSpacing: "0.04em",
@@ -991,7 +1060,8 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
                 Select a project ↑
               </div>
             )}
-            {scene === "experience"  && <InspectorExperience experience={experience} />}
+            {scene === "experience"  && selectedExperience && <InspectorExperienceItem item={selectedExperience} />}
+            {scene === "experience"  && !selectedExperience && <InspectorExperience experience={experience} />}
             {scene === "stack"       && <InspectorStack />}
             {scene === "contact"     && <InspectorContact />}
             {scene === "cv"          && <InspectorCV />}
