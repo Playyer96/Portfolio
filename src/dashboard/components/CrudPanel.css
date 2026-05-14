@@ -1,0 +1,151 @@
+/* ─── Panel header ─── */
+.cp__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.cp__title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.cp__title {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--pb-fg);
+  font-family: var(--pb-display);
+}
+
+.cp__count {
+  font-size: 12px;
+  color: var(--pb-dim);
+}
+
+.cp__add-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--pb-accent);
+  border: none;
+  border-radius: 6px;
+  color: var(--pb-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--pb-mono);
+}
+
+.cp__add-btn:hover {
+  opacity: 0.85;
+}
+
+/* ─── States ─── */
+.cp__loading {
+  padding: 40px;
+  text-align: center;
+  color: var(--pb-dim);
+  font-size: 13px;
+}
+
+.cp__error {
+  padding: 20px;
+  background: rgba(255, 68, 68, 0.07);
+  border: 1px solid rgba(255, 68, 68, 0.15);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.cp__error-text {
+  color: #f66;
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+
+.cp__retry-btn {
+  padding: 6px 14px;
+  font-size: 12px;
+  background: var(--pb-panel-h);
+  border: 1px solid var(--pb-line);
+  border-radius: 4px;
+  color: var(--pb-dim);
+  cursor: pointer;
+  font-family: var(--pb-mono);
+}
+
+.cp__retry-btn:hover {
+  color: var(--pb-fg);
+}
+
+.cp__empty {
+  padding: 40px;
+  background: var(--pb-panel);
+  border-radius: 8px;
+  border: 1px solid var(--pb-line);
+  text-align: center;
+  color: var(--pb-dim);
+  font-size: 13px;
+}
+
+.cp__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ─── ItemCard ─── */
+.cp-card {
+  padding: 16px;
+  background: var(--pb-panel);
+  border-radius: 8px;
+  border: 1px solid var(--pb-line);
+  transition: border-color 0.1s;
+}
+
+/* ─── ItemActions ─── */
+.cp-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.cp-actions__edit {
+  padding: 4px 10px;
+  font-size: 12px;
+  background: transparent;
+  border: 1px solid var(--pb-line);
+  border-radius: 4px;
+  color: var(--pb-accent);
+  cursor: pointer;
+  font-family: var(--pb-mono);
+}
+
+.cp-actions__edit:hover {
+  background: var(--pb-panel-h);
+}
+
+.cp-actions__delete {
+  padding: 4px 10px;
+  font-size: 12px;
+  background: transparent;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 4px;
+  color: #f66;
+  cursor: pointer;
+  font-family: var(--pb-mono);
+}
+
+.cp-actions__delete:hover {
+  background: rgba(255, 68, 68, 0.08);
+}
+
+.cp-actions__delete:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

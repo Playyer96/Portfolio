@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { authFetch } from '../../data/api';
 import FormModal, { FormField, Input, Select, ArrayInput, displayValue } from '../components/FormModal';
 import CrudPanel, { ItemCard, ItemActions } from '../components/CrudPanel';
+import './panels.css';
 
 const ITEM_COLORS = ['#f9004d', '#10b981', '#f59e0b', '#06b6d4', '#8b5cf6', '#ec4899', '#3b82f6'];
 
@@ -48,8 +49,7 @@ function ExperienceForm({ item, onSave, onCancel }) {
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <input type="color" value={form.iconBackground || '#f9004d'} onChange={e => update('iconBackground', e.target.value)}
               style={{ width: 36, height: 36, padding: 0, border: 'none', borderRadius: 4, cursor: 'pointer', background: 'none' }} />
-            <Input value={form.iconBackground || '#f9004d'} onChange={e => update('iconBackground', e.target.value)}
-              style={{ fontFamily: 'monospace', width: 110 }} />
+            <Input value={form.iconBackground || '#f9004d'} onChange={e => update('iconBackground', e.target.value)} style={{ fontFamily: 'monospace', width: 110, flex: 'none' }} />
           </div>
         </FormField>
       </div>
@@ -124,23 +124,20 @@ export default function PanelExperience() {
         onAdd={() => setModal({ index: undefined })}
         renderItem={(item, i) => (
           <ItemCard key={i}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{
-                    display: 'inline-block', width: 8, height: 8, borderRadius: '50%',
-                    background: ITEM_COLORS[i % ITEM_COLORS.length], flexShrink: 0,
-                  }} />
-                  <span style={{ fontSize: 15, fontWeight: 600, color: '#eee' }}>{item.title}</span>
-                  <span style={{ fontSize: 11, color: '#555' }}>({item.icon === 'SchoolIcon' ? 'Education' : 'Work'})</span>
+            <div className="pp-row">
+              <div className="pp-info">
+                <div className="pp-name-row">
+                  <span className="pp-dot" style={{ background: ITEM_COLORS[i % ITEM_COLORS.length] }} />
+                  <span className="pp-name">{item.title}</span>
+                  <span className="pp-badge pp-badge--dim">({item.icon === 'SchoolIcon' ? 'Education' : 'Work'})</span>
                 </div>
-                <div style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>{item.subtitle}</div>
-                <div style={{ fontSize: 11, color: '#666', marginBottom: 6 }}>{item.date}</div>
+                <div className="pp-meta">{item.subtitle}</div>
+                <div className="pp-sub" style={{ marginBottom: 6 }}>{item.date}</div>
                 {item.responsibilities?.slice(0, 2).map((r, j) => (
-                  <div key={j} style={{ fontSize: 12, color: '#666', lineHeight: 1.5 }}>&bull; {displayValue(r)}</div>
+                  <div key={j} className="pp-bullet">&bull; {displayValue(r)}</div>
                 ))}
                 {item.responsibilities?.length > 2 && (
-                  <div style={{ fontSize: 11, color: '#555', marginTop: 2 }}>+{item.responsibilities.length - 2} more</div>
+                  <div className="pp-more">+{item.responsibilities.length - 2} more</div>
                 )}
               </div>
               <ItemActions

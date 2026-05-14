@@ -1,0 +1,234 @@
+/* ─── Overlay & Modal ─── */
+.fm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.fm-modal {
+  background: var(--pb-panel);
+  border: 1px solid var(--pb-line);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 640px;
+  max-height: 85vh;
+  overflow: auto;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+}
+
+.fm-modal--wide {
+  max-width: 800px;
+}
+
+.fm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--pb-line);
+  position: sticky;
+  top: 0;
+  background: var(--pb-panel);
+  z-index: 1;
+}
+
+.fm-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pb-fg);
+  margin: 0;
+  font-family: var(--pb-display);
+}
+
+.fm-close {
+  background: none;
+  border: none;
+  color: var(--pb-dim);
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.fm-close:hover {
+  color: var(--pb-fg);
+  background: var(--pb-panel-h);
+}
+
+.fm-body {
+  padding: 20px;
+}
+
+.fm-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--pb-line);
+  position: sticky;
+  bottom: 0;
+  background: var(--pb-panel);
+}
+
+/* ─── Form fields ─── */
+.ff__container {
+  margin-bottom: 16px;
+}
+
+.ff__label {
+  display: block;
+  font-size: 12px;
+  color: var(--pb-dim);
+  margin-bottom: 4px;
+  font-weight: 500;
+  font-family: var(--pb-mono);
+}
+
+.ff__helper {
+  font-size: 11px;
+  color: var(--pb-dim);
+  margin-top: 4px;
+  opacity: 0.7;
+}
+
+.ff__input,
+.ff__textarea,
+.ff__select {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  background: var(--pb-bg);
+  border: 1px solid var(--pb-line);
+  border-radius: 6px;
+  color: var(--pb-fg);
+  outline: none;
+  box-sizing: border-box;
+  font-family: var(--pb-mono);
+}
+
+.ff__input:focus,
+.ff__textarea:focus,
+.ff__select:focus {
+  border-color: var(--pb-accent);
+}
+
+.ff__textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.ff__checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--pb-accent);
+  flex-shrink: 0;
+}
+
+.ff__checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--pb-fg);
+  font-family: var(--pb-mono);
+}
+
+/* ─── Buttons ─── */
+.fm-btn-primary {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--pb-accent);
+  border: none;
+  border-radius: 6px;
+  color: var(--pb-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--pb-mono);
+}
+
+.fm-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.fm-btn-secondary {
+  padding: 8px 16px;
+  font-size: 13px;
+  background: transparent;
+  border: 1px solid var(--pb-line);
+  border-radius: 6px;
+  color: var(--pb-dim);
+  cursor: pointer;
+  font-family: var(--pb-mono);
+}
+
+.fm-btn-secondary:hover {
+  background: var(--pb-panel-h);
+  color: var(--pb-fg);
+}
+
+/* ─── Tags & array input ─── */
+.ff__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--pb-panel-h);
+  border: 1px solid var(--pb-line);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--pb-dim);
+  font-family: var(--pb-mono);
+}
+
+.ff__tag-remove {
+  background: none;
+  border: none;
+  color: var(--pb-dim);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+}
+
+.ff__tag-remove:hover {
+  color: var(--pb-fg);
+}
+
+.ff__array-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 0;
+}
+
+.ff__array-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+/* ─── File inputs ─── */
+.ff__file-input {
+  font-size: 12px;
+  color: var(--pb-dim);
+  font-family: var(--pb-mono);
+}
+
+.ff__file-info {
+  font-size: 11px;
+  color: var(--pb-dim);
+  margin-top: 4px;
+  opacity: 0.6;
+}

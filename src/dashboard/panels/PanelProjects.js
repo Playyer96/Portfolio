@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { authFetch } from '../../data/api';
 import FormModal, { FormField, Input, Checkbox, ArrayInput, displayValue } from '../components/FormModal';
 import CrudPanel, { ItemCard, ItemActions } from '../components/CrudPanel';
+import './panels.css';
 
 function ProjectForm({ item, onSave, onCancel }) {
   const [form, setForm] = useState(item || { name: '', year: new Date().getFullYear(), role: '', descriptions: [], technologies: [], responsibilities: [], link: '', githubLink: '', liveLink: '', videoUrl: '', featured: false });
@@ -128,14 +129,14 @@ export default function PanelProjects() {
         onAdd={() => setModal({ item: null })}
         renderItem={(item) => (
           <ItemCard key={item.id}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: '#eee' }}>{item.name}</span>
-                  {item.featured && <span style={{ fontSize: 10, padding: '1px 6px', background: '#3b82f6', borderRadius: 3, color: '#fff' }}>FEATURED</span>}
+            <div className="pp-row">
+              <div className="pp-info">
+                <div className="pp-name-row">
+                  <span className="pp-name">{item.name}</span>
+                  {item.featured && <span className="pp-badge pp-badge--accent">FEATURED</span>}
                 </div>
-                <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>{item.role} &middot; {item.year}</div>
-                {item.descriptions?.[0] && <div style={{ fontSize: 12, color: '#666', lineHeight: 1.5 }}>{displayValue(item.descriptions[0])}</div>}
+                <div className="pp-meta">{item.role} &middot; {item.year}</div>
+                {item.descriptions?.[0] && <div className="pp-detail">{displayValue(item.descriptions[0])}</div>}
               </div>
               <ItemActions
                 onEdit={() => setModal({ item })}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { authFetch } from '../../data/api';
 import FormModal, { FormField, Input, Textarea, Select, Checkbox, ArrayInput, displayValue } from '../components/FormModal';
 import CrudPanel, { ItemCard, ItemActions } from '../components/CrudPanel';
+import './panels.css';
 
 function PluginForm({ item, onSave, onCancel }) {
   const [form, setForm] = useState(item || { name: '', slug: '', description: '', storeType: 'unity', unityStoreUrl: '', unrealStoreUrl: '', price: '', version: '1.0.0', technologies: [], featured: false });
@@ -59,17 +60,16 @@ function PluginForm({ item, onSave, onCancel }) {
         <Input value={form.unrealStoreUrl || ''} onChange={e => update('unrealStoreUrl', e.target.value)} />
       </FormField>
       <FormField label="Technologies">
-                <ArrayInput values={(form.technologies || []).map(t => displayValue(t))} onChange={v => update('technologies', v)} />
+        <ArrayInput values={(form.technologies || []).map(t => displayValue(t))} onChange={v => update('technologies', v)} />
       </FormField>
       <div style={{ display: 'flex', gap: 12 }}>
         <FormField>
           <Checkbox label="Featured" checked={!!form.featured} onChange={e => update('featured', e.target.checked)} />
         </FormField>
         <FormField label="Images" style={{ flex: 1 }}>
-          <input type="file" accept="image/*" multiple onChange={e => setFiles(e.target.files)}
-            style={{ fontSize: 12, color: '#aaa' }} />
+          <input type="file" accept="image/*" multiple onChange={e => setFiles(e.target.files)} className="ff__file-input" />
           {form.images?.length > 0 && (
-            <div style={{ fontSize: 11, color: '#555', marginTop: 4 }}>{form.images.length} image(s) on file</div>
+            <div className="ff__file-info">{form.images.length} image(s) on file</div>
           )}
         </FormField>
       </div>
@@ -135,18 +135,18 @@ export default function PanelPlugins() {
         onAdd={() => setModal({})}
         renderItem={(item) => (
           <ItemCard key={item._id}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: '#eee' }}>{item.name}</span>
-                  <span style={{ fontSize: 10, padding: '1px 6px', background: '#2a2a2a', borderRadius: 3, color: '#888' }}>{storeLabel(item.storeType)}</span>
-                  {item.featured && <span style={{ fontSize: 10, padding: '1px 6px', background: '#3b82f6', borderRadius: 3, color: '#fff' }}>FEATURED</span>}
+            <div className="pp-row">
+              <div className="pp-info">
+                <div className="pp-name-row">
+                  <span className="pp-name">{item.name}</span>
+                  <span className="pp-badge pp-badge--dim">{storeLabel(item.storeType)}</span>
+                  {item.featured && <span className="pp-badge pp-badge--accent">FEATURED</span>}
                 </div>
-                {item.description && <div style={{ fontSize: 12, color: '#666', lineHeight: 1.5, marginBottom: 4 }}>{item.description}</div>}
-                <div style={{ fontSize: 11, color: '#555' }}>
-                  {item.price ? `${item.price} \u00b7 ` : ''}
+                {item.description && <div className="pp-detail">{item.description}</div>}
+                <div className="pp-sub">
+                  {item.price ? `${item.price} · ` : ''}
                   v{item.version}
-                  {item.technologies?.length > 0 && ` \u00b7 ${item.technologies.map(t => displayValue(t)).join(', ')}`}
+                  {item.technologies?.length > 0 && ` · ${item.technologies.map(t => displayValue(t)).join(', ')}`}
                 </div>
               </div>
               <ItemActions

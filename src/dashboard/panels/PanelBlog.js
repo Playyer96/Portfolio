@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { authFetch } from '../../data/api';
 import FormModal, { FormField, Input, Textarea, Checkbox, displayValue } from '../components/FormModal';
 import CrudPanel, { ItemCard, ItemActions } from '../components/CrudPanel';
+import './panels.css';
 
 const dateStr = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
 
@@ -50,17 +51,19 @@ function BlogForm({ item, onSave, onCancel }) {
         <Textarea value={form.content || ''} onChange={e => update('content', e.target.value)} style={{ minHeight: 200 }} />
       </FormField>
       <FormField label="Tags" helper="Comma-separated tags">
-              <Input value={Array.isArray(form.tags) ? form.tags.map(t => displayValue(t)).join(', ') : form.tags || ''} onChange={e => update('tags', e.target.value.split(',').map(s => s.trim()).filter(Boolean))} />
+        <Input
+          value={Array.isArray(form.tags) ? form.tags.map(t => displayValue(t)).join(', ') : form.tags || ''}
+          onChange={e => update('tags', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+        />
       </FormField>
       <div style={{ display: 'flex', gap: 12 }}>
         <FormField>
           <Checkbox label="Published" checked={!!form.published} onChange={e => update('published', e.target.checked)} />
         </FormField>
         <FormField label="Featured Image" style={{ flex: 1 }}>
-          <input type="file" accept="image/*" onChange={e => setFile(e.target.files[0])}
-            style={{ fontSize: 12, color: '#aaa' }} />
+          <input type="file" accept="image/*" onChange={e => setFile(e.target.files[0])} className="ff__file-input" />
           {form.featuredImage && (
-            <div style={{ fontSize: 11, color: '#555', marginTop: 4 }}>
+            <div className="ff__file-info">
               {typeof form.featuredImage === 'object' ? displayValue(form.featuredImage.url || form.featuredImage) : form.featuredImage}
             </div>
           )}
@@ -126,20 +129,20 @@ export default function PanelBlog() {
         onAdd={() => setModal({})}
         renderItem={(item) => (
           <ItemCard key={item._id}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: '#eee' }}>{item.title}</span>
+            <div className="pp-row">
+              <div className="pp-info">
+                <div className="pp-name-row">
+                  <span className="pp-name">{item.title}</span>
                   {item.published
-                    ? <span style={{ fontSize: 10, padding: '1px 6px', background: '#0a2a1a', border: '1px solid #1a4a2a', borderRadius: 3, color: '#4caf50' }}>PUBLISHED</span>
-                    : <span style={{ fontSize: 10, padding: '1px 6px', background: '#2a1a0a', border: '1px solid #4a2a1a', borderRadius: 3, color: '#f90' }}>DRAFT</span>
+                    ? <span className="pp-badge pp-badge--success">PUBLISHED</span>
+                    : <span className="pp-badge pp-badge--warning">DRAFT</span>
                   }
                 </div>
-                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>/blog/{item.slug}</div>
-                {item.excerpt && <div style={{ fontSize: 12, color: '#666', lineHeight: 1.5, marginBottom: 4 }}>{item.excerpt}</div>}
-                <div style={{ fontSize: 11, color: '#555' }}>
+                <div className="pp-sub">/blog/{item.slug}</div>
+                {item.excerpt && <div className="pp-detail">{item.excerpt}</div>}
+                <div className="pp-sub">
                   {dateStr(item.publishDate || item.createdAt)}
-                  {item.tags?.length > 0 && ` \u00b7 ${item.tags.map(t => displayValue(t)).join(', ')}`}
+                  {item.tags?.length > 0 && ` · ${item.tags.map(t => displayValue(t)).join(', ')}`}
                 </div>
               </div>
               <ItemActions

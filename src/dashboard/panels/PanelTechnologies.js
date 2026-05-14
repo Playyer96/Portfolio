@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { authFetch } from '../../data/api';
 import FormModal, { FormField, Input, Select, ArrayInput, displayValue } from '../components/FormModal';
 import CrudPanel, { ItemCard, ItemActions } from '../components/CrudPanel';
+import './panels.css';
 
 const CATEGORY_OPTIONS = [
   { value: 'engines', label: 'Engines' },
@@ -110,16 +111,16 @@ export default function PanelTechnologies() {
           const cat = CATEGORY_OPTIONS.find(o => o.value === item.category);
           return (
             <ItemCard key={i}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                    <span style={{ fontSize: 15, fontWeight: 600, color: '#eee' }}>{item.name}</span>
-                    <span style={{ fontSize: 10, padding: '1px 6px', background: '#2a2a2a', borderRadius: 3, color: '#888' }}>{cat?.label || item.category}</span>
+              <div className="pp-row">
+                <div className="pp-info">
+                  <div className="pp-name-row">
+                    <span className="pp-name">{item.name}</span>
+                    <span className="pp-badge pp-badge--dim">{cat?.label || item.category}</span>
                   </div>
                   {item.packages?.length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 6 }}>
+                    <div className="pp-tags">
                       {item.packages.map((p, j) => (
-                        <span key={j} style={{ padding: '1px 6px', background: '#1a1a1a', borderRadius: 3, border: '1px solid #2a2a2a', fontSize: 11, color: '#777' }}>{displayValue(p)}</span>
+                        <span key={j} className="pp-tag">{displayValue(p)}</span>
                       ))}
                     </div>
                   )}

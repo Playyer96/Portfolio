@@ -2,6 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { authFetch } from '../../data/api';
 import FormModal, { FormField, Input, Textarea, Select, Checkbox } from '../components/FormModal';
 import CrudPanel, { ItemCard, ItemActions } from '../components/CrudPanel';
+import './panels.css';
+
+const PLATFORM_OPTIONS = [
+  { value: 'android', label: 'Android' },
+  { value: 'ios', label: 'iOS' },
+  { value: 'desktop', label: 'Desktop' },
+];
+
+const PLATFORM_LABELS = { android: 'Android', ios: 'iOS', desktop: 'Desktop' };
 
 function AppForm({ item, onSave, onCancel }) {
   const [form, setForm] = useState(item || { name: '', slug: '', description: '', platform: 'android', appStoreUrl: '', googlePlayUrl: '', downloads: 0, rating: 0, featured: false });
@@ -23,12 +32,6 @@ function AppForm({ item, onSave, onCancel }) {
       setSaving(false);
     }
   };
-
-  const PLATFORM_OPTIONS = [
-    { value: 'android', label: 'Android' },
-    { value: 'ios', label: 'iOS' },
-    { value: 'desktop', label: 'Desktop' },
-  ];
 
   return (
     <FormModal isOpen onClose={onCancel} title={item ? 'Edit App' : 'New App'} onSubmit={handleSubmit} loading={saving} wide>
@@ -65,10 +68,9 @@ function AppForm({ item, onSave, onCancel }) {
           <Checkbox label="Featured" checked={!!form.featured} onChange={e => update('featured', e.target.checked)} />
         </FormField>
         <FormField label="Images" style={{ flex: 1 }}>
-          <input type="file" accept="image/*" multiple onChange={e => setFiles(e.target.files)}
-            style={{ fontSize: 12, color: '#aaa' }} />
+          <input type="file" accept="image/*" multiple onChange={e => setFiles(e.target.files)} className="ff__file-input" />
           {form.images?.length > 0 && (
-            <div style={{ fontSize: 11, color: '#555', marginTop: 4 }}>{form.images.length} image(s) on file</div>
+            <div className="ff__file-info">{form.images.length} image(s) on file</div>
           )}
         </FormField>
       </div>
@@ -121,8 +123,6 @@ export default function PanelApps() {
     }
   };
 
-  const PLATFORM_LABELS = { android: 'Android', ios: 'iOS', desktop: 'Desktop' };
-
   return (
     <>
       <CrudPanel
@@ -134,17 +134,17 @@ export default function PanelApps() {
         onAdd={() => setModal({})}
         renderItem={(item) => (
           <ItemCard key={item._id}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: '#eee' }}>{item.name}</span>
-                  <span style={{ fontSize: 10, padding: '1px 6px', background: '#2a2a2a', borderRadius: 3, color: '#888' }}>{PLATFORM_LABELS[item.platform] || item.platform}</span>
-                  {item.featured && <span style={{ fontSize: 10, padding: '1px 6px', background: '#3b82f6', borderRadius: 3, color: '#fff' }}>FEATURED</span>}
+            <div className="pp-row">
+              <div className="pp-info">
+                <div className="pp-name-row">
+                  <span className="pp-name">{item.name}</span>
+                  <span className="pp-badge pp-badge--dim">{PLATFORM_LABELS[item.platform] || item.platform}</span>
+                  {item.featured && <span className="pp-badge pp-badge--accent">FEATURED</span>}
                 </div>
-                {item.description && <div style={{ fontSize: 12, color: '#666', lineHeight: 1.5, marginBottom: 4 }}>{item.description}</div>}
-                <div style={{ fontSize: 11, color: '#555' }}>
-                  {item.downloads > 0 && `${item.downloads.toLocaleString()} downloads \u00b7 `}
-                  {item.rating > 0 && `\u2605 ${item.rating.toFixed(1)}`}
+                {item.description && <div className="pp-detail">{item.description}</div>}
+                <div className="pp-sub">
+                  {item.downloads > 0 && `${item.downloads.toLocaleString()} downloads · `}
+                  {item.rating > 0 && `★ ${item.rating.toFixed(1)}`}
                 </div>
               </div>
               <ItemActions

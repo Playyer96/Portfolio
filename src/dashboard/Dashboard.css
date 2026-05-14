@@ -1,0 +1,236 @@
+/* ─── Login ─── */
+.db-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--pb-bg);
+}
+
+.db-login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 360px;
+  padding: 36px;
+  background: var(--pb-panel);
+  border-radius: 8px;
+  border: 1px solid var(--pb-line);
+}
+
+.db-login__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--pb-fg);
+  font-family: var(--pb-display);
+}
+
+.db-login__subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: var(--pb-dim);
+}
+
+.db-login__error {
+  color: #f66;
+  font-size: 13px;
+  margin: 0;
+  padding: 8px 12px;
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.2);
+  border-radius: 4px;
+}
+
+.db-login__input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 13px;
+  box-sizing: border-box;
+  background: var(--pb-bg);
+  border: 1px solid var(--pb-line);
+  border-radius: 4px;
+  color: var(--pb-fg);
+  outline: none;
+  font-family: var(--pb-mono);
+}
+
+.db-login__input:focus {
+  border-color: var(--pb-accent);
+}
+
+.db-login__btn {
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--pb-accent);
+  border: none;
+  border-radius: 4px;
+  color: var(--pb-bg);
+  cursor: pointer;
+  font-family: var(--pb-mono);
+}
+
+.db-login__btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.db-login__forgot {
+  background: none;
+  border: none;
+  color: var(--pb-dim);
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  font-family: var(--pb-mono);
+}
+
+.db-login__forgot:hover {
+  color: var(--pb-fg);
+}
+
+.db-login__success {
+  color: #4ade80;
+  font-size: 13px;
+  margin: 0;
+  padding: 8px 12px;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 4px;
+}
+
+/* ─── Shell ─── */
+.db-shell {
+  display: flex;
+  height: 100vh;
+  background: var(--pb-bg);
+  color: var(--pb-fg);
+  font-family: var(--pb-mono);
+}
+
+.db-nav {
+  width: 220px;
+  background: var(--pb-panel);
+  border-right: 1px solid var(--pb-line);
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.db-nav__header {
+  padding: 0 16px 16px;
+  border-bottom: 1px solid var(--pb-line);
+  margin-bottom: 8px;
+}
+
+.db-nav__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pb-fg);
+}
+
+.db-nav__email {
+  font-size: 11px;
+  color: var(--pb-dim);
+  margin-top: 4px;
+}
+
+.db-nav__spacer {
+  flex: 1;
+}
+
+.db-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  width: 100%;
+  border: none;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--pb-dim);
+  cursor: pointer;
+  font-size: 13px;
+  text-align: left;
+  font-family: var(--pb-mono);
+  transition: background 0.1s, color 0.1s;
+}
+
+.db-nav-item:hover {
+  background: var(--pb-panel-h);
+  color: var(--pb-fg);
+}
+
+.db-nav-item--active {
+  background: var(--pb-panel-h);
+  color: var(--pb-accent);
+  border-left-color: var(--pb-accent);
+}
+
+.db-nav-item--logout {
+  margin-top: 8px;
+}
+
+.db-main {
+  flex: 1;
+  padding: 24px;
+  overflow: auto;
+  min-width: 0;
+}
+
+/* ─── Overview ─── */
+.db-overview__title {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--pb-fg);
+  font-family: var(--pb-display);
+}
+
+.db-overview__subtitle {
+  font-size: 13px;
+  color: var(--pb-dim);
+  margin: 0 0 24px;
+}
+
+.db-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.db-stat-card {
+  padding: 20px;
+  background: var(--pb-panel);
+  border-radius: 8px;
+  border: 1px solid var(--pb-line);
+}
+
+.db-stat-card__label {
+  font-size: 11px;
+  color: var(--pb-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.db-stat-card__count {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--pb-accent);
+  font-family: var(--pb-display);
+}
+
+.db-hint {
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--pb-panel);
+  border-radius: 8px;
+  border: 1px solid var(--pb-line);
+  font-size: 12px;
+  color: var(--pb-dim);
+  line-height: 1.6;
+}
