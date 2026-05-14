@@ -1,6 +1,8 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import useTheme from './hooks/useTheme';
+import GameView from './scenes/GameView';
 
 function HItem({ icon, label, depth = 0, active, onClick, badge, color }) {
   return (
@@ -49,17 +51,47 @@ function InspGroup({ icon, iconColor, title, badge, defaultOpen = true, children
   );
 }
 
-function InspField({ label, value, accent }) {
-  return (
-    <div style={{
-      display: "grid", gridTemplateColumns: "100px 1fr",
-      padding: "4px 10px", borderBottom: "1px solid var(--pb-line)",
-      fontFamily: "var(--pb-mono)", fontSize: 10, gap: 8,
-    }}>
+function InspField({ label, value, accent, copyValue, href }) {
+  const [copied, setCopied] = React.useState(false);
+  const interactive = !!(copyValue || href || false);
+
+  const handleClick = () => {
+    if (copyValue) {
+      navigator.clipboard?.writeText(copyValue).catch(() => {});
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    }
+  };
+
+  const inner = (
+    <div
+      onClick={handleClick}
+      style={{
+        display: "grid", gridTemplateColumns: "100px 1fr",
+        padding: "4px 10px", borderBottom: "1px solid var(--pb-line)",
+        fontFamily: "var(--pb-mono)", fontSize: 10, gap: 8,
+        cursor: interactive ? "pointer" : "default",
+        transition: "background 0.12s",
+      }}
+      onMouseEnter={e => { if (interactive) e.currentTarget.style.background = "var(--pb-panel-h)"; }}
+      onMouseLeave={e => { if (interactive) e.currentTarget.style.background = "transparent"; }}
+    >
       <span style={{ color: "var(--pb-dim)" }}>{label}</span>
-      <span style={{ color: accent ? "var(--pb-accent)" : "var(--pb-fg)", textAlign: "right" }}>{value}</span>
+      <span style={{ color: accent ? "var(--pb-accent)" : copied ? "var(--pb-accent)" : "var(--pb-fg)", textAlign: "right" }}>
+        {copied ? "Copied! ✓" : value}
+        {href && !copied && <span style={{ color: "var(--pb-dim)", marginLeft: 4 }}>↗</span>}
+      </span>
     </div>
   );
+
+  if (href) {
+    return (
+      <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" style={{ textDecoration: "none", display: "block" }}>
+        {inner}
+      </a>
+    );
+  }
+  return inner;
 }
 
 function AnimatorView({ experience }) {
@@ -217,20 +249,22 @@ function InspectorIntro() {
   return (
     <div>
       <InspGroup icon="👤" iconColor="var(--pb-accent)" title="Identity">
-        <InspField label="Name" value="Danilo Vanegas" />
-        <InspField label="Role" value="Engineer" />
-        <InspField label="Location" value="Colombia, UTC-5" />
+        <InspField label="Name"       value="Danilo Vanegas" />
+        <InspField label="Role"       value="Engineer" />
+        <InspField label="Location"   value="Colombia, UTC-5" />
         <InspField label="Experience" value="8+ years" accent />
       </InspGroup>
       <InspGroup icon="✉" iconColor="#0a66c2" title="Engagement">
-        <InspField label="Status" value="Available" accent />
-        <InspField label="Start" value="Q3 2026" />
-        <InspField label="Contact" value="vanegasdanilo7@gmail.com" />
+        <InspField label="Status"  value="Available" accent />
+        <InspField label="Start"   value="Q3 2026" />
+        <InspField label="Email"   value="vanegasdanilo7@…" copyValue="vanegasdanilo7@gmail.com" href="mailto:vanegasdanilo7@gmail.com" />
+        <InspField label="GitHub"  value="danilovanegas" href="https://github.com/danilovanegas" />
+        <InspField label="LinkedIn" value="danilovanegas" href="https://linkedin.com/in/danilovanegas" />
       </InspGroup>
       <InspGroup icon="◆" iconColor="#888" title="Transform" defaultOpen={false}>
         <InspField label="Position" value="(0, 0, 0)" />
         <InspField label="Rotation" value="(0, 0, 0)" />
-        <InspField label="Scale" value="(1, 1, 1)" />
+        <InspField label="Scale"    value="(1, 1, 1)" />
       </InspGroup>
     </div>
   );
@@ -328,12 +362,14 @@ function InspectorContact() {
   return (
     <div>
       <InspGroup icon="⏰" iconColor="var(--pb-accent)" title="Availability">
-        <InspField label="Status" value="Open" accent />
+        <InspField label="Status"     value="Open" accent />
         <InspField label="Start date" value="Q3 2026" />
       </InspGroup>
       <InspGroup icon="📞" iconColor="#0a66c2" title="Channels">
-        <InspField label="Email" value="Email preferred" />
-        <InspField label="Chat" value="LinkedIn/X" />
+        <InspField label="Email"    value="vanegasdanilo7@…" copyValue="vanegasdanilo7@gmail.com" href="mailto:vanegasdanilo7@gmail.com" />
+        <InspField label="GitHub"   value="danilovanegas"    href="https://github.com/danilovanegas" />
+        <InspField label="LinkedIn" value="danilovanegas"    href="https://linkedin.com/in/danilovanegas" />
+        <InspField label="X"        value="@danilovanegas"   href="https://x.com/danilovanegas" />
       </InspGroup>
       <InspGroup icon="🎯" iconColor="#10b981" title="Engagement Types">
         <InspField label="Roles" value="Full-time, contract" />
@@ -377,7 +413,16 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
   const [hSearch, setHSearch] = React.useState("");
   const [openMenu, setOpenMenu] = React.useState(null);
   const [transformTool, setTransformTool] = React.useState(1);
-  const [logs, setLogs] = React.useState([]);
+  const ts = () => new Date().toLocaleTimeString('en-US', { hour12: false });
+  const [logs, setLogs] = React.useState(() => [
+    { id: 'boot-1', type: 'ok',   msg: '> portfolio_main  Awake ()', timestamp: ts() },
+    { id: 'boot-2', type: 'info', msg: '> SceneManager    LoadScene("01_intro")', timestamp: ts() },
+    { id: 'boot-3', type: 'info', msg: '> API             Connecting to backend…', timestamp: ts() },
+  ]);
+
+  const shellEmit = React.useCallback((type, msg) => {
+    setLogs(prev => [...prev.slice(-48), { id: Math.random().toString(36).slice(2), type, msg, timestamp: ts() }]);
+  }, []);
 
   // Route mapping
   const routePath = location.pathname || '/';
@@ -411,6 +456,35 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
     "--pb-accent": accentLight, "--pb-grid": "rgba(0,0,0,.06)",
   };
 
+  // Log scene changes
+  React.useEffect(() => {
+    shellEmit('info', `> SceneManager    LoadScene("${
+      { intro:'01_intro', about:'02_about', projects:'03_projects',
+        experience:'04_trajectory', stack:'05_stack', contact:'06_contact', cv:'07_cv' }[scene] || scene
+    }")`);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene]);
+
+  // Log when API data arrives
+  React.useEffect(() => {
+    if (projects.length > 0) shellEmit('ok', `> API             ${projects.length} project prefabs loaded`);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projects.length]);
+
+  React.useEffect(() => {
+    if (experience.length > 0) shellEmit('ok', `> API             ${experience.length} timeline entries loaded`);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [experience.length]);
+
+  // Log play mode changes (skip initial mount)
+  const playMountedRef = React.useRef(false);
+  React.useEffect(() => {
+    if (!playMountedRef.current) { playMountedRef.current = true; return; }
+    if (playing) shellEmit('ok',   '> Application     EnterPlayMode()');
+    else         shellEmit('info', '> Application     ExitPlayMode()');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing]);
+
   // Menu logic
   React.useEffect(() => {
     if (openMenu === null) return;
@@ -426,8 +500,18 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         document.getElementById("pb-hier-search")?.focus();
+        return;
       }
-      if (e.key === "Escape") setOpenMenu(null);
+      if (e.key === "Escape") { setOpenMenu(null); return; }
+      // Space = toggle play (only when not typing in an input)
+      if (e.key === " " && !e.target.closest("input, button, textarea, [contenteditable]")) {
+        e.preventDefault();
+        setPlaying(p => {
+          if (!p) setSceneTab("Game");
+          else     setSceneTab("Scene");
+          return !p;
+        });
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -802,6 +886,30 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
             )}
 
             {sceneTab === "Profiler" && <ProfilerView />}
+
+            {/* Scene viewport HUD */}
+            {(sceneTab === "Scene" || sceneTab === "Game") && !playing && (
+              <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 4 }}>
+                <div style={{
+                  position: "absolute", top: 8, left: 10,
+                  fontFamily: "var(--pb-mono)", fontSize: 9, color: "var(--pb-dim)",
+                  letterSpacing: "0.07em", background: "var(--pb-bg)",
+                  padding: "2px 8px", border: "1px solid var(--pb-line)", opacity: 0.65,
+                }}>{sceneLabel}</div>
+                <div style={{
+                  position: "absolute", top: 8, right: 10,
+                  fontFamily: "var(--pb-mono)", fontSize: 9, color: "var(--pb-dim)", letterSpacing: "0.06em",
+                }}>{["Pan","Move","Rotate","Scale","Rect"][transformTool]} mode &nbsp;·&nbsp; SPACE to play</div>
+                <div style={{
+                  position: "absolute", bottom: 8, left: 10,
+                  fontFamily: "var(--pb-mono)", fontSize: 9, color: "var(--pb-dim)", opacity: 0.45, letterSpacing: "0.04em",
+                }}>X: 0.000 &nbsp; Y: 0.000 &nbsp; Z: 1.000</div>
+                <div style={{
+                  position: "absolute", bottom: 8, right: 10,
+                  fontFamily: "var(--pb-mono)", fontSize: 10, color: "var(--pb-dim)", opacity: 0.35,
+                }}>⊕</div>
+              </div>
+            )}
           </div>
 
           {/* Bottom dock */}
@@ -844,8 +952,12 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
                     <div style={{ color: "var(--pb-dim)", fontStyle: "italic" }}>No logs yet. Navigate to a scene.</div>
                   ) : (
                     logs.map((log, i) => (
-                      <div key={i} style={{ marginBottom: 4, color: log.type === 'error' ? '#ff6b6b' : log.type === 'ok' ? 'var(--pb-accent)' : 'inherit' }}>
-                        {log.message}
+                      <div key={log.id || i} style={{
+                        marginBottom: 3, display: "flex", gap: 10, alignItems: "baseline",
+                        color: log.type === 'error' ? '#ff6b6b' : log.type === 'ok' ? 'var(--pb-accent)' : 'inherit',
+                      }}>
+                        <span style={{ color: "var(--pb-line)", flexShrink: 0, fontSize: 9 }}>{log.timestamp}</span>
+                        <span>{log.msg || log.message}</span>
                       </div>
                     ))
                   )}
@@ -910,6 +1022,18 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
         <a href="https://github.com/danilovanegas" target="_blank" rel="noreferrer"
           style={{ color: "var(--pb-fg)", textDecoration: "none" }}>Unity 6 / Next 15 ↗</a>
       </div>
+
+      {/* ── Game View full-screen overlay ─────────────────────────────────── */}
+      <AnimatePresence>
+        {playing && (
+          <GameView
+            projects={projects}
+            experience={experience}
+            accent={dark ? accentDark : accentLight}
+            onExit={() => { setPlaying(false); setSceneTab("Scene"); }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

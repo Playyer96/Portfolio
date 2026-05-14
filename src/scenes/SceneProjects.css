@@ -371,6 +371,66 @@
   font-size: 14px;
 }
 
+/* ── Unity-style gizmo effects ────────────────────────────────────────────── */
+
+/* Floating object label */
+.project-card::before {
+  content: attr(data-name) ' · GameObject';
+  position: absolute;
+  top: -22px;
+  left: 0;
+  font-family: var(--pb-mono);
+  font-size: 9px;
+  letter-spacing: 0.07em;
+  color: var(--project-color);
+  background: var(--pb-panel);
+  border: 1px solid var(--project-color);
+  padding: 1px 7px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.18s;
+}
+.project-card:hover::before { opacity: 1; }
+
+/* Gizmo selection outline pulse */
+.project-card:hover .card-front::after,
+.project-card.gizmo-selected .card-front::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 1px solid var(--project-color);
+  pointer-events: none;
+  animation: gizmo-pulse 1.8s ease-in-out infinite;
+}
+
+.project-card.gizmo-selected .card-front::after {
+  inset: -4px;
+  border-width: 2px;
+  animation: none;
+  opacity: 0.6;
+}
+
+@keyframes gizmo-pulse {
+  0%, 100% { opacity: 0.18; }
+  50%       { opacity: 0.45; }
+}
+
+/* Corner handles (top-left + bottom-right) */
+.project-card:hover .card-front::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid var(--project-color);
+  border-left: 2px solid var(--project-color);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
 @media (max-width: 768px) {
   .projects-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

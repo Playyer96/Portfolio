@@ -157,7 +157,8 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
               (
                 <div
                   key={project.id}
-                  className="project-card"
+                  className={`project-card${selectedProject?.id === project.id ? ' gizmo-selected' : ''}`}
+                  data-name={project.name}
                   style={{
                     '--project-color': project.color || 'var(--pb-accent)',
                     '--card-delay': `${idx * 50}ms`,
