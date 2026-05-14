@@ -83,7 +83,7 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
                 className="detail-card"
                 style={{
                   transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`,
-                  background: `linear-gradient(135deg, ${selectedProject.color || '#a8ff60'}, ${selectedProject.color || '#a8ff60'}cc)`,
+                  '--project-color': selectedProject.color || 'var(--pb-accent)',
                 }}
               >
                 <div className="detail-card-grid" />

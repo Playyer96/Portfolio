@@ -166,7 +166,13 @@
   transform-style: preserve-3d;
   transition: transform 0.15s ease-out;
   border-radius: 6px;
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+  border: 1.5px solid var(--project-color, var(--pb-accent));
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.6),
+    0 0 0 1px color-mix(in srgb, var(--project-color, var(--pb-accent)) 30%, transparent),
+    0 0 40px color-mix(in srgb, var(--project-color, var(--pb-accent)) 12%, transparent);
+  background: color-mix(in srgb, var(--project-color, var(--pb-accent)) 6%, rgba(8, 10, 8, 0.32));
+  backdrop-filter: blur(10px);
   overflow: hidden;
   position: relative;
   display: flex;
@@ -191,34 +197,35 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid color-mix(in srgb, var(--project-color, var(--pb-accent)) 35%, transparent);
   flex-shrink: 0;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--project-color, var(--pb-accent));
   letter-spacing: 0.1em;
   font-weight: 500;
+  opacity: 0.9;
 }
 
 .detail-close-btn {
   width: 28px;
   height: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid color-mix(in srgb, var(--project-color, var(--pb-accent)) 40%, transparent);
+  background: color-mix(in srgb, var(--project-color, var(--pb-accent)) 10%, transparent);
+  color: var(--project-color, var(--pb-accent));
   cursor: pointer;
   border-radius: 4px;
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   padding: 0;
   line-height: 1;
 }
 
 .detail-close-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: color-mix(in srgb, var(--project-color, var(--pb-accent)) 25%, transparent);
   color: #fff;
 }
 
@@ -236,7 +243,7 @@
   flex-shrink: 0;
   position: relative;
   overflow: hidden;
-  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  border-right: 1px solid color-mix(in srgb, var(--project-color, var(--pb-accent)) 30%, transparent);
 }
 
 .carousel-img {
@@ -288,7 +295,7 @@
   transition: background 0.15s;
 }
 
-.carousel-dot.active { background: rgba(255, 255, 255, 0.9); }
+.carousel-dot.active { background: var(--project-color, var(--pb-accent)); }
 
 /* Text panel */
 .detail-content {
@@ -304,19 +311,19 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 36px;
   font-weight: 700;
-  color: #fff;
+  color: var(--project-color, var(--pb-fg));
   letter-spacing: -0.03em;
   line-height: 1.1;
   margin: 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .detail-tagline {
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--pb-fg);
   line-height: 1.6;
   margin: 0;
+  opacity: 0.8;
 }
 
 .detail-tags {
@@ -329,11 +336,11 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
   padding: 3px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid color-mix(in srgb, var(--project-color, var(--pb-accent)) 45%, transparent);
+  color: var(--project-color, var(--pb-accent));
   border-radius: 3px;
   letter-spacing: 0.06em;
-  background: rgba(0, 0, 0, 0.2);
+  background: color-mix(in srgb, var(--project-color, var(--pb-accent)) 10%, transparent);
 }
 
 .detail-responsibilities {
@@ -342,17 +349,17 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  padding-top: 12px;
+  gap: 10px;
+  border-top: 1px solid color-mix(in srgb, var(--project-color, var(--pb-accent)) 25%, transparent);
+  padding-top: 14px;
 }
 
 .detail-responsibilities li {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.5;
-  padding-left: 14px;
+  font-size: 12.5px;
+  color: var(--pb-fg);
+  line-height: 1.65;
+  padding-left: 16px;
   position: relative;
 }
 
@@ -360,7 +367,8 @@
   content: '›';
   position: absolute;
   left: 0;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--project-color, var(--pb-accent));
+  font-size: 14px;
 }
 
 @media (max-width: 768px) {
