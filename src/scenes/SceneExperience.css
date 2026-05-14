@@ -25,51 +25,6 @@
   margin-bottom: 60px;
 }
 
-.timeline-ruler {
-  margin-bottom: 80px;
-  padding: 0 20px;
-  background: var(--pb-panel);
-  border: 1px solid var(--pb-line);
-  border-radius: 4px;
-  position: relative;
-}
-
-.ruler-track {
-  position: relative;
-  height: 80px;
-  display: flex;
-  align-items: flex-end;
-}
-
-.ruler-tick {
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  width: 1px;
-}
-
-.tick-line {
-  position: absolute;
-  bottom: 10px;
-  width: 2px;
-  height: 24px;
-  background: var(--pb-accent);
-  border-radius: 1px;
-}
-
-.tick-label {
-  position: absolute;
-  bottom: -28px;
-  font-size: 11px;
-  color: var(--pb-dim);
-  font-weight: 600;
-  white-space: nowrap;
-  transform: translateX(-50%);
-  margin-left: 50%;
-}
 
 .timeline {
   position: relative;
@@ -121,51 +76,6 @@
   }
 }
 
-.timeline-bar {
-  position: absolute;
-  top: 0;
-  height: 40px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  z-index: 2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  opacity: 0.7;
-}
-
-.timeline-bar:hover {
-  opacity: 1;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.timeline-item.selected .timeline-bar {
-  opacity: 1;
-  box-shadow: 0 6px 16px rgba(168, 255, 96, 0.3);
-}
-
-.bar-label {
-  font-size: 10px;
-  color: #000;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-}
-
-.label-title {
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-
-.label-role {
-  font-size: 9px;
-  opacity: 0.8;
-}
 
 .timeline-card {
   margin-left: 0;
@@ -300,14 +210,6 @@
 @media (max-width: 768px) {
   .scene-content {
     max-width: 100%;
-  }
-
-  .timeline-ruler {
-    margin-bottom: 60px;
-  }
-
-  .ruler-tick {
-    flex-basis: 20%;
   }
 
   .timeline-card {

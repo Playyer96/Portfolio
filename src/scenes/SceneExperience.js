@@ -56,40 +56,14 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
     setSelectedExperience(item);
   };
 
-  const minYear = items.length > 0 ? Math.min(...items.map(i => i.startYear)) : 2017;
-  const maxYear = items.length > 0 ? Math.max(...items.map(i => i.endYear)) : 2026;
-  const yearRange = maxYear - minYear;
-  const years = Array.from({ length: yearRange + 1 }, (_, i) => minYear + i);
-
   return (
     <div className="scene-experience">
       <GridBackground />
       <div className="scene-content">
         <h1 className="section-heading">Experience</h1>
 
-        <div className="timeline-ruler">
-          <div className="ruler-track">
-            {years.map(year => {
-              const position = ((year - minYear) / yearRange) * 100;
-              return (
-                <div
-                  key={year}
-                  className="ruler-tick"
-                  style={{ left: `${position}%` }}
-                >
-                  <div className="tick-line" />
-                  <div className="tick-label">{year}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
         <div className="timeline">
           {items.map((item, idx) => {
-            const startPos = ((item.startYear - minYear) / yearRange) * 100;
-            const endPos = ((item.endYear - minYear) / yearRange) * 100;
-            const width = endPos - startPos;
             const colors = [
               'var(--pb-accent)',
               '#10b981',
@@ -111,22 +85,7 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
                 data-id={item.id}
                 ref={el => (itemRefs.current[item.id] = el)}
               >
-                <button
-                  className="timeline-bar"
-                  onClick={() => handleSelectItem(item)}
-                  style={{
-                    left: `${startPos}%`,
-                    width: `${width}%`,
-                    backgroundColor: color,
-                  }}
-                >
-                  <div className="bar-label">
-                    <div className="label-title">{item.company}</div>
-                    <div className="label-role">{item.role}</div>
-                  </div>
-                </button>
-
-                <div className="timeline-card">
+                <div className="timeline-card" onClick={() => handleSelectItem(item)}>
                   <div className="card-header" style={{ borderLeftColor: color }}>
                     <h3 className="card-title">{item.company}</h3>
                     <span className={`card-type ${item.type.toLowerCase()}`}>
