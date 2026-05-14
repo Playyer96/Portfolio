@@ -174,18 +174,16 @@ export const fetchApp         = (slug) =>
 
 // ── Auth ─────────────────────────────────────────────────────────────────────
 export const login = async (email, password) => {
-  try {
-    const res = await fetch(`${baseUrl()}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) throw new Error('Login failed');
-    return await res.json();
-  } catch (err) {
-    console.error('Login error:', err);
-    return null;
+  const res = await fetch(`${baseUrl()}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || `Login failed (${res.status})`);
   }
+  return await res.json();
 };
 
 export const authFetch = async (endpoint, options = {}) => {
