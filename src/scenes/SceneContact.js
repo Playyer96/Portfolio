@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import './SceneContact.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
+import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { FiDownload, FiCopy, FiCheck } from 'react-icons/fi';
 
 const SceneContact = () => {
@@ -47,9 +46,9 @@ const SceneContact = () => {
   };
 
   const socials = [
-    { name: 'GitHub',      url: 'https://github.com/danivanegas',         icon: <FaGithub />,   color: 'var(--pb-fg)' },
-    { name: 'LinkedIn',    url: 'https://linkedin.com/in/danilo-vanegas', icon: <FaLinkedin />, color: '#0a66c2' },
-    { name: 'X',           url: 'https://x.com/danivanegas',              icon: <FaXTwitter />, color: 'var(--pb-fg)' },
+    { name: 'GitHub',      url: 'https://github.com/Playyer96',        icon: <FaGithub />,    color: 'var(--pb-fg)' },
+    { name: 'LinkedIn',    url: 'https://linkedin.com/in/danisvs',      icon: <FaLinkedin />,  color: '#0a66c2' },
+    { name: 'Instagram',   url: 'https://instagram.com/_dani.svs',      icon: <FaInstagram />, color: '#e1306c' },
     { name: 'CV',          url: '/CV-Danilo-Vanegas-2025.pdf',            icon: <FiDownload />, color: 'var(--pb-accent)', download: true },
   ];
 

@@ -337,9 +337,9 @@ const ContactSection = ({ accent }) => (
     <div className="gv-contact-links">
       {[
         { label: 'Email',    href: 'mailto:vanegasdanilo7@gmail.com', text: 'vanegasdanilo7@gmail.com' },
-        { label: 'GitHub',   href: 'https://github.com/danilovanegas',     text: 'github.com/danilovanegas'   },
-        { label: 'LinkedIn', href: 'https://linkedin.com/in/danilovanegas', text: 'linkedin.com/in/danilovanegas' },
-        { label: 'X',        href: 'https://x.com/danilovanegas',          text: 'x.com/danilovanegas'       },
+        { label: 'GitHub',    href: 'https://github.com/Playyer96',       text: 'github.com/Playyer96'       },
+        { label: 'LinkedIn',  href: 'https://linkedin.com/in/danisvs',    text: 'linkedin.com/in/danisvs'    },
+        { label: 'Instagram', href: 'https://instagram.com/_dani.svs',    text: 'instagram.com/_dani.svs'    },
       ].map((link, i) => (
         <motion.a
           key={link.label}

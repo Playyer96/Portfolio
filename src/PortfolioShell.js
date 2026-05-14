@@ -258,8 +258,9 @@ function InspectorIntro() {
         <InspField label="Status"  value="Available Now" accent />
         <InspField label="Start"   value="Immediately" />
         <InspField label="Email"   value="vanegasdanilo7@…" copyValue="vanegasdanilo7@gmail.com" href="mailto:vanegasdanilo7@gmail.com" />
-        <InspField label="GitHub"  value="danilovanegas" href="https://github.com/danilovanegas" />
-        <InspField label="LinkedIn" value="danilovanegas" href="https://linkedin.com/in/danilovanegas" />
+        <InspField label="GitHub"    value="Playyer96" href="https://github.com/Playyer96" />
+        <InspField label="LinkedIn"  value="danisvs"   href="https://linkedin.com/in/danisvs" />
+        <InspField label="Instagram" value="_dani.svs" href="https://instagram.com/_dani.svs" />
       </InspGroup>
       <InspGroup icon="◆" iconColor="#888" title="Transform" defaultOpen={false}>
         <InspField label="Position" value="(0, 0, 0)" />
@@ -532,9 +533,9 @@ function InspectorContact() {
       </InspGroup>
       <InspGroup icon="~" iconColor="#0a66c2" title="Channels">
         <InspField label="Email"    value="vanegasdanilo7@…" copyValue="vanegasdanilo7@gmail.com" href="mailto:vanegasdanilo7@gmail.com" />
-        <InspField label="GitHub"   value="danilovanegas"    href="https://github.com/danilovanegas" />
-        <InspField label="LinkedIn" value="danilovanegas"    href="https://linkedin.com/in/danilovanegas" />
-        <InspField label="X"        value="@danilovanegas"   href="https://x.com/danilovanegas" />
+        <InspField label="GitHub"    value="Playyer96"   href="https://github.com/Playyer96" />
+        <InspField label="LinkedIn"  value="danisvs"     href="https://linkedin.com/in/danisvs" />
+        <InspField label="Instagram" value="_dani.svs"   href="https://instagram.com/_dani.svs" />
       </InspGroup>
       <InspGroup icon="◎" iconColor="#10b981" title="Engagement Types">
         <InspField label="Roles" value="Full-time, contract" />
@@ -745,9 +746,9 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
               { l: "Console",  a: () => setBottomTab("console") },
             ]},
             { l: "Help", items: [
-              { l: "GitHub ↗",   a: () => window.open("https://github.com/danilovanegas", "_blank") },
-              { l: "LinkedIn ↗", a: () => window.open("https://linkedin.com/in/danilovanegas", "_blank") },
-              { l: "X ↗",        a: () => window.open("https://x.com/danilovanegas", "_blank") },
+              { l: "GitHub ↗",    a: () => window.open("https://github.com/Playyer96", "_blank") },
+              { l: "LinkedIn ↗",  a: () => window.open("https://linkedin.com/in/danisvs", "_blank") },
+              { l: "Instagram ↗", a: () => window.open("https://instagram.com/_dani.svs", "_blank") },
             ]},
           ].map((m, idx) => (
             <div key={m.l} style={{ position: "relative" }}>
@@ -1168,7 +1169,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
         </span>
         <span style={{ marginLeft: "auto", color: "var(--pb-dim)" }}>render: {renderMode}</span>
         <span style={{ color: "var(--pb-dim)" }}>· main · 0 conflicts</span>
-        <a href="https://github.com/danilovanegas" target="_blank" rel="noreferrer"
+        <a href="https://github.com/Playyer96" target="_blank" rel="noreferrer"
           style={{ color: "var(--pb-fg)", textDecoration: "none" }}>Unity 6 / Next 15 ↗</a>
       </div>
 
