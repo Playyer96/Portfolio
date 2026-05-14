@@ -3,6 +3,7 @@ import './SceneAbout.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
 import { fetchProjects, fetchExperience, fetchTechnologies } from '../data/api';
+import { FiGlobe, FiZap, FiTool, FiRefreshCw, FiBarChart2 } from 'react-icons/fi';
 
 const SceneAbout = () => {
   const [stats, setStats] = useState({ projects: 0, years: 0, tech: 0 });
@@ -79,29 +80,29 @@ const SceneAbout = () => {
             <div className="stat-label">Technologies</div>
           </div>
           <div className="stat-card">
-            <div className="stat-big">🌎</div>
+            <div className="stat-big"><FiGlobe /></div>
             <div className="stat-label">Colombia, UTC-5</div>
           </div>
         </div>
 
         <div className="values-grid">
           <div className="value-card">
-            <div className="value-icon">⚡</div>
+            <div className="value-icon"><FiZap /></div>
             <div className="value-title">Ship</div>
             <div className="value-desc">Bias toward shipping. Working code beats perfect plans.</div>
           </div>
           <div className="value-card">
-            <div className="value-icon">🛠</div>
+            <div className="value-icon"><FiTool /></div>
             <div className="value-title">Tools</div>
             <div className="value-desc">Build abstractions that multiply team productivity.</div>
           </div>
           <div className="value-card">
-            <div className="value-icon">🔄</div>
+            <div className="value-icon"><FiRefreshCw /></div>
             <div className="value-title">Cross-discipline</div>
             <div className="value-desc">Collaborate across domains. Best solutions emerge at boundaries.</div>
           </div>
           <div className="value-card">
-            <div className="value-icon">📊</div>
+            <div className="value-icon"><FiBarChart2 /></div>
             <div className="value-title">Performance</div>
             <div className="value-desc">Measure impact. Optimize ruthlessly. Details compound.</div>
           </div>

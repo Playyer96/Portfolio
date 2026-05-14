@@ -12,13 +12,13 @@ export const displayConsoleArt = () => {
       '\n' +
       '╔════════════════════════════════════════════════════════════╗\n' +
       '║                                                            ║\n' +
-      '║     👋  Welcome to my portfolio!                          ║\n' +
+      '║     o/  Welcome to my portfolio!                          ║\n' +
       '║                                                            ║\n' +
       '║     Built with React 19 + TypeScript                      ║\n' +
       '║     Animations powered by Framer Motion                   ║\n' +
       '║     Deployed on Vercel                                    ║\n' +
       '║                                                            ║\n' +
-      '║     🚀  Check out the code on GitHub                      ║\n' +
+      '║     >>  Check out the code on GitHub                      ║\n' +
       '║                                                            ║\n' +
       '╚════════════════════════════════════════════════════════════╝\n',
     'color: #00ff88; font-family: monospace; font-size: 12px; line-height: 1.5;'
@@ -26,19 +26,19 @@ export const displayConsoleArt = () => {
 
   // Role Title
   console.log(
-    '%c🎮 Game Developer | Software Engineer',
+    '%c[>] Game Developer | Software Engineer',
     'font-size: 20px; font-weight: bold; color: #00ff88; text-shadow: 0 0 10px #00ff88;'
   );
 
   // Curious Developer Message
   console.log(
-    '%c🔍 Curious developer? I like you!',
+    '%c[?] Curious developer? I like you!',
     'font-size: 16px; color: #00d9ff; font-weight: bold;'
   );
 
   // Tech Stack
   console.log(
-    '%c\n📚 Tech Stack:',
+    '%c\n[+] Tech Stack:',
     'font-size: 14px; color: #ff00ff; font-weight: bold;'
   );
   console.log(
@@ -48,7 +48,7 @@ export const displayConsoleArt = () => {
 
   // Fun Fact
   console.log(
-    '%c\n💡 Fun Fact:',
+    '%c\n[!] Fun Fact:',
     'font-size: 14px; color: #ff00ff; font-weight: bold;'
   );
   console.log(
@@ -58,7 +58,7 @@ export const displayConsoleArt = () => {
 
   // Contact Info
   console.log(
-    '%c\n📬 Want to work together?',
+    '%c\n[@] Want to work together?',
     'font-size: 14px; color: #ff00ff; font-weight: bold;'
   );
   console.log(
@@ -68,7 +68,7 @@ export const displayConsoleArt = () => {
 
   // Easter Egg Hint
   console.log(
-    '%c🎁 Psst... Try the Konami Code: ↑↑↓↓←→←→BA',
+    '%c[*] Psst... Try the Konami Code: ^^vv<><>BA',
     'font-size: 11px; color: #6b7b8c; font-style: italic;'
   );
 };

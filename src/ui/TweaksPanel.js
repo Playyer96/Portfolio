@@ -20,7 +20,7 @@ const TweaksPanel = () => {
           className={`tweaks-btn ${theme === 'dark' ? 'active' : ''}`}
           onClick={toggleTheme}
         >
-          {theme === 'dark' ? '◐ Dark' : '☀ Light'}
+          {theme === 'dark' ? '◐ Dark' : '○ Light'}
         </button>
       </div>
 

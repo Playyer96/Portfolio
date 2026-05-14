@@ -68,7 +68,7 @@ const SceneCV = () => {
               onMouseMove={handleMagneticButton}
               onMouseLeave={handleMagneticLeave}
             >
-              ⬇ Download CV
+              ↓ Download CV
             </button>
           </div>
 

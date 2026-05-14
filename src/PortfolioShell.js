@@ -248,13 +248,13 @@ function BottomAssets({ projects, navigate, setSelectedProject }) {
 function InspectorIntro() {
   return (
     <div>
-      <InspGroup icon="👤" iconColor="var(--pb-accent)" title="Identity">
+      <InspGroup icon="i" iconColor="var(--pb-accent)" title="Identity">
         <InspField label="Name"       value="Danilo Vanegas" />
         <InspField label="Role"       value="Engineer" />
         <InspField label="Location"   value="Colombia, UTC-5" />
         <InspField label="Experience" value="8+ years" accent />
       </InspGroup>
-      <InspGroup icon="✉" iconColor="#0a66c2" title="Engagement">
+      <InspGroup icon="@" iconColor="#0a66c2" title="Engagement">
         <InspField label="Status"  value="Available Now" accent />
         <InspField label="Start"   value="Immediately" />
         <InspField label="Email"   value="vanegasdanilo7@…" copyValue="vanegasdanilo7@gmail.com" href="mailto:vanegasdanilo7@gmail.com" />
@@ -273,13 +273,13 @@ function InspectorIntro() {
 function InspectorAbout() {
   return (
     <div>
-      <InspGroup icon="📖" iconColor="var(--pb-accent)" title="Document">
+      <InspGroup icon="§" iconColor="var(--pb-accent)" title="Document">
         <InspField label="Content" value="Full bio on /about" />
       </InspGroup>
-      <InspGroup icon="🎓" iconColor="#f59e0b" title="Education">
+      <InspGroup icon="^" iconColor="#f59e0b" title="Education">
         <InspField label="Focus" value="CS, interactive systems" />
       </InspGroup>
-      <InspGroup icon="💼" iconColor="#10b981" title="Working At">
+      <InspGroup icon="#" iconColor="#10b981" title="Working At">
         <InspField label="Last" value="See /experience" />
       </InspGroup>
     </div>
@@ -293,12 +293,12 @@ function InspectorProject({ project }) {
         <InspField label="ID" value={project.id || 'N/A'} />
         <InspField label="Year" value={project.year || 'N/A'} />
       </InspGroup>
-      <InspGroup icon="📝" iconColor="var(--pb-accent)" title="Highlights">
+      <InspGroup icon="*" iconColor="var(--pb-accent)" title="Highlights">
         <div style={{ padding: "8px 10px", fontSize: 10, color: "var(--pb-fg)", lineHeight: 1.5 }}>
           {project.summary || project.description || 'No description'}
         </div>
       </InspGroup>
-      <InspGroup icon="⚙" iconColor="#06b6d4" title="Stack">
+      <InspGroup icon="%" iconColor="#06b6d4" title="Stack">
         <div style={{ padding: "8px 10px", display: "flex", flexWrap: "wrap", gap: 6 }}>
           {(project.technologies || []).map((t, i) => (
             <span key={i} style={{
@@ -318,7 +318,7 @@ function InspectorProject({ project }) {
 function InspectorExperience({ experience }) {
   return (
     <div>
-      <InspGroup icon="📈" iconColor="var(--pb-accent)" title={`Timeline · ${experience.length} roles`}>
+      <InspGroup icon="↑" iconColor="var(--pb-accent)" title={`Timeline · ${experience.length} roles`}>
         <InspField label="Span" value={`${experience.length} positions`} />
       </InspGroup>
       {experience.map((e, i) => (
@@ -335,23 +335,23 @@ function InspectorExperience({ experience }) {
 function InspectorStack() {
   return (
     <div>
-      <InspGroup icon="📊" iconColor="var(--pb-accent)" title="Graph Statistics">
+      <InspGroup icon="≡" iconColor="var(--pb-accent)" title="Graph Statistics">
         <InspField label="Categories" value="5" />
         <InspField label="Total items" value="40+" accent />
       </InspGroup>
-      <InspGroup icon="⚡" iconColor="#3b82f6" title="Engines" defaultOpen={false}>
+      <InspGroup icon="!" iconColor="#3b82f6" title="Engines" defaultOpen={false}>
         <InspField label="Count" value="3" />
       </InspGroup>
-      <InspGroup icon="🔤" iconColor="#f59e0b" title="Languages" defaultOpen={false}>
+      <InspGroup icon="Λ" iconColor="#f59e0b" title="Languages" defaultOpen={false}>
         <InspField label="Count" value="7" />
       </InspGroup>
-      <InspGroup icon="🌐" iconColor="#10b981" title="Web" defaultOpen={false}>
+      <InspGroup icon="⊕" iconColor="#10b981" title="Web" defaultOpen={false}>
         <InspField label="Count" value="8" />
       </InspGroup>
-      <InspGroup icon="🎮" iconColor="#8b5cf6" title="XR/3D" defaultOpen={false}>
+      <InspGroup icon="△" iconColor="#8b5cf6" title="XR/3D" defaultOpen={false}>
         <InspField label="Count" value="8" />
       </InspGroup>
-      <InspGroup icon="🛠" iconColor="#ec4899" title="Tools" defaultOpen={false}>
+      <InspGroup icon="+" iconColor="#ec4899" title="Tools" defaultOpen={false}>
         <InspField label="Count" value="12+" />
       </InspGroup>
     </div>
@@ -361,17 +361,17 @@ function InspectorStack() {
 function InspectorContact() {
   return (
     <div>
-      <InspGroup icon="⏰" iconColor="var(--pb-accent)" title="Availability">
+      <InspGroup icon="○" iconColor="var(--pb-accent)" title="Availability">
         <InspField label="Status"     value="Open" accent />
         <InspField label="Start date" value="Immediately" />
       </InspGroup>
-      <InspGroup icon="📞" iconColor="#0a66c2" title="Channels">
+      <InspGroup icon="~" iconColor="#0a66c2" title="Channels">
         <InspField label="Email"    value="vanegasdanilo7@…" copyValue="vanegasdanilo7@gmail.com" href="mailto:vanegasdanilo7@gmail.com" />
         <InspField label="GitHub"   value="danilovanegas"    href="https://github.com/danilovanegas" />
         <InspField label="LinkedIn" value="danilovanegas"    href="https://linkedin.com/in/danilovanegas" />
         <InspField label="X"        value="@danilovanegas"   href="https://x.com/danilovanegas" />
       </InspGroup>
-      <InspGroup icon="🎯" iconColor="#10b981" title="Engagement Types">
+      <InspGroup icon="◎" iconColor="#10b981" title="Engagement Types">
         <InspField label="Roles" value="Full-time, contract" />
         <InspField label="Focus" value="Real problems" />
       </InspGroup>
@@ -382,7 +382,7 @@ function InspectorContact() {
 function InspectorCV() {
   return (
     <div>
-      <InspGroup icon="📄" iconColor="var(--pb-accent)" title="CV · 2025">
+      <InspGroup icon="≡" iconColor="var(--pb-accent)" title="CV · 2025">
         <InspField label="Format" value="PDF" />
         <InspField label="Pages" value="1" />
         <InspField label="Size" value="240 KB" />
@@ -653,7 +653,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
                         fontFamily: "var(--pb-mono)", textAlign: "left",
                       }}
                     >
-                      {theme === "dark" ? "◐ Dark" : "☀ Light"}
+                      {theme === "dark" ? "◐ Dark" : "○ Light"}
                     </button>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -722,7 +722,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
           style={{
             padding: "4px 10px", background: "transparent", color: "var(--pb-fg)",
             border: "1px solid var(--pb-line)", cursor: "pointer", fontFamily: "var(--pb-mono)", fontSize: 11,
-          }}>⏸</button>
+          }}>||</button>
         <button
           onClick={() => {
             const order = ["intro","about","projects","experience","stack","contact","cv"];
@@ -733,7 +733,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
           style={{
             padding: "4px 10px", background: "transparent", color: "var(--pb-fg)",
             border: "1px solid var(--pb-line)", cursor: "pointer", fontFamily: "var(--pb-mono)", fontSize: 11,
-          }}>⏭</button>
+          }}>›</button>
         <div style={{ flex: 1 }} />
         <span style={{ color: "var(--pb-dim)", fontSize: 10 }}>scene</span>
         <span style={{ color: "var(--pb-fg)", padding: "2px 10px", background: "var(--pb-line)", fontSize: 11 }}>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { FiAlertTriangle } from 'react-icons/fi';
 import './ErrorBoundary.scss';
 
 /**
@@ -33,7 +34,7 @@ const ErrorFallback = ({ error, errorInfo, resetError }) => {
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
           >
-            ⚠️
+            <FiAlertTriangle size={32} />
           </motion.div>
 
           {/* Error Title */}

@@ -3,6 +3,7 @@ import './SceneExperience.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
 import { fetchExperience as fetchExperienceFromApi } from '../data/api';
+import { FiMapPin } from 'react-icons/fi';
 
 const SceneExperience = ({ selectedExperience = null, setSelectedExperience = () => {} }) => {
   const [items, setItems] = useState([]);
@@ -21,7 +22,7 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
         if (data.length > 0) {
           emit('ok', `✓ Loaded ${data.length} experience items from API`);
         } else {
-          emit('warn', '⚠ No experience items returned from API');
+          emit('warn', '! No experience items returned from API');
         }
       } catch (err) {
         emit('error', `✗ Failed to load experience: ${err.message}`);
@@ -136,7 +137,7 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
                     <p className="card-role">{item.role}</p>
                     <div className="card-meta">
                       <span className="card-period">{item.period}</span>
-                      <span className="card-location">📍 {item.location}</span>
+                      <span className="card-location"><FiMapPin size={10} style={{marginRight: 3, verticalAlign: 'middle'}} />{item.location}</span>
                     </div>
                   </div>
                   {item.highlights && item.highlights.length > 0 && (

@@ -46,7 +46,7 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
         if (data.length > 0) {
           emit('ok', `✓ Loaded ${data.length} projects from API`);
         } else {
-          emit('warn', '⚠ No projects returned from API');
+          emit('warn', '! No projects returned from API');
         }
       } catch (err) {
         emit('error', `✗ Failed to load projects: ${err.message}`);
