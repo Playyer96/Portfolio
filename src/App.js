@@ -12,6 +12,7 @@ import SceneCV from './scenes/SceneCV';
 import SceneStack from './scenes/SceneStack';
 import SceneContact from './scenes/SceneContact';
 import Dashboard from './dashboard/Dashboard';
+import ResetPassword from './dashboard/ResetPassword';
 import { fetchAbout, fetchProjects, fetchExperience, fetchTechnologies } from './data/api';
 import CustomCursor from './components/CustomCursor';
 
@@ -74,6 +75,7 @@ const App = () => (
     <CustomCursor />
     <Routes>
       <Route path="/dashboard/*" element={<Dashboard />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="*" element={<AppContent />} />
     </Routes>
     <Analytics />

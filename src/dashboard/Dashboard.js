@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiLogOut, FiSettings, FiFileText, FiPackage, FiSmartphone, FiGrid, FiHome, FiCpu } from 'react-icons/fi';
 import { login, authFetch } from '../data/api';
@@ -31,6 +32,7 @@ function LoginScreen({ onLogin }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,6 +72,10 @@ function LoginScreen({ onLogin }) {
             color: '#fff', cursor: loading ? 'wait' : 'pointer', opacity: loading ? 0.7 : 1,
           }}
         >{loading ? 'Signing in...' : 'Sign In'}</button>
+        <button type="button" onClick={() => navigate('/reset-password')}
+          style={{ background: 'none', border: 'none', color: '#555', fontSize: 12, cursor: 'pointer', textAlign: 'left', padding: 0 }}>
+          Forgot password?
+        </button>
       </form>
     </div>
   );
