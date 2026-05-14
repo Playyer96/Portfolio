@@ -3,24 +3,23 @@ import './SceneCV.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
 
-const SceneCV = () => {
+const SceneCV = ({ about = null }) => {
   const downloadBtnRef = useRef(null);
   const [pdfLoaded, setPdfLoaded] = useState(false);
   const { emit } = useConsoleLog();
+  const cvPath = about?.cv?.path || '/CV-Danilo-Vanegas-2025.pdf';
+  const cvName = cvPath.split('/').pop() || 'CV.pdf';
 
   useEffect(() => {
     emit('info', '> Scene loaded: Resume');
     emit('info', '> Loading CV document...');
-
-    setTimeout(() => {
-      emit('ok', '✓ CV ready for download');
-    }, 300);
+    setTimeout(() => emit('ok', '✓ CV ready for download'), 300);
   }, [emit]);
 
   const handleDownload = () => {
     const link = document.createElement('a');
-    link.href = '/CV-Danilo-Vanegas-2025.pdf';
-    link.download = 'CV-Danilo-Vanegas-2025.pdf';
+    link.href     = cvPath;
+    link.download = cvName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -56,9 +55,9 @@ const SceneCV = () => {
           <div className="cv-preview" style={{ position: 'relative' }}>
             {!pdfLoaded && <div className="cv-pdf-skeleton pb-shimmer" />}
             <iframe
-              src="/CV-Danilo-Vanegas-2025.pdf"
+              src={cvPath}
               className="pdf-viewer"
-              title="CV-Danilo-Vanegas-2025.pdf"
+              title={cvName}
               style={{ opacity: pdfLoaded ? 1 : 0, transition: 'opacity 0.5s ease' }}
               onLoad={() => setPdfLoaded(true)}
             />
@@ -89,11 +88,11 @@ const SceneCV = () => {
               </div>
               <div className="info-item">
                 <label>Pages</label>
-                <value>1</value>
+                <value>{about?.cv?.pages || '1'}</value>
               </div>
               <div className="info-item">
-                <label>Updated</label>
-                <value>May 2025</value>
+                <label>Year</label>
+                <value>{about?.cv?.year || '2025'}</value>
               </div>
             </div>
           </div>

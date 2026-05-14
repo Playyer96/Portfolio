@@ -9,13 +9,13 @@ const SECTIONS = [
   { id: 'contact',  label: '03 / CONTACT' },
 ];
 
-const STACK_CATEGORIES = [
-  { cat: 'Engines',   color: '#3b82f6', items: ['Unity',    'Unreal Engine', 'Custom (OpenGL/Vulkan)'] },
-  { cat: 'Languages', color: '#f59e0b', items: ['C#',       'C++',           'TypeScript', 'JavaScript', 'Python'] },
-  { cat: 'Web',       color: '#10b981', items: ['React',    'Next.js',       'Three.js',   'WebGL',      'Node.js'] },
-  { cat: 'XR / 3D',  color: '#8b5cf6', items: ['OpenXR',   'VR Platforms',  'AR Foundation', 'visionOS'] },
-  { cat: 'Tools',     color: '#ec4899', items: ['Git',      'Docker',        'AWS',        'CI/CD',      'Vercel'] },
-];
+const CATEGORY_COLORS = {
+  engines: '#3b82f6',
+  languages: '#f59e0b',
+  web: '#10b981',
+  xr3d: '#8b5cf6',
+  tools: '#ec4899',
+};
 
 // ─── Boot screen ────────────────────────────────────────────────────────────
 const BootScreen = ({ accent }) => (
@@ -49,9 +49,13 @@ const BootScreen = ({ accent }) => (
 );
 
 // ─── Hero ────────────────────────────────────────────────────────────────────
-const HeroSection = ({ accent, projects }) => {
+const HeroSection = ({ accent, projects, about }) => {
   const projectCount = projects.length || 8;
-  const yearsActive  = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const careerStart = about?.careerStartDate || '2019-03-01';
+  const yearsActive  = Math.floor((Date.now() - new Date(careerStart).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const heroName = (about?.heroText || about?.name || 'Danilo Vanegas').split(' ');
+  const nameLine1 = heroName[0] || 'DANILO';
+  const nameLine2 = heroName.slice(1).join(' ') || 'VANEGAS';
 
   return (
     <motion.div
@@ -70,7 +74,7 @@ const HeroSection = ({ accent, projects }) => {
           transition={{ delay: 0.1 }}
         >
           <span className="gv-pulse-dot" style={{ background: accent }} />
-          Software Engineer · Game Developer · Creative Coder
+          {about?.title || 'Software Engineer & Creative Developer'}
         </motion.div>
 
         <motion.h1
@@ -79,7 +83,7 @@ const HeroSection = ({ accent, projects }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.18, duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          DANILO<br />VANEGAS
+          {nameLine1}<br />{nameLine2}
         </motion.h1>
 
         <motion.div
@@ -112,9 +116,9 @@ const HeroSection = ({ accent, projects }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.75 }}
         >
-          <a href="/projects"                        className="gv-cta gv-cta-primary"   style={{ '--ca': accent }}>View Projects</a>
-          <a href="mailto:vanegasdanilo7@gmail.com"  className="gv-cta gv-cta-secondary">Contact</a>
-          <a href="/CV-Danilo-Vanegas-2025.pdf" download className="gv-cta gv-cta-ghost">Download CV</a>
+          <a href="/projects" className="gv-cta gv-cta-primary" style={{ '--ca': accent }}>View Projects</a>
+          <a href={`mailto:${about?.email || 'vanegasdanilo7@gmail.com'}`} className="gv-cta gv-cta-secondary">Contact</a>
+          <a href={about?.cv?.path || '/CV-Danilo-Vanegas-2025.pdf'} download className="gv-cta gv-cta-ghost">Download CV</a>
         </motion.div>
 
         <motion.div
@@ -124,7 +128,7 @@ const HeroSection = ({ accent, projects }) => {
           transition={{ delay: 0.9 }}
         >
           <span className="gv-pulse-dot gv-pulse-sm" style={{ background: accent }} />
-          Available for hire · Now · Colombia (UTC-5)
+          {about?.availability || 'Available for hire'} · {about?.availabilityStart || 'Now'} · {about?.location?.split(',').slice(-2).join(',').trim() || 'Colombia (UTC-5)'}
         </motion.div>
       </div>
 
@@ -259,121 +263,149 @@ const ProjectsSection = ({ accent, projects }) => {
 };
 
 // ─── Stack ────────────────────────────────────────────────────────────────────
-const StackSection = ({ accent }) => (
-  <motion.div
-    key="stack"
-    className="gv-section gv-stack"
-    initial={{ opacity: 0, y: 16 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -16 }}
-    transition={{ duration: 0.4 }}
-  >
-    <div className="gv-sec-head">
-      <div className="gv-sec-label">02 / TECHNOLOGY STACK</div>
-      <div className="gv-sec-count">40+ technologies · 5 domains</div>
-    </div>
-    <div className="gv-stack-grid">
-      {STACK_CATEGORIES.map((cat, ci) => (
-        <motion.div
-          key={cat.cat}
-          className="gv-stack-cat"
-          style={{ '--cc': cat.color }}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: ci * 0.07 }}
-        >
-          <div className="gv-cat-head">
-            <div className="gv-cat-dot" />
-            <div className="gv-cat-name">{cat.cat.toUpperCase()}</div>
-          </div>
-          <div className="gv-cat-items">
-            {cat.items.map((item, ii) => (
-              <motion.div
-                key={ii}
-                className="gv-cat-item"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: ci * 0.07 + ii * 0.045 }}
-              >
-                {item}
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  </motion.div>
-);
+const StackSection = ({ accent, technologies }) => {
+  const groups = (technologies || []).reduce((acc, t) => {
+    const cat = t.category || 'tools';
+    if (!acc[cat]) acc[cat] = { name: cat, items: [] };
+    acc[cat].items.push(t.name);
+    return acc;
+  }, {});
+
+  const catLabels = { engines: 'Engines', languages: 'Languages', web: 'Web', xr3d: 'XR / 3D', tools: 'Tools' };
+  const categoryList = Object.entries(groups).map(([key, val]) => ({
+    cat: catLabels[key] || key,
+    color: CATEGORY_COLORS[key] || '#888',
+    items: val.items,
+  }));
+  const totalTechs = (technologies || []).length;
+  const domainCount = categoryList.length;
+
+  return (
+    <motion.div
+      key="stack"
+      className="gv-section gv-stack"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -16 }}
+      transition={{ duration: 0.4 }}
+    >
+      <div className="gv-sec-head">
+        <div className="gv-sec-label">02 / TECHNOLOGY STACK</div>
+        <div className="gv-sec-count">{totalTechs}+ technologies · {domainCount} domains</div>
+      </div>
+      <div className="gv-stack-grid">
+        {categoryList.map((cat, ci) => (
+          <motion.div
+            key={cat.cat}
+            className="gv-stack-cat"
+            style={{ '--cc': cat.color }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: ci * 0.07 }}
+          >
+            <div className="gv-cat-head">
+              <div className="gv-cat-dot" />
+              <div className="gv-cat-name">{cat.cat.toUpperCase()}</div>
+            </div>
+            <div className="gv-cat-items">
+              {cat.items.map((item, ii) => (
+                <motion.div
+                  key={ii}
+                  className="gv-cat-item"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: ci * 0.07 + ii * 0.045 }}
+                >
+                  {item}
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
 
 // ─── Contact ──────────────────────────────────────────────────────────────────
-const ContactSection = ({ accent }) => (
-  <motion.div
-    key="contact"
-    className="gv-section gv-contact"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.4 }}
-  >
-    <motion.div
-      className="gv-contact-heading"
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1, duration: 0.6 }}
-    >
-      LET'S BUILD<br />SOMETHING.
-    </motion.div>
+const ContactSection = ({ accent, about }) => {
+  const socials = about?.socials || [];
+  const locationStr = about?.locationDisplay || about?.location || 'Colombia (UTC-5)';
+  const timezone = about?.timezone ? `UTC${about.timezone.replace('America/', '-')}` : 'UTC-5';
 
-    <motion.p
-      className="gv-contact-sub"
+  const links = [
+    { label: 'Email', href: `mailto:${about?.email || 'vanegasdanilo7@gmail.com'}`, text: about?.email || 'vanegasdanilo7@gmail.com' },
+    ...socials.map(s => ({
+      label: s.name,
+      href: s.url,
+      text: s.handle ? `${s.name.toLowerCase()}/${s.handle}` : s.url,
+    })),
+  ];
+
+  return (
+    <motion.div
+      key="contact"
+      className="gv-section gv-contact"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay: 0.35 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
     >
-      Available for full-time roles, contract work, and creative collaborations.<br />
-      Based in Colombia (UTC-5) — open to remote worldwide.
-    </motion.p>
+      <motion.div
+        className="gv-contact-heading"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.6 }}
+      >
+        LET'S BUILD<br />SOMETHING.
+      </motion.div>
 
-    <div className="gv-contact-links">
-      {[
-        { label: 'Email',    href: 'mailto:vanegasdanilo7@gmail.com', text: 'vanegasdanilo7@gmail.com' },
-        { label: 'GitHub',    href: 'https://github.com/Playyer96',       text: 'github.com/Playyer96'       },
-        { label: 'LinkedIn',  href: 'https://linkedin.com/in/danisvs',    text: 'linkedin.com/in/danisvs'    },
-        { label: 'Instagram', href: 'https://instagram.com/_dani.svs',    text: 'instagram.com/_dani.svs'    },
-      ].map((link, i) => (
-        <motion.a
-          key={link.label}
-          href={link.href}
-          target={link.href.startsWith('http') ? '_blank' : undefined}
-          rel="noreferrer"
-          className="gv-contact-link"
-          style={{ '--la': accent }}
-          initial={{ opacity: 0, x: -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.4 + i * 0.09 }}
-        >
-          <span className="gv-cl-label">{link.label}</span>
-          <span className="gv-cl-text">{link.text}</span>
-          <span className="gv-cl-arrow">↗</span>
-        </motion.a>
-      ))}
-    </div>
+      <motion.p
+        className="gv-contact-sub"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.35 }}
+      >
+        Available for full-time roles, contract work, and creative collaborations.<br />
+        Based in {locationStr} — open to remote worldwide.
+      </motion.p>
 
-    <motion.div
-      className="gv-avail-badge"
-      style={{ '--ba': accent }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.88 }}
-    >
-      <span className="gv-pulse-dot" style={{ background: accent }} />
-      Available Now
+      <div className="gv-contact-links">
+        {links.map((link, i) => (
+          <motion.a
+            key={link.label}
+            href={link.href}
+            target={link.href.startsWith('http') ? '_blank' : undefined}
+            rel="noreferrer"
+            className="gv-contact-link"
+            style={{ '--la': accent }}
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 + i * 0.09 }}
+          >
+            <span className="gv-cl-label">{link.label}</span>
+            <span className="gv-cl-text">{link.text}</span>
+            <span className="gv-cl-arrow">↗</span>
+          </motion.a>
+        ))}
+      </div>
+
+      <motion.div
+        className="gv-avail-badge"
+        style={{ '--ba': accent }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.88 }}
+      >
+        <span className="gv-pulse-dot" style={{ background: accent }} />
+        {about?.availability || 'Available Now'}
+      </motion.div>
     </motion.div>
-  </motion.div>
-);
+  );
+};
 
 // ─── Root ─────────────────────────────────────────────────────────────────────
-const GameView = ({ projects = [], experience = [], accent = 'oklch(82% 0.20 130)', onExit }) => {
+const GameView = ({ projects = [], experience = [], technologies = [], about = null, accent = 'oklch(82% 0.20 130)', onExit }) => {
   const [booting, setBooting] = useState(true);
   const [section, setSection] = useState(0);
 
@@ -453,10 +485,10 @@ const GameView = ({ projects = [], experience = [], accent = 'oklch(82% 0.20 130
 
           {/* Section content */}
           <AnimatePresence mode="wait">
-            {section === 0 && <HeroSection     key="hero"     accent={accent} projects={projects} />}
+            {section === 0 && <HeroSection     key="hero"     accent={accent} projects={projects} about={about} />}
             {section === 1 && <ProjectsSection key="projects" accent={accent} projects={projects} />}
-            {section === 2 && <StackSection    key="stack"    accent={accent} />}
-            {section === 3 && <ContactSection  key="contact"  accent={accent} />}
+            {section === 2 && <StackSection    key="stack"    accent={accent} technologies={technologies} />}
+            {section === 3 && <ContactSection  key="contact"  accent={accent} about={about} />}
           </AnimatePresence>
         </>
       )}

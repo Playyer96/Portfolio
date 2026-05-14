@@ -11,7 +11,8 @@ import SceneExperience from './scenes/SceneExperience';
 import SceneCV from './scenes/SceneCV';
 import SceneStack from './scenes/SceneStack';
 import SceneContact from './scenes/SceneContact';
-import { fetchProjects, fetchExperience } from './data/api';
+import Dashboard from './dashboard/Dashboard';
+import { fetchAbout, fetchProjects, fetchExperience, fetchTechnologies } from './data/api';
 import CustomCursor from './components/CustomCursor';
 
 const AppContent = () => {
@@ -20,27 +21,26 @@ const AppContent = () => {
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [projects, setProjects] = useState([]);
   const [experience, setExperience] = useState([]);
+  const [about, setAbout] = useState(null);
+  const [technologies, setTechnologies] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [proj, exp] = await Promise.all([
-          fetchProjects(),
-          fetchExperience(),
-        ]);
+    Promise.all([fetchAbout(), fetchProjects(), fetchExperience(), fetchTechnologies()])
+      .then(([abt, proj, exp, tech]) => {
+        setAbout(abt);
         setProjects(proj);
         setExperience(exp);
-      } catch (err) {
-        console.error('API fetch error:', err);
-      }
-    };
-    fetchData();
+        setTechnologies(tech);
+      })
+      .catch(err => console.error('API fetch error:', err));
   }, []);
 
   return (
     <PortfolioShell
+      about={about}
       projects={projects}
       experience={experience}
+      technologies={technologies}
       selectedProject={selectedProject}
       setSelectedProject={setSelectedProject}
       selectedExperience={selectedExperience}
@@ -55,13 +55,13 @@ const AppContent = () => {
           style={{ position: 'absolute', inset: 0 }}
         >
           <Routes>
-            <Route path="/" element={<SceneHome />} />
-            <Route path="/about" element={<SceneAbout />} />
-            <Route path="/projects" element={<SceneProjects selectedProject={selectedProject} setSelectedProject={setSelectedProject} />} />
-            <Route path="/experience" element={<SceneExperience selectedExperience={selectedExperience} setSelectedExperience={setSelectedExperience} />} />
-            <Route path="/stack" element={<SceneStack />} />
-            <Route path="/contact" element={<SceneContact />} />
-            <Route path="/cv" element={<SceneCV />} />
+            <Route path="/"           element={<SceneHome about={about} />} />
+            <Route path="/about"      element={<SceneAbout about={about} />} />
+            <Route path="/projects"   element={<SceneProjects selectedProject={selectedProject} setSelectedProject={setSelectedProject} />} />
+            <Route path="/experience" element={<SceneExperience about={about} selectedExperience={selectedExperience} setSelectedExperience={setSelectedExperience} />} />
+            <Route path="/stack"      element={<SceneStack />} />
+            <Route path="/contact"    element={<SceneContact about={about} />} />
+            <Route path="/cv"         element={<SceneCV about={about} />} />
           </Routes>
         </motion.div>
       </AnimatePresence>
@@ -69,15 +69,16 @@ const AppContent = () => {
   );
 };
 
-const App = () => {
-  return (
-    <Router>
-      <CustomCursor />
-      <AppContent />
-      <Analytics />
-      <SpeedInsights />
-    </Router>
-  );
-};
+const App = () => (
+  <Router>
+    <CustomCursor />
+    <Routes>
+      <Route path="/dashboard/*" element={<Dashboard />} />
+      <Route path="*" element={<AppContent />} />
+    </Routes>
+    <Analytics />
+    <SpeedInsights />
+  </Router>
+);
 
 export default App;

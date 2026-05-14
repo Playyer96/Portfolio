@@ -32,8 +32,8 @@ const FeaturedProjectCard = ({ project, index = 0 }) => {
     return iconMap[(techName || '').toLowerCase()];
   };
 
-  const imageUrl = project.imageUrl || project.images?.[0]?.image;
-  const description = project.descriptions?.[0] || project.description || '';
+  const imageUrl = project.imageUrl || project.images?.[0] || null;
+  const description = project.description || '';
   const truncatedDescription = description.length > 150
     ? description.substring(0, 150) + '...'
     : description;

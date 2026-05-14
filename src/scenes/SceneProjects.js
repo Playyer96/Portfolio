@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import './SceneProjects.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
-import ProjectModal from '../components/ProjectModal';
 import LazyImage from '../components/LazyImage';
 import { fetchProjects as fetchProjectsFromApi } from '../data/api';
 

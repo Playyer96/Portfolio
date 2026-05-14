@@ -1,12 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeIn } from "./animations";
-import { skillCategories, skillProjectMap } from "../data/skillProjectMap";
+import { fetchSkills } from "../data/api";
 import "./SkillShowcase.scss";
 
 const SkillShowcase = ({ projects = [] }) => {
-  const [selectedSkills, setSelectedSkills] = useState(["Unreal Engine", "Unity"]);
-  const [activeCategory, setActiveCategory] = useState("Game Engines");
+  const [skillsData, setSkillsData] = useState({ skills: {}, skillCategories: {} });
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("");
+
+  useEffect(() => {
+    fetchSkills().then(data => {
+      if (data?.skills) {
+        setSkillsData(data);
+        const cats = Object.keys(data.skillCategories || {});
+        if (cats.length > 0) {
+          setActiveCategory(cats[0]);
+          setSelectedSkills(data.skillCategories[cats[0]] || []);
+        }
+      }
+    });
+  }, []);
+
+  const { skills: skillProjectMap, skillCategories } = skillsData;
 
   // Filter projects by skill keywords
   const getProjectsForSkill = (skillName) => {
@@ -30,7 +46,7 @@ const SkillShowcase = ({ projects = [] }) => {
   const categorizedSkills = {};
 
   // Organize skills by category
-  Object.entries(skillCategories).forEach(([category, skills]) => {
+  Object.entries(skillCategories || {}).forEach(([category, skills]) => {
     categorizedSkills[category] = skills;
   });
 

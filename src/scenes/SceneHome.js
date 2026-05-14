@@ -5,39 +5,35 @@ import useMouseRotation from '../hooks/useMouseRotation';
 import useConsoleLog from '../hooks/useConsoleLog';
 import { fetchProjects, fetchExperience, fetchTechnologies } from '../data/api';
 
-const SceneHome = () => {
+const SceneHome = ({ about = null }) => {
   const containerRef = useRef(null);
   const { handlers } = useMouseRotation(containerRef);
   const { emit } = useConsoleLog();
   const [stats, setStats] = useState({ projects: 0, years: 0, tech: 0 });
   const [statsLoaded, setStatsLoaded] = useState(false);
 
-  const heroText = 'Danilo Vanegas';
+  const heroText = about?.heroText || 'Danilo Vanegas';
+  const subtitle = about?.subtitle || 'Software Engineer / Creative Developer';
+  const marquee  = about?.marqueeItems || ['React', 'TypeScript', 'Three.js', 'WebGL', 'Node.js', 'Game Dev', 'Creative Coding', 'UI/UX'];
+  const startDate = about?.careerStartDate || '2019-03-01';
 
   useEffect(() => {
     emit('info', '> Scene loaded: Home');
 
-    Promise.all([
-      fetchProjects(),
-      fetchExperience(),
-      fetchTechnologies(),
-    ]).then(([projects, experience, tech]) => {
-      const yearsActive = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-
-      setStats({
-        projects: projects.length || 8,
-        years: yearsActive,
-        tech: tech.length || 16,
+    Promise.all([fetchProjects(), fetchExperience(), fetchTechnologies()])
+      .then(([projects, experience, tech]) => {
+        const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+        setStats({ projects: projects.length || 8, years: yearsActive, tech: tech.length || 16 });
+        setStatsLoaded(true);
+        emit('ok', '✓ Portfolio stats loaded');
+      })
+      .catch(() => {
+        const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+        setStats({ projects: 8, years: yearsActive, tech: 16 });
+        setStatsLoaded(true);
+        emit('warn', '! Using fallback stats');
       });
-      setStatsLoaded(true);
-      emit('ok', '✓ Portfolio stats loaded');
-    }).catch(() => {
-      const yearsActive = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-      setStats({ projects: 8, years: yearsActive, tech: 16 });
-      setStatsLoaded(true);
-      emit('ok', '✓ Using default stats');
-    });
-  }, [emit]);
+  }, [emit, startDate]);
 
   return (
     <div className="scene-home" ref={containerRef} {...handlers}>
@@ -47,12 +43,10 @@ const SceneHome = () => {
         <div className="hero-section">
           <h1 className="hero-text">
             {heroText.split('').map((char, i) => (
-              <span key={i} style={{ '--char-i': i }}>
-                {char}
-              </span>
+              <span key={i} style={{ '--char-i': i }}>{char}</span>
             ))}
           </h1>
-          <p className="hero-subtitle">Software Engineer / Creative Developer</p>
+          <p className="hero-subtitle">{subtitle}</p>
 
           <div className="cta-buttons">
             <button className="magnetic-btn primary" onClick={() => window.location.href = '/projects'}>
@@ -65,21 +59,15 @@ const SceneHome = () => {
 
           <div className="floating-card">
             <div className="card-stat">
-              {statsLoaded
-                ? <div className="stat-number">{stats.projects}</div>
-                : <div className="skel-stat-num pb-shimmer" />}
+              {statsLoaded ? <div className="stat-number">{stats.projects}</div> : <div className="skel-stat-num pb-shimmer" />}
               <div className="stat-label">Projects</div>
             </div>
             <div className="card-stat">
-              {statsLoaded
-                ? <div className="stat-number">{stats.years}+</div>
-                : <div className="skel-stat-num pb-shimmer" />}
+              {statsLoaded ? <div className="stat-number">{stats.years}+</div> : <div className="skel-stat-num pb-shimmer" />}
               <div className="stat-label">Years</div>
             </div>
             <div className="card-stat">
-              {statsLoaded
-                ? <div className="stat-number">{stats.tech}+</div>
-                : <div className="skel-stat-num pb-shimmer" />}
+              {statsLoaded ? <div className="stat-number">{stats.tech}+</div> : <div className="skel-stat-num pb-shimmer" />}
               <div className="stat-label">Technologies</div>
             </div>
           </div>
@@ -87,15 +75,8 @@ const SceneHome = () => {
 
         <div className="marquee-container">
           <div className="marquee">
-            {['React', 'TypeScript', 'Three.js', 'WebGL', 'Node.js', 'Game Dev', 'Creative Coding', 'UI/UX'].map((tech, i) => (
-              <div key={i} className="marquee-item">
-                {tech}
-              </div>
-            ))}
-            {['React', 'TypeScript', 'Three.js', 'WebGL', 'Node.js', 'Game Dev', 'Creative Coding', 'UI/UX'].map((tech, i) => (
-              <div key={`copy-${i}`} className="marquee-item">
-                {tech}
-              </div>
+            {[...marquee, ...marquee].map((item, i) => (
+              <div key={i} className="marquee-item">{item}</div>
             ))}
           </div>
         </div>

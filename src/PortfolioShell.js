@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import useTheme from './hooks/useTheme';
 import GameView from './scenes/GameView';
+import TweaksPanel from './ui/TweaksPanel';
 
 function HItem({ icon, label, depth = 0, active, onClick, badge, color }) {
   return (
@@ -245,33 +246,41 @@ function BottomAssets({ projects, navigate, setSelectedProject }) {
   );
 }
 
-function InspectorIntro() {
-  const yearsActive = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+function InspectorIntro({ about }) {
+  const tz = about?.timezone || 'America/Bogota';
+  const startDate = about?.careerStartDate || '2019-03-01';
+  const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
   const [colTime, setColTime] = React.useState(() =>
-    new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' })
+    new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: tz })
   );
   React.useEffect(() => {
     const id = setInterval(() => {
-      setColTime(new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' }));
+      setColTime(new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: tz }));
     }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [tz]);
+
+  const email    = about?.email || '';
+  const github   = about?.socials?.find(s => s.name === 'GitHub');
+  const linkedin = about?.socials?.find(s => s.name === 'LinkedIn');
+  const insta    = about?.socials?.find(s => s.name === 'Instagram');
+
   return (
     <div>
       <InspGroup icon="i" iconColor="var(--pb-accent)" title="Identity">
-        <InspField label="Name"       value="Danilo Vanegas" />
-        <InspField label="Role"       value="Engineer" />
-        <InspField label="Location"   value="Medellín, Antioquia - Colombia" />
+        <InspField label="Name"       value={about?.name || '—'} />
+        <InspField label="Role"       value={about?.role || '—'} />
+        <InspField label="Location"   value={about?.locationDisplay || '—'} />
         <InspField label="Local Time" value={colTime} />
-        <InspField label="Experience" value={`${yearsActive}+ years`} accent />
+        <InspField label="Experience" value={about ? `${yearsActive}+ years` : '—'} accent />
       </InspGroup>
       <InspGroup icon="@" iconColor="#0a66c2" title="Engagement">
-        <InspField label="Status"  value="Available Now" accent />
-        <InspField label="Start"   value="Immediately" />
-        <InspField label="Email"   value="vanegasdanilo7@…" copyValue="vanegasdanilo7@gmail.com" href="mailto:vanegasdanilo7@gmail.com" />
-        <InspField label="GitHub"    value="Playyer96" href="https://github.com/Playyer96" />
-        <InspField label="LinkedIn"  value="danisvs"   href="https://linkedin.com/in/danisvs" />
-        <InspField label="Instagram" value="_dani.svs" href="https://instagram.com/_dani.svs" />
+        <InspField label="Status"    value={about?.availability || 'Available Now'} accent />
+        <InspField label="Start"     value={about?.availabilityStart || 'Immediately'} />
+        {email && <InspField label="Email"     value={`${email.split('@')[0]}@…`} copyValue={email} href={`mailto:${email}`} />}
+        {github   && <InspField label="GitHub"    value={github.handle}   href={github.url} />}
+        {linkedin && <InspField label="LinkedIn"  value={linkedin.handle} href={linkedin.url} />}
+        {insta    && <InspField label="Instagram" value={insta.handle}    href={insta.url} />}
       </InspGroup>
       <InspGroup icon="◆" iconColor="#888" title="Transform" defaultOpen={false}>
         <InspField label="Position" value="(0, 0, 0)" />
@@ -282,17 +291,19 @@ function InspectorIntro() {
   );
 }
 
-function InspectorAbout() {
+function InspectorAbout({ about }) {
+  const bioPreview = about?.bio?.[0]?.slice(0, 60) || 'Full bio on /about';
+  const eduCount = about?.education?.length || '—';
   return (
     <div>
       <InspGroup icon="§" iconColor="var(--pb-accent)" title="Document">
-        <InspField label="Content" value="Full bio on /about" />
+        <InspField label="Content" value={bioPreview + '...'} />
       </InspGroup>
       <InspGroup icon="^" iconColor="#f59e0b" title="Education">
         <InspField label="Focus" value="CS, interactive systems" />
       </InspGroup>
       <InspGroup icon="#" iconColor="#10b981" title="Working At">
-        <InspField label="Last" value="See /experience" />
+        <InspField label="Last" value={about?.role || 'See /experience'} />
       </InspGroup>
     </div>
   );
@@ -349,36 +360,30 @@ function calcInspDuration(period) {
   return y === 0 ? `${m} months` : m === 0 ? `${y} years` : `${y}y ${m}mo`;
 }
 
-function inferInspEngines(role) {
-  const r = role.toLowerCase();
-  const tags = [];
-  if (r.includes('unity'))   tags.push('Unity');
-  if (r.includes('unreal'))  tags.push('Unreal');
-  if (r.includes('hololens') || (r.includes('ar') && r.includes('unity'))) tags.push('HoloLens AR');
-  return tags;
-}
-
-function InspectorExperience({ experience }) {
+function InspectorExperience({ experience, about }) {
   const work = experience.filter(e => e.type === 'Work');
   const edu  = experience.filter(e => e.type === 'Education');
+  const allTech = [...new Set(work.flatMap(e => e.technologies || []))];
   const totalYears = work.reduce((acc, e) => {
     const d = calcInspDuration(e.period);
     const m = d.match(/(\d+)y/);
     return acc + (m ? parseInt(m[1]) : 0);
   }, 0);
+  const primaryEngines = allTech.filter(t => ['Unity', 'Unreal', 'React', 'Node.js'].includes(t)).join(', ') || 'Unity, Unreal';
+  const xrTech = allTech.filter(t => ['HoloLens 2', 'AR Foundation', 'ARCore', 'MRTK3', 'OpenXR'].includes(t)).join(', ') || 'HoloLens, ARCore';
+  const webTech = allTech.filter(t => ['React', 'Node.js', 'WebSocket', 'Next.js', 'Three.js'].includes(t)).join(', ') || 'React, Node.js';
   return (
     <div>
       <InspGroup icon="↑" iconColor="var(--pb-accent)" title="Career · Overview">
         <InspField label="Work roles"  value={`${work.length} positions`} />
         <InspField label="Education"   value={`${edu.length} entries`} />
         <InspField label="Total exp."  value={`${totalYears}+ years`} accent />
-        <InspField label="Status"      value="Available Now" accent />
+        <InspField label="Status"      value={about?.availability || 'Available Now'} accent />
       </InspGroup>
       <InspGroup icon="≡" iconColor="#888" title="Engines & Tools" defaultOpen={false}>
-        <InspField label="Primary"  value="Unity, Unreal" />
-        <InspField label="XR / AR"  value="HoloLens, ARCore" />
-        <InspField label="3D"       value="Blender, Maya" />
-        <InspField label="Web"      value="React, Node.js" />
+        <InspField label="Primary"  value={primaryEngines} />
+        <InspField label="XR / AR"  value={xrTech} />
+        <InspField label="Web"      value={webTech} />
       </InspGroup>
       <div style={{ padding: "8px 10px 4px", fontFamily: "var(--pb-mono)", fontSize: 9, color: "var(--pb-dim)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
         — click any card to inspect —
@@ -433,7 +438,7 @@ function deriveSkills(role, highlights) {
 
 function InspectorExperienceItem({ item }) {
   const duration  = calcInspDuration(item.period);
-  const engines   = inferInspEngines(item.role);
+  const engines   = item.technologies || [];
   const isCurrent = item.period.toLowerCase().includes('present');
   const isWork    = item.type === 'Work';
   const skills    = isWork ? deriveSkills(item.role, item.highlights) : [];
@@ -509,64 +514,73 @@ function InspectorExperienceItem({ item }) {
   );
 }
 
-function InspectorStack() {
+function InspectorStack({ technologies }) {
+  const cats = {};
+  (technologies || []).forEach(t => {
+    const c = t.category || 'tools';
+    cats[c] = (cats[c] || 0) + 1;
+  });
+  const catMeta = [
+    { key: 'engines',   icon: '!', color: '#3b82f6', label: 'Engines' },
+    { key: 'languages', icon: '\u039B', color: '#f59e0b', label: 'Languages' },
+    { key: 'web',       icon: '\u2295', color: '#10b981', label: 'Web' },
+    { key: 'xr3d',      icon: '\u25B3', color: '#8b5cf6', label: 'XR/3D' },
+    { key: 'tools',     icon: '+', color: '#ec4899', label: 'Tools' },
+  ];
+  const total = (technologies || []).length;
+  const catCount = Object.keys(cats).length;
   return (
     <div>
       <InspGroup icon="≡" iconColor="var(--pb-accent)" title="Graph Statistics">
-        <InspField label="Categories" value="5" />
-        <InspField label="Total items" value="40+" accent />
+        <InspField label="Categories" value={String(catCount)} />
+        <InspField label="Total items" value={total > 0 ? String(total) : '40+'} accent />
       </InspGroup>
-      <InspGroup icon="!" iconColor="#3b82f6" title="Engines" defaultOpen={false}>
-        <InspField label="Count" value="3" />
-      </InspGroup>
-      <InspGroup icon="Λ" iconColor="#f59e0b" title="Languages" defaultOpen={false}>
-        <InspField label="Count" value="7" />
-      </InspGroup>
-      <InspGroup icon="⊕" iconColor="#10b981" title="Web" defaultOpen={false}>
-        <InspField label="Count" value="8" />
-      </InspGroup>
-      <InspGroup icon="△" iconColor="#8b5cf6" title="XR/3D" defaultOpen={false}>
-        <InspField label="Count" value="8" />
-      </InspGroup>
-      <InspGroup icon="+" iconColor="#ec4899" title="Tools" defaultOpen={false}>
-        <InspField label="Count" value="12+" />
-      </InspGroup>
+      {catMeta.map(m => (
+        <InspGroup key={m.key} icon={m.icon} iconColor={m.color} title={m.label} defaultOpen={false}>
+          <InspField label="Count" value={String(cats[m.key] || 0)} />
+        </InspGroup>
+      ))}
     </div>
   );
 }
 
-function InspectorContact() {
+function InspectorContact({ about }) {
+  const email    = about?.email || '';
+  const github   = about?.socials?.find(s => s.name === 'GitHub');
+  const linkedin = about?.socials?.find(s => s.name === 'LinkedIn');
+  const insta    = about?.socials?.find(s => s.name === 'Instagram');
   return (
     <div>
       <InspGroup icon="○" iconColor="var(--pb-accent)" title="Availability">
-        <InspField label="Status"     value="Open" accent />
-        <InspField label="Start date" value="Immediately" />
+        <InspField label="Status"     value={about?.availability || 'Available Now'} accent />
+        <InspField label="Start date" value={about?.availabilityStart || 'Immediately'} />
       </InspGroup>
       <InspGroup icon="~" iconColor="#0a66c2" title="Channels">
-        <InspField label="Email"    value="vanegasdanilo7@…" copyValue="vanegasdanilo7@gmail.com" href="mailto:vanegasdanilo7@gmail.com" />
-        <InspField label="GitHub"    value="Playyer96"   href="https://github.com/Playyer96" />
-        <InspField label="LinkedIn"  value="danisvs"     href="https://linkedin.com/in/danisvs" />
-        <InspField label="Instagram" value="_dani.svs"   href="https://instagram.com/_dani.svs" />
+        {email    && <InspField label="Email"     value={`${email.split('@')[0]}@…`} copyValue={email} href={`mailto:${email}`} />}
+        {github   && <InspField label="GitHub"    value={github.handle}   href={github.url} />}
+        {linkedin && <InspField label="LinkedIn"  value={linkedin.handle} href={linkedin.url} />}
+        {insta    && <InspField label="Instagram" value={insta.handle}    href={insta.url} />}
       </InspGroup>
       <InspGroup icon="◎" iconColor="#10b981" title="Engagement Types">
-        <InspField label="Roles" value="Full-time, contract" />
-        <InspField label="Focus" value="Real problems" />
+        <InspField label="Roles" value={about?.availabilityRoles || 'Full-time, contract'} />
+        <InspField label="Focus" value={about?.availabilityFocus || 'Real problems'} />
       </InspGroup>
     </div>
   );
 }
 
-function InspectorCV() {
+function InspectorCV({ about }) {
+  const cv = about?.cv || {};
   return (
     <div>
-      <InspGroup icon="≡" iconColor="var(--pb-accent)" title="CV · 2025">
+      <InspGroup icon="≡" iconColor="var(--pb-accent)" title={`CV · ${cv.year || '2025'}`}>
         <InspField label="Format" value="PDF" />
-        <InspField label="Pages" value="1" />
-        <InspField label="Size" value="240 KB" />
+        <InspField label="Pages"  value={cv.pages || '1'} />
+        <InspField label="Size"   value={cv.size  || '—'} />
       </InspGroup>
       <InspGroup icon="✓" iconColor="#10b981" title="Download">
         <div style={{ padding: "10px", textAlign: "center" }}>
-          <a href="/CV-Danilo-Vanegas-2025.pdf" download style={{
+          <a href={cv.path || '/CV-Danilo-Vanegas-2025.pdf'} download style={{
             background: "var(--pb-accent)", color: "#000", padding: "8px 16px",
             fontFamily: "var(--pb-mono)", fontSize: 10, fontWeight: 600,
             textDecoration: "none", display: "inline-block", borderRadius: 2,
@@ -578,7 +592,7 @@ function InspectorCV() {
   );
 }
 
-function PortfolioShell({ children, projects = [], experience = [], selectedProject, setSelectedProject, selectedExperience }) {
+function PortfolioShell({ children, about = null, projects = [], experience = [], technologies = [], selectedProject, setSelectedProject, selectedExperience }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, accent, toggleTheme, setAccent } = useTheme();
@@ -694,8 +708,8 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
   }, []);
 
   const matches = (s) => !hSearch || s.toLowerCase().includes(hSearch.toLowerCase());
-  const filteredProjects = projects.filter((p) => matches(p.name || p.title || ''));
-  const filteredExperience = experience.filter((e) => matches(e.company || ''));
+  const filteredProjects    = React.useMemo(() => projects.filter(p  => matches(p.name    || p.title || '')), [projects,    hSearch]);  // eslint-disable-line react-hooks/exhaustive-deps
+  const filteredExperience  = React.useMemo(() => experience.filter(e => matches(e.company || '')),           [experience,  hSearch]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const sceneLabel = {
     intro: "01_intro.scene",
@@ -727,18 +741,18 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
             <span key={c} style={{ width: 10, height: 10, borderRadius: "50%", background: c }} />
           ))}
         </div>
-        <span style={{ color: "var(--pb-dim)" }}>danilo-vanegas.unityproj</span>
+        <span style={{ color: "var(--pb-dim)" }}>{about?.projectFilename || 'portfolio.unityproj'}</span>
         <div style={{ display: "flex", gap: 0, marginLeft: 16, color: "var(--pb-dim)", fontSize: 11, position: "relative" }} data-pb-menu>
           {[
             { l: "File", items: [
-              { l: "Open CV (PDF)", a: () => window.open("/cv.pdf", "_blank") },
-              { l: "Email me", a: () => { window.location.href = `mailto:vanegasdanilo7@gmail.com`; } },
-              { l: "Copy email", a: () => navigator.clipboard?.writeText("vanegasdanilo7@gmail.com") },
+              { l: "Open CV (PDF)", a: () => window.open(about?.cv?.path || '/CV-Danilo-Vanegas-2025.pdf', "_blank") },
+              { l: "Email me",   a: () => { window.location.href = `mailto:${about?.email || ''}`; } },
+              { l: "Copy email", a: () => navigator.clipboard?.writeText(about?.email || '') },
               { l: "—" },
               { l: "Export as JSON", a: () => {
-                const blob = new Blob([JSON.stringify({ projects, experience }, null, 2)], { type: "application/json" });
+                const blob = new Blob([JSON.stringify({ about, projects, experience }, null, 2)], { type: "application/json" });
                 const a = document.createElement("a");
-                a.href = URL.createObjectURL(blob); a.download = "danilo-vanegas.json"; a.click();
+                a.href = URL.createObjectURL(blob); a.download = `${about?.name?.toLowerCase().replace(' ', '-') || 'portfolio'}.json`; a.click();
               }},
             ]},
             { l: "Edit", items: [
@@ -756,10 +770,11 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
               { l: "Profiler", a: () => setSceneTab("Profiler") },
               { l: "Console",  a: () => setBottomTab("console") },
             ]},
-            { l: "Help", items: [
+            { l: "Help", items: about?.socials?.map(s => ({
+                l: `${s.name} ↗`, a: () => window.open(s.url, "_blank"),
+              })) || [
               { l: "GitHub ↗",    a: () => window.open("https://github.com/Playyer96", "_blank") },
               { l: "LinkedIn ↗",  a: () => window.open("https://linkedin.com/in/danisvs", "_blank") },
-              { l: "Instagram ↗", a: () => window.open("https://instagram.com/_dani.svs", "_blank") },
             ]},
           ].map((m, idx) => (
             <div key={m.l} style={{ position: "relative" }}>
@@ -798,7 +813,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
           ))}
         </div>
         <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center", fontSize: 11 }}>
-          <span style={{ color: "var(--pb-accent)" }}>● available now</span>
+          <span style={{ color: "var(--pb-accent)" }}>● {about?.availability?.toLowerCase() || 'available now'}</span>
           <div style={{ position: "relative" }} data-pb-menu>
             <button
               onClick={() => setOpenMenu(openMenu === "settings" ? null : "settings")}
@@ -1143,23 +1158,18 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
             <span style={{ marginLeft: "auto", color: "var(--pb-dim)", fontSize: 10 }}>◇ ⊕</span>
           </div>
           <div style={{ flex: 1, overflow: "auto" }}>
-            {scene === "intro"       && <InspectorIntro />}
-            {scene === "about"       && <InspectorAbout />}
-            {scene === "projects"    && selectedProject  && <InspectorProject project={selectedProject} />}
-            {scene === "projects"    && !selectedProject && (
-              <div style={{ padding: 40, textAlign: "center", fontFamily: "var(--pb-mono)", fontSize: 11, color: "var(--pb-dim)" }}>
-                Select a project ↑
-              </div>
-            )}
+            {scene === "intro"       && <InspectorIntro about={about} />}
+            {scene === "about"       && <InspectorAbout about={about} />}
+            {scene === "tweaks"      && <TweaksPanel accent={accent} accentDark={accentDark} accentLight={accentLight} onSetAccent={setAccent} />}
             {scene === "experience"  && selectedExperience && <InspectorExperienceItem item={selectedExperience} />}
-            {scene === "experience"  && !selectedExperience && <InspectorExperience experience={experience} />}
-            {scene === "stack"       && <InspectorStack />}
-            {scene === "contact"     && <InspectorContact />}
-            {scene === "cv"          && <InspectorCV />}
+            {scene === "experience"  && !selectedExperience && <InspectorExperience experience={experience} about={about} />}
+            {scene === "stack"       && <InspectorStack technologies={technologies} />}
+            {scene === "contact"     && <InspectorContact about={about} />}
+            {scene === "cv"          && <InspectorCV about={about} />}
           </div>
           <div style={{ borderTop: "1px solid var(--pb-line)", background: "var(--pb-panel)", padding: 16, textAlign: "center" }}>
             <div style={{ color: "var(--pb-dim)", fontFamily: "var(--pb-mono)", fontSize: 11 }}>Drag a brief here, or</div>
-            <a href="mailto:vanegasdanilo7@gmail.com" style={{
+            <a href={`mailto:${about?.email || 'vanegasdanilo7@gmail.com'}`} style={{
               color: "var(--pb-accent)", textDecoration: "none", fontWeight: 600, display: "inline-block", marginTop: 6,
             }}>
               + start a conversation
@@ -1180,7 +1190,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
         </span>
         <span style={{ marginLeft: "auto", color: "var(--pb-dim)" }}>render: {renderMode}</span>
         <span style={{ color: "var(--pb-dim)" }}>· main · 0 conflicts</span>
-        <a href="https://github.com/Playyer96" target="_blank" rel="noreferrer"
+        <a href={about?.socials?.find(s => s.name === 'GitHub')?.url || 'https://github.com/Playyer96'} target="_blank" rel="noreferrer"
           style={{ color: "var(--pb-fg)", textDecoration: "none" }}>Unity 6 / Next 15 ↗</a>
       </div>
 
@@ -1190,6 +1200,8 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
           <GameView
             projects={projects}
             experience={experience}
+            technologies={technologies}
+            about={about}
             accent={dark ? accentDark : accentLight}
             onExit={() => { setPlaying(false); setSceneTab("Scene"); }}
           />

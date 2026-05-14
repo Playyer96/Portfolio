@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import '../styles/TechStackGraph.scss';
-import techStackData from '../data/techStack.json';
+import { fetchTechStack } from '../data/api';
 
 const TechStackGraph = () => {
   const canvasRef = useRef(null);
   const [nodes, setNodes] = useState([]);
   const [hoveredNode, setHoveredNode] = useState(null);
+  const [techStackData, setTechStackData] = useState({ nodes: [], relationships: [] });
   const animationFrameRef = useRef(null);
   const nodesRef = useRef([]);
 
@@ -21,8 +22,14 @@ const TechStackGraph = () => {
   const isPanningRef = useRef(false);
   const panStartRef = useRef({ x: 0, y: 0 });
 
-  const nodeData = techStackData.nodes;
-  const connections = techStackData.relationships;
+  useEffect(() => {
+    fetchTechStack().then(data => {
+      if (data?.nodes) setTechStackData(data);
+    });
+  }, []);
+
+  const nodeData = techStackData.nodes || [];
+  const connections = techStackData.relationships || [];
 
   useEffect(() => {
     // Initialize nodes with radial layout - much more spread out

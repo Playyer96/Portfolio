@@ -14,7 +14,7 @@ function calcDuration(period) {
   const monthMap = { jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6, aug:7, sep:8, oct:9, nov:10, dec:11 };
   const parseDate = (s) => {
     s = s.trim();
-    if (s === 'present') return new Date(2026, 4);
+    if (s === 'present') return new Date(new Date().getFullYear(), new Date().getMonth());
     const year = parseInt(s.match(/\d{4}/)?.[0]);
     if (!year) return null;
     for (const [abbr, mo] of Object.entries(monthMap)) {
@@ -32,15 +32,6 @@ function calcDuration(period) {
   if (y === 0) return `${m}mo`;
   if (m === 0) return `${y}y`;
   return `${y}y ${m}mo`;
-}
-
-function inferEngines(role) {
-  const r = role.toLowerCase();
-  const tags = [];
-  if (r.includes('unity')) tags.push('Unity');
-  if (r.includes('unreal')) tags.push('Unreal');
-  if (r.includes('hololens') || (r.includes('ar') && r.includes('unity'))) tags.push('HoloLens AR');
-  return tags;
 }
 
 
@@ -89,7 +80,7 @@ const EduCardSkeleton = () => (
   </div>
 );
 
-const SceneExperience = ({ selectedExperience = null, setSelectedExperience = () => {} }) => {
+const SceneExperience = ({ about = null, selectedExperience = null, setSelectedExperience = () => {} }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visibleItems, setVisibleItems] = useState(new Set());
@@ -130,7 +121,8 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
 
   const workItems = items.filter(i => i.type === 'Work');
   const eduItems  = items.filter(i => i.type === 'Education');
-  const yearsActive = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const careerStart = about?.careerStartDate || '2019-03-01';
+  const yearsActive = Math.floor((Date.now() - new Date(careerStart).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
 
   return (
     <div className="scene-experience">
@@ -189,7 +181,7 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
               {workItems.map((item, idx) => {
                 const color     = WORK_COLORS[idx % WORK_COLORS.length];
                 const duration  = calcDuration(item.period);
-                const engines   = inferEngines(item.role);
+                  const engines   = item.technologies || [];
                 const isCurrent = item.period.toLowerCase().includes('present');
                 const isLast    = idx === workItems.length - 1;
                 const isVisible = visibleItems.has(String(item.id));

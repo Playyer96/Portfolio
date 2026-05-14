@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 const useMouseRotation = (containerRef) => {
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
