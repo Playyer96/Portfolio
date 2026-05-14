@@ -246,13 +246,14 @@ function BottomAssets({ projects, navigate, setSelectedProject }) {
 }
 
 function InspectorIntro() {
+  const yearsActive = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
   return (
     <div>
       <InspGroup icon="i" iconColor="var(--pb-accent)" title="Identity">
         <InspField label="Name"       value="Danilo Vanegas" />
         <InspField label="Role"       value="Engineer" />
         <InspField label="Location"   value="Colombia, UTC-5" />
-        <InspField label="Experience" value="8+ years" accent />
+        <InspField label="Experience" value={`${yearsActive}+ years`} accent />
       </InspGroup>
       <InspGroup icon="@" iconColor="#0a66c2" title="Engagement">
         <InspField label="Status"  value="Available Now" accent />
@@ -578,7 +579,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
   const [playing, setPlaying] = React.useState(false);
   const [hSearch, setHSearch] = React.useState("");
   const [openMenu, setOpenMenu] = React.useState(null);
-  const ts = () => new Date().toLocaleTimeString('en-US', { hour12: false });
+  const ts = () => new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' });
   const [logs, setLogs] = React.useState(() => [
     { id: 'boot-1', type: 'ok',   msg: '> portfolio_main  Awake ()', timestamp: ts() },
     { id: 'boot-2', type: 'info', msg: '> SceneManager    LoadScene("01_intro")', timestamp: ts() },
@@ -1105,7 +1106,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
                         marginBottom: 3, display: "flex", gap: 10, alignItems: "baseline",
                         color: log.type === 'error' ? '#ff6b6b' : log.type === 'ok' ? 'var(--pb-accent)' : 'inherit',
                       }}>
-                        <span style={{ color: "var(--pb-line)", flexShrink: 0, fontSize: 9 }}>{log.timestamp}</span>
+                        <span style={{ color: "color-mix(in srgb, var(--pb-accent) 50%, var(--pb-dim))", flexShrink: 0, fontSize: 9 }}>{log.timestamp}</span>
                         <span>{log.msg || log.message}</span>
                       </div>
                     ))

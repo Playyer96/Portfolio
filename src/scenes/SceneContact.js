@@ -5,6 +5,8 @@ import useConsoleLog from '../hooks/useConsoleLog';
 import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { FiDownload, FiCopy, FiCheck } from 'react-icons/fi';
 
+const yearsExp = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+
 const SceneContact = () => {
   const [copied, setCopied] = useState(false);
   const emailRef = useRef(null);
@@ -61,7 +63,7 @@ const SceneContact = () => {
 
           <div className="contact-card">
             <p className="contact-intro">
-              8+ years across game dev, XR, and web. Looking for real problems to solve.
+              {yearsExp}+ years across game dev, XR, and web. Looking for real problems to solve.
             </p>
 
             <div className="email-section">

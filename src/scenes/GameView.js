@@ -51,7 +51,7 @@ const BootScreen = ({ accent }) => (
 // ─── Hero ────────────────────────────────────────────────────────────────────
 const HeroSection = ({ accent, projects }) => {
   const projectCount = projects.length || 8;
-  const yearsActive  = new Date().getFullYear() - 2017;
+  const yearsActive  = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
 
   return (
     <motion.div

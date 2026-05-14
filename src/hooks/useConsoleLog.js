@@ -5,7 +5,7 @@ const useConsoleLog = () => {
 
   const emit = useCallback((type, msg) => {
     const id = Math.random().toString(36).substr(2, 9);
-    const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false });
+    const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' });
     setLogs(prev => [...prev, { id, type, msg, timestamp }]);
   }, []);
 

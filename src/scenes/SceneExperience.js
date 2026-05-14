@@ -90,6 +90,7 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
 
   const workItems = items.filter(i => i.type === 'Work');
   const eduItems  = items.filter(i => i.type === 'Education');
+  const yearsActive = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
 
   return (
     <div className="scene-experience">
@@ -101,7 +102,7 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
           {items.length > 0 && (
             <p className="exp-tagline">
               <span className="exp-tagline__val">{workItems.length}</span> roles &nbsp;·&nbsp;
-              <span className="exp-tagline__val">8+</span> years &nbsp;·&nbsp;
+              <span className="exp-tagline__val">{yearsActive}+</span> years &nbsp;·&nbsp;
               <span className="exp-tagline__val">Unity / Unreal</span>
             </p>
           )}

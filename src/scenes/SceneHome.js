@@ -21,9 +21,7 @@ const SceneHome = () => {
       fetchExperience(),
       fetchTechnologies(),
     ]).then(([projects, experience, tech]) => {
-      const startYear = 2017;
-      const currentYear = new Date().getFullYear();
-      const yearsActive = currentYear - startYear;
+      const yearsActive = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
 
       setStats({
         projects: projects.length || 8,
@@ -32,7 +30,8 @@ const SceneHome = () => {
       });
       emit('ok', '✓ Portfolio stats loaded');
     }).catch(() => {
-      setStats({ projects: 8, years: 9, tech: 16 });
+      const yearsActive = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+      setStats({ projects: 8, years: yearsActive, tech: 16 });
       emit('ok', '✓ Using default stats');
     });
   }, [emit]);
