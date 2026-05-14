@@ -4,17 +4,21 @@
   height: 100%;
   overflow-y: auto;
   background: var(--pb-bg);
-  padding: 60px 40px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
 .scene-content {
   width: 100%;
   max-width: 900px;
+  min-height: 100%;
   z-index: 1;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px 40px;
 }
 
 .contact-container {
@@ -22,12 +26,12 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 40px;
+  gap: 16px;
 }
 
 .contact-heading {
   font-family: var(--pb-display);
-  font-size: 64px;
+  font-size: 52px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -37,18 +41,12 @@
 }
 
 @keyframes headingSlideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .contact-card {
-  padding: 60px 40px;
+  padding: 28px 36px;
   background: linear-gradient(135deg, var(--pb-panel) 0%, var(--pb-panel-h) 100%);
   border: 2px solid var(--pb-line);
   border-radius: 4px;
@@ -58,39 +56,33 @@
 }
 
 @keyframes cardFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 .contact-intro {
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--pb-dim);
-  margin: 0 0 40px 0;
+  margin: 0 0 18px 0;
 }
 
 .email-section {
-  margin-bottom: 40px;
+  margin-bottom: 18px;
 }
 
 .email-label {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--pb-dim);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
-  margin: 0 0 16px 0;
+  margin: 0 0 10px 0;
 }
 
 .email-button {
   width: 100%;
-  padding: 20px 24px;
+  padding: 14px 20px;
   background: var(--pb-accent);
   border: none;
   border-radius: 4px;
@@ -105,7 +97,7 @@
 
 .email-button:hover {
   transform: scale(1.02);
-  box-shadow: 0 12px 32px rgba(168, 255, 96, 0.3);
+  box-shadow: 0 10px 28px rgba(168, 255, 96, 0.25);
 }
 
 .email-button:active {
@@ -140,7 +132,7 @@
 .divider {
   height: 1px;
   background: var(--pb-line);
-  margin: 40px 0;
+  margin: 18px 0;
 }
 
 .socials-section {
@@ -148,29 +140,30 @@
 }
 
 .socials-label {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--pb-dim);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
-  margin: 0 0 24px 0;
+  margin: 0 0 12px 0;
 }
 
 .socials-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
 }
 
 .social-link {
-  padding: 16px;
+  padding: 12px;
   background: var(--pb-panel);
   border: 1px solid var(--pb-line);
   border-radius: 4px;
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 8px;
   transition: all 0.2s ease;
   cursor: pointer;
 }
@@ -185,21 +178,21 @@
 .social-icon {
   display: flex;
   align-items: center;
-  font-size: 18px;
+  font-size: 16px;
   flex-shrink: 0;
 }
 
 .social-name {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--pb-fg);
 }
 
 .contact-footer {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--pb-dim);
   max-width: 500px;
-  line-height: 1.6;
+  line-height: 1.5;
   animation: footerFadeIn 0.6s ease 0.4s both;
 }
 
@@ -208,26 +201,21 @@
 }
 
 @keyframes footerFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @media (max-width: 768px) {
-  .scene-contact {
-    padding: 40px 20px;
+  .scene-content {
+    padding: 20px 20px;
   }
 
   .contact-heading {
-    font-size: 48px;
-    margin-bottom: 20px;
+    font-size: 40px;
   }
 
   .contact-card {
-    padding: 40px 24px;
+    padding: 24px 20px;
   }
 
   .email-button {
@@ -235,11 +223,7 @@
     align-items: flex-start;
   }
 
-  .copy-indicator {
-    align-self: flex-end;
-  }
-
   .socials-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
