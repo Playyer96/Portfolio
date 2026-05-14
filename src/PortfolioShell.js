@@ -375,18 +375,31 @@ function InspectorExperience({ experience }) {
   );
 }
 
-function SkillBar({ name, level }) {
+const SKILL_CAT_COLORS = {
+  Engine:    '#06b6d4',
+  Language:  '#10b981',
+  Platform:  '#a78bfa',
+  Specialty: '#f59e0b',
+};
+
+function SkillRow({ name, category, core }) {
+  const cc = SKILL_CAT_COLORS[category] || 'var(--pb-dim)';
   return (
     <div style={{
-      display: "grid", gridTemplateColumns: "90px 1fr 28px",
+      display: "grid", gridTemplateColumns: "1fr auto",
       padding: "4px 10px", borderBottom: "1px solid var(--pb-line)",
       fontFamily: "var(--pb-mono)", fontSize: 10, gap: 8, alignItems: "center",
     }}>
-      <span style={{ color: "var(--pb-dim)" }}>{name}</span>
-      <div style={{ background: "var(--pb-line)", height: 3, borderRadius: 2 }}>
-        <div style={{ width: `${level}%`, height: "100%", background: "var(--pb-accent)", borderRadius: 2 }} />
+      <span style={{ color: core ? "var(--pb-fg)" : "var(--pb-dim)" }}>{name}</span>
+      <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+        <span style={{
+          fontSize: 8, padding: "1px 5px", borderRadius: 2, letterSpacing: "0.05em",
+          background: `color-mix(in srgb,${cc} 15%,transparent)`,
+          border: `1px solid color-mix(in srgb,${cc} 35%,transparent)`,
+          color: cc,
+        }}>{category.toUpperCase()}</span>
+        {core && <span style={{ fontSize: 8, color: "var(--pb-accent)", fontWeight: 700, letterSpacing: "0.05em" }}>Core</span>}
       </div>
-      <span style={{ color: "var(--pb-accent)", textAlign: "right", fontSize: 9, fontWeight: 700 }}>{level}</span>
     </div>
   );
 }
@@ -395,14 +408,14 @@ function deriveSkills(role, highlights) {
   const r = role.toLowerCase();
   const h = highlights.join(' ').toLowerCase();
   const skills = [];
-  if (r.includes('unity'))                                     skills.push({ name: 'C# / .NET',       level: 92 });
-  if (r.includes('unity'))                                     skills.push({ name: 'Unity Engine',     level: 95 });
-  if (r.includes('unreal'))                                    skills.push({ name: 'Unreal Engine',    level: 80 });
-  if (r.includes('unreal'))                                    skills.push({ name: 'C++',              level: 62 });
-  if (r.includes('ar') || r.includes('hololens'))             skills.push({ name: 'AR / XR',          level: 85 });
-  if (h.includes('sports') || h.includes('fsx') || h.includes('calibration')) skills.push({ name: 'Physics / Sim', level: 78 });
-  if (h.includes('vial') || h.includes('logistica'))          skills.push({ name: '3D Visualization', level: 72 });
-  if (h.includes('arena') || h.includes('stardust'))          skills.push({ name: 'Multiplayer / Net', level: 68 });
+  if (r.includes('unity'))                                                        skills.push({ name: 'C# / .NET',         category: 'Language',  core: true });
+  if (r.includes('unity'))                                                        skills.push({ name: 'Unity Engine',       category: 'Engine',    core: true });
+  if (r.includes('unreal'))                                                       skills.push({ name: 'Unreal Engine',      category: 'Engine',    core: true });
+  if (r.includes('unreal'))                                                       skills.push({ name: 'C++',                category: 'Language',  core: true });
+  if (r.includes('ar') || r.includes('hololens'))                                 skills.push({ name: 'AR / XR',            category: 'Platform',  core: false });
+  if (h.includes('sports') || h.includes('fsx') || h.includes('calibration'))    skills.push({ name: 'Physics / Sim',      category: 'Specialty', core: false });
+  if (h.includes('vial') || h.includes('logistica'))                              skills.push({ name: '3D Visualization',   category: 'Specialty', core: false });
+  if (h.includes('arena') || h.includes('stardust'))                              skills.push({ name: 'Multiplayer / Net',  category: 'Specialty', core: false });
   return skills;
 }
 
@@ -450,7 +463,7 @@ function InspectorExperienceItem({ item }) {
       {/* Skills component - only for work */}
       {isWork && skills.length > 0 && (
         <InspGroup icon="*" iconColor="var(--pb-accent)" title="Skills.cs">
-          {skills.map((s, i) => <SkillBar key={i} name={s.name} level={s.level} />)}
+          {skills.map((s, i) => <SkillRow key={i} name={s.name} category={s.category} core={s.core} />)}
         </InspGroup>
       )}
 
