@@ -79,17 +79,24 @@
 
 .manifest-items { background: var(--pb-bg); }
 
+.manifest-item-group { border-bottom: 1px solid var(--pb-line); }
+.manifest-item-group:last-child { border-bottom: none; }
+
 .manifest-item {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 5px 14px;
-  border-bottom: 1px solid var(--pb-line);
   transition: background 0.1s;
 }
 
-.manifest-item:last-child { border-bottom: none; }
-.manifest-item:hover { background: var(--pb-panel); }
+.manifest-item--expandable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.manifest-item--expandable:hover { background: var(--pb-panel); }
+.manifest-item--open { background: var(--pb-panel); }
 
 .manifest-diamond {
   color: var(--pb-accent);
@@ -99,6 +106,52 @@
 
 .manifest-item-name {
   color: var(--pb-fg);
+  letter-spacing: 0.02em;
+  flex: 1;
+}
+
+.manifest-expand-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.manifest-pkg-count {
+  color: var(--pb-dim);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+
+.manifest-chevron {
+  color: var(--pb-accent);
+  font-size: 9px;
+  width: 8px;
+  text-align: center;
+}
+
+.manifest-packages {
+  background: color-mix(in srgb, var(--pb-bg) 60%, var(--pb-panel) 40%);
+  border-top: 1px solid var(--pb-line);
+  padding: 4px 0;
+}
+
+.manifest-pkg-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 14px 3px 32px;
+}
+
+.manifest-pkg-bullet {
+  color: var(--pb-dim);
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.manifest-pkg-name {
+  color: var(--pb-dim);
+  font-size: 10px;
   letter-spacing: 0.02em;
 }
 

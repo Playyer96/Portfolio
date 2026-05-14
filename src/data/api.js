@@ -59,7 +59,9 @@ const transformTechnologies = (rawResponse) => {
   if (!Array.isArray(rawResponse) || !rawResponse[0]?.technologies) {
     return [];
   }
-  return rawResponse[0].technologies;
+  return rawResponse[0].technologies.map(t =>
+    typeof t === 'string' ? t : (t.name || t.title || t.label || '')
+  ).filter(Boolean);
 };
 
 export const fetchProjects = async () => {
