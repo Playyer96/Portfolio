@@ -5,7 +5,7 @@
   overflow-y: auto;
   background: var(--pb-bg);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   transform-style: preserve-3d;
 }
@@ -13,20 +13,24 @@
 .scene-content {
   width: 100%;
   max-width: 900px;
-  padding: 60px 40px;
+  padding: 32px 40px;
   z-index: 1;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hero-section {
   text-align: center;
-  margin-bottom: 120px;
+  margin-bottom: 0;
 }
 
 .hero-text {
   font-family: var(--pb-display);
   font-size: 96px;
   font-weight: 700;
-  line-height: 0.9;
+  line-height: 1.1;
   letter-spacing: -0.04em;
   color: var(--pb-fg);
   margin-bottom: 16px;
@@ -49,7 +53,7 @@
   display: flex;
   gap: 16px;
   justify-content: center;
-  margin-bottom: 80px;
+  margin-bottom: 20px;
 }
 
 .magnetic-btn {
@@ -91,8 +95,8 @@
 .marquee-container {
   width: 100%;
   overflow: hidden;
-  margin: 60px 0;
-  padding: 20px 0;
+  margin: 16px 0 0;
+  padding: 12px 0;
   border-top: 1px solid var(--pb-line);
   border-bottom: 1px solid var(--pb-line);
 }
@@ -128,9 +132,9 @@
 .floating-card {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 80px;
-  padding: 40px;
+  gap: 0;
+  margin-top: 0;
+  padding: 16px 24px;
   background: var(--pb-panel);
   border: 1px solid var(--pb-line);
   border-radius: 4px;
@@ -138,7 +142,7 @@
 
 .card-stat {
   text-align: center;
-  padding: 20px 0;
+  padding: 8px 0;
   border-right: 1px solid var(--pb-line);
 }
 
@@ -148,28 +152,16 @@
 
 .stat-number {
   font-family: var(--pb-display);
-  font-size: 44px;
+  font-size: 28px;
   font-weight: 700;
   color: var(--pb-accent);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .stat-label {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--pb-dim);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.cursor-trail {
-  position: fixed;
-  width: 16px;
-  height: 16px;
-  border: 1.5px solid var(--pb-accent);
-  border-radius: 0;
-  pointer-events: none;
-  mix-blend-mode: difference;
-  z-index: 9999;
-  left: -100px;
-  top: -100px;
-}

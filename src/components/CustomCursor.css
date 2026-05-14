@@ -1,0 +1,76 @@
+.cc {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.1s ease,
+    height 0.1s ease,
+    background-color 0.1s ease,
+    border-color 0.1s ease,
+    border-radius 0.1s ease,
+    opacity 0.2s ease;
+}
+
+/* default: square outline — the cube */
+.cc[data-state="default"] {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--pb-accent);
+  background: transparent;
+  border-radius: 0;
+}
+
+/* hover: larger filled square */
+.cc[data-state="hover"] {
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--pb-accent);
+  background: color-mix(in srgb, var(--pb-accent) 20%, transparent);
+  border-radius: 0;
+}
+
+/* click on empty area: solid small square */
+.cc[data-state="click"] {
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid var(--pb-accent);
+  background: var(--pb-accent);
+  border-radius: 0;
+}
+
+/* click while hovering interactive: filled smaller */
+.cc[data-state="click-hover"] {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--pb-accent);
+  background: color-mix(in srgb, var(--pb-accent) 50%, transparent);
+  border-radius: 0;
+}
+
+/* text: I-beam bar */
+.cc[data-state="text"] {
+  width: 2px;
+  height: 22px;
+  border: none;
+  background: var(--pb-accent);
+  border-radius: 1px;
+}
+
+/* loading: spinning square */
+.cc[data-state="loading"] {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--pb-accent);
+  border-top-color: transparent;
+  background: transparent;
+  border-radius: 0;
+  animation: cc-spin 0.7s linear infinite;
+}
+
+@keyframes cc-spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}

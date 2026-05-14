@@ -12,6 +12,7 @@ import SceneCV from './scenes/SceneCV';
 import SceneStack from './scenes/SceneStack';
 import SceneContact from './scenes/SceneContact';
 import { fetchProjects, fetchExperience } from './data/api';
+import CustomCursor from './components/CustomCursor';
 
 const AppContent = () => {
   const location = useLocation();
@@ -69,6 +70,7 @@ const AppContent = () => {
 const App = () => {
   return (
     <Router>
+      <CustomCursor />
       <AppContent />
       <Analytics />
       <SpeedInsights />

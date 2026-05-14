@@ -7,11 +7,9 @@ import { fetchProjects, fetchExperience, fetchTechnologies } from '../data/api';
 
 const SceneHome = () => {
   const containerRef = useRef(null);
-  const { style, handlers } = useMouseRotation(containerRef);
+  const { handlers } = useMouseRotation(containerRef);
   const { emit } = useConsoleLog();
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [stats, setStats] = useState({ projects: 0, years: 0, tech: 0 });
-  const trailRef = useRef(null);
 
   const heroText = 'Danilo Vanegas';
 
@@ -39,24 +37,9 @@ const SceneHome = () => {
     });
   }, [emit]);
 
-  useEffect(() => {
-    const handleMouseMove = e => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-
-      if (trailRef.current) {
-        trailRef.current.style.left = `${e.clientX - 8}px`;
-        trailRef.current.style.top = `${e.clientY - 8}px`;
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   return (
     <div className="scene-home" ref={containerRef} {...handlers}>
       <GridBackground />
-      <div className="cursor-trail" ref={trailRef} />
 
       <div className="scene-content">
         <div className="hero-section">
@@ -77,6 +60,21 @@ const SceneHome = () => {
               Download CV
             </button>
           </div>
+
+          <div className="floating-card">
+            <div className="card-stat">
+              <div className="stat-number">{stats.projects}</div>
+              <div className="stat-label">Projects</div>
+            </div>
+            <div className="card-stat">
+              <div className="stat-number">{stats.years}+</div>
+              <div className="stat-label">Years</div>
+            </div>
+            <div className="card-stat">
+              <div className="stat-number">{stats.tech}+</div>
+              <div className="stat-label">Technologies</div>
+            </div>
+          </div>
         </div>
 
         <div className="marquee-container">
@@ -91,21 +89,6 @@ const SceneHome = () => {
                 {tech}
               </div>
             ))}
-          </div>
-        </div>
-
-        <div className="floating-card">
-          <div className="card-stat">
-            <div className="stat-number">{stats.projects}</div>
-            <div className="stat-label">Projects</div>
-          </div>
-          <div className="card-stat">
-            <div className="stat-number">{stats.years}+</div>
-            <div className="stat-label">Years</div>
-          </div>
-          <div className="card-stat">
-            <div className="stat-number">{stats.tech}+</div>
-            <div className="stat-label">Technologies</div>
           </div>
         </div>
       </div>
