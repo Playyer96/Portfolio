@@ -101,6 +101,48 @@ const PACKAGES_MAP = {
   ],
 };
 
+const SKEL_WIDTHS = [58, 72, 45, 64, 52, 38, 61, 49];
+
+const StackSkeleton = () => {
+  const cats = [
+    { name: 'ENGINES',   count: 3 },
+    { name: 'LANGUAGES', count: 5 },
+    { name: 'WEB',       count: 5 },
+    { name: 'XR/3D',     count: 4 },
+    { name: 'TOOLS',     count: 6 },
+  ];
+  return (
+    <div className="asset-manifest">
+      <div className="manifest-head">
+        <div className="skel-stk-bar skel-stk-title pb-shimmer" />
+        <div className="skel-stk-bar skel-stk-total pb-shimmer" />
+      </div>
+      {cats.map((cat, ci) => (
+        <div key={cat.name} className="manifest-section">
+          <div className="manifest-section-head">
+            <div className="skel-stk-bar skel-stk-cat pb-shimmer" />
+            <div className="skel-stk-bar skel-stk-count pb-shimmer" />
+          </div>
+          <div className="manifest-items">
+            {Array.from({ length: cat.count }).map((_, i) => (
+              <div key={i} className="manifest-item-group">
+                <div className="manifest-item">
+                  <span className="manifest-diamond" style={{ opacity: 0.2 }}>◆</span>
+                  <div
+                    className="skel-stk-bar pb-shimmer"
+                    style={{ width: `${SKEL_WIDTHS[(ci + i) % SKEL_WIDTHS.length]}%`, height: 10 }}
+                  />
+                  <div className="skel-stk-bar skel-stk-pkg pb-shimmer" style={{ marginLeft: 'auto' }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const SceneStack = () => {
   const [tech, setTech] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -197,7 +239,7 @@ const SceneStack = () => {
         <h1 className="section-heading">Stack</h1>
 
         {loading ? (
-          <div className="loading-state">Compiling technology stack...</div>
+          <StackSkeleton />
         ) : (
           <div className="asset-manifest">
             <div className="manifest-head">

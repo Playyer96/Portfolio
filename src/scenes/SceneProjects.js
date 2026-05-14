@@ -3,7 +3,26 @@ import './SceneProjects.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
 import ProjectModal from '../components/ProjectModal';
+import LazyImage from '../components/LazyImage';
 import { fetchProjects as fetchProjectsFromApi } from '../data/api';
+
+const ProjectCardSkeleton = ({ idx }) => (
+  <div className="project-card-skeleton" style={{ '--card-delay': `${idx * 50}ms` }}>
+    <div className="skel-card-front">
+      <div className="skel-proj-header">
+        <div className="skel-bar skel-proj-title pb-shimmer" />
+        <div className="skel-bar skel-proj-year pb-shimmer" />
+      </div>
+      <div className="skel-bar skel-proj-desc pb-shimmer" />
+      <div className="skel-bar skel-proj-desc skel-proj-desc--b pb-shimmer" />
+      <div className="skel-bar skel-proj-desc skel-proj-desc--c pb-shimmer" />
+      <div className="skel-proj-meta">
+        <div className="skel-bar skel-proj-chip pb-shimmer" />
+        <div className="skel-bar skel-proj-chip pb-shimmer" />
+      </div>
+    </div>
+  </div>
+);
 
 const use3D = (strength = 12) => {
   const ref = useRef(null);
@@ -102,10 +121,10 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
                 <div className="detail-body">
                   {selectedProject.images?.length > 0 && (
                     <div className="detail-carousel">
-                      <img
-                        className="carousel-img"
+                      <LazyImage
                         src={selectedProject.images[carouselIdx]}
                         alt={`${selectedProject.name} ${carouselIdx + 1}`}
+                        style={{ width: '100%', height: '100%' }}
                       />
                       {selectedProject.images.length > 1 && (
                         <>
@@ -150,7 +169,11 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
         )}
 
         {loading ? (
-          <div className="loading-state">Compiling project data...</div>
+          <div className="projects-grid">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <ProjectCardSkeleton key={i} idx={i} />
+            ))}
+          </div>
         ) : (
           <div className="projects-grid">
             {projects.map((project, idx) => (

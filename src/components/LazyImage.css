@@ -1,0 +1,63 @@
+/* ── Lazy image wrapper ── */
+.lazy-img-wrap {
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+/* Shimmer placeholder – uses IDE theme variables with fallbacks */
+.lazy-img-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--pb-panel, #222226) 0%,
+    var(--pb-panel-h, #2c2c30) 50%,
+    var(--pb-panel, #222226) 100%
+  );
+  background-size: 600px 100%;
+  animation: pb-shimmer 1.5s ease infinite;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.lazy-img-shimmer--done {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Global shimmer keyframe – referenced from skeleton styles everywhere */
+@keyframes pb-shimmer {
+  0%   { background-position: -300px 0; }
+  100% { background-position:  300px 0; }
+}
+
+/* Actual image: starts invisible, fades in when loaded */
+.lazy-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.lazy-img--loaded {
+  opacity: 1;
+}
+
+/* ── Skeleton bar utility (used across scene loading states) ── */
+.pb-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--pb-panel, #222226) 0%,
+    var(--pb-panel-h, #2c2c30) 50%,
+    var(--pb-panel, #222226) 100%
+  );
+  background-size: 600px 100%;
+  animation: pb-shimmer 1.5s ease infinite;
+  border-radius: 2px;
+  display: block;
+}

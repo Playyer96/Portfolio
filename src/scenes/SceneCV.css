@@ -49,6 +49,13 @@
   border-radius: 4px;
 }
 
+.cv-pdf-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 4px;
+}
+
 .pdf-placeholder {
   text-align: center;
 }

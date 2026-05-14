@@ -52,8 +52,46 @@ const WORK_COLORS = [
   '#8b5cf6',
 ];
 
+const WorkEntrySkeleton = ({ idx, isLast }) => (
+  <div className="work-entry-skel" style={{ '--entry-delay': `${idx * 0.06}s` }}>
+    <div className="work-entry__track">
+      <div className="work-entry__dot skel-exp-dot" />
+      {!isLast && <div className="work-entry__line" />}
+    </div>
+    <div className="skel-exp-content">
+      <div className="skel-exp-header">
+        <div>
+          <div className="skel-exp-bar skel-exp-company pb-shimmer" />
+          <div className="skel-exp-bar skel-exp-role pb-shimmer" />
+        </div>
+        <div className="skel-exp-meta-col">
+          <div className="skel-exp-bar skel-exp-period pb-shimmer" />
+          <div className="skel-exp-bar skel-exp-badge pb-shimmer" />
+        </div>
+      </div>
+      <div className="skel-exp-chips">
+        <div className="skel-exp-bar skel-exp-chip pb-shimmer" />
+        <div className="skel-exp-bar skel-exp-chip pb-shimmer" />
+        <div className="skel-exp-bar skel-exp-chip pb-shimmer" />
+      </div>
+    </div>
+  </div>
+);
+
+const EduCardSkeleton = () => (
+  <div className="edu-card-skel">
+    <div className="skel-edu-header">
+      <div className="skel-exp-bar skel-edu-title pb-shimmer" />
+      <div className="skel-exp-bar skel-edu-period pb-shimmer" />
+    </div>
+    <div className="skel-exp-bar skel-edu-inst pb-shimmer" />
+    <div className="skel-exp-bar skel-edu-loc pb-shimmer" />
+  </div>
+);
+
 const SceneExperience = ({ selectedExperience = null, setSelectedExperience = () => {} }) => {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [visibleItems, setVisibleItems] = useState(new Set());
   const itemRefs = useRef({});
   const { emit } = useConsoleLog();
@@ -69,6 +107,8 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
         else emit('warn', '! No experience items returned from API');
       } catch (err) {
         emit('error', `✗ Failed to load experience: ${err.message}`);
+      } finally {
+        setLoading(false);
       }
     };
     const id = setTimeout(loadExperience, 200);
@@ -107,6 +147,35 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
             </p>
           )}
         </div>
+
+        {loading && (
+          <>
+            <section className="exp-section">
+              <div className="exp-section-label">
+                <FiBriefcase size={11} />
+                <span>Work</span>
+                <span className="exp-section-count">·</span>
+              </div>
+              <div className="work-list">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <WorkEntrySkeleton key={i} idx={i} isLast={i === 3} />
+                ))}
+              </div>
+            </section>
+            <section className="exp-section">
+              <div className="exp-section-label">
+                <FiBook size={11} />
+                <span>Education</span>
+                <span className="exp-section-count">·</span>
+              </div>
+              <div className="edu-grid">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <EduCardSkeleton key={i} />
+                ))}
+              </div>
+            </section>
+          </>
+        )}
 
         {workItems.length > 0 && (
           <section className="exp-section">

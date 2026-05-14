@@ -380,6 +380,75 @@
   opacity: 0.6;
 }
 
+/* === Skeleton Loading === */
+.work-entry-skel {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 28px;
+  animation: exp-skel-in 0.5s ease var(--entry-delay, 0s) both;
+}
+
+@keyframes exp-skel-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.skel-exp-dot {
+  background: var(--pb-line) !important;
+  outline: 1px solid var(--pb-line) !important;
+}
+
+.skel-exp-content {
+  flex: 1;
+  background: var(--pb-panel);
+  border: 1px solid var(--pb-line);
+  border-left: 2px solid var(--pb-line);
+  padding: 18px 20px 16px;
+  min-width: 0;
+}
+
+.skel-exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 14px;
+}
+
+.skel-exp-bar { flex-shrink: 0; }
+
+.skel-exp-company { height: 17px; width: 160px; margin-bottom: 8px; }
+.skel-exp-role    { height: 11px; width: 110px; }
+.skel-exp-meta-col { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.skel-exp-period  { height: 10px; width: 100px; }
+.skel-exp-badge   { height: 16px; width: 40px; }
+
+.skel-exp-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.skel-exp-chip  { height: 22px; width: 62px; }
+
+.edu-card-skel {
+  background: var(--pb-panel);
+  border: 1px solid var(--pb-line);
+  padding: 14px 16px;
+  border-radius: 2px;
+  animation: exp-skel-in 0.5s ease both;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skel-edu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.skel-edu-title  { height: 13px; width: 52%; }
+.skel-edu-period { height: 10px; width: 60px; }
+.skel-edu-inst   { height: 10px; width: 76%; }
+.skel-edu-loc    { height: 9px;  width: 42%; }
+
 /* === Responsive === */
 @media (max-width: 768px) {
   .scene-experience {

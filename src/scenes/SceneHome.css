@@ -165,3 +165,10 @@
   letter-spacing: 0.5px;
 }
 
+.skel-stat-num {
+  height: 28px;
+  width: 48px;
+  margin: 0 auto 4px;
+  border-radius: 3px;
+}
+

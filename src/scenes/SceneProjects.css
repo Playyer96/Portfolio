@@ -371,6 +371,51 @@
   font-size: 14px;
 }
 
+/* ── Skeleton loading ────────────────────────────────────────────────────── */
+.project-card-skeleton {
+  height: 320px;
+  border: 2px solid var(--pb-line);
+  border-radius: 4px;
+  animation: cardSlideIn 0.5s ease var(--card-delay, 0ms) both;
+}
+
+.skel-card-front {
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--pb-panel);
+}
+
+.skel-proj-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.skel-bar { flex-shrink: 0; }
+
+.skel-proj-title  { height: 18px; width: 58%; }
+.skel-proj-year   { height: 10px; width: 34px; margin-top: 4px; }
+.skel-proj-desc   { height: 11px; width: 100%; }
+.skel-proj-desc--b { width: 84%; }
+.skel-proj-desc--c { width: 68%; }
+
+.skel-proj-meta {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--pb-line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skel-proj-chip { height: 10px; width: 46px; }
+
 /* ── Unity-style gizmo effects ────────────────────────────────────────────── */
 
 /* Floating object label */

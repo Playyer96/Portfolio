@@ -1,10 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './SceneCV.css';
 import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
 
 const SceneCV = () => {
   const downloadBtnRef = useRef(null);
+  const [pdfLoaded, setPdfLoaded] = useState(false);
   const { emit } = useConsoleLog();
 
   useEffect(() => {
@@ -52,11 +53,14 @@ const SceneCV = () => {
         <h1 className="section-heading">Resume</h1>
 
         <div className="cv-container">
-          <div className="cv-preview">
+          <div className="cv-preview" style={{ position: 'relative' }}>
+            {!pdfLoaded && <div className="cv-pdf-skeleton pb-shimmer" />}
             <iframe
               src="/CV-Danilo-Vanegas-2025.pdf"
               className="pdf-viewer"
               title="CV-Danilo-Vanegas-2025.pdf"
+              style={{ opacity: pdfLoaded ? 1 : 0, transition: 'opacity 0.5s ease' }}
+              onLoad={() => setPdfLoaded(true)}
             />
           </div>
 

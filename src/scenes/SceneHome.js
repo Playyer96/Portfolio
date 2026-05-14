@@ -10,6 +10,7 @@ const SceneHome = () => {
   const { handlers } = useMouseRotation(containerRef);
   const { emit } = useConsoleLog();
   const [stats, setStats] = useState({ projects: 0, years: 0, tech: 0 });
+  const [statsLoaded, setStatsLoaded] = useState(false);
 
   const heroText = 'Danilo Vanegas';
 
@@ -28,10 +29,12 @@ const SceneHome = () => {
         years: yearsActive,
         tech: tech.length || 16,
       });
+      setStatsLoaded(true);
       emit('ok', '✓ Portfolio stats loaded');
     }).catch(() => {
       const yearsActive = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
       setStats({ projects: 8, years: yearsActive, tech: 16 });
+      setStatsLoaded(true);
       emit('ok', '✓ Using default stats');
     });
   }, [emit]);
@@ -62,15 +65,21 @@ const SceneHome = () => {
 
           <div className="floating-card">
             <div className="card-stat">
-              <div className="stat-number">{stats.projects}</div>
+              {statsLoaded
+                ? <div className="stat-number">{stats.projects}</div>
+                : <div className="skel-stat-num pb-shimmer" />}
               <div className="stat-label">Projects</div>
             </div>
             <div className="card-stat">
-              <div className="stat-number">{stats.years}+</div>
+              {statsLoaded
+                ? <div className="stat-number">{stats.years}+</div>
+                : <div className="skel-stat-num pb-shimmer" />}
               <div className="stat-label">Years</div>
             </div>
             <div className="card-stat">
-              <div className="stat-number">{stats.tech}+</div>
+              {statsLoaded
+                ? <div className="stat-number">{stats.tech}+</div>
+                : <div className="skel-stat-num pb-shimmer" />}
               <div className="stat-label">Technologies</div>
             </div>
           </div>
