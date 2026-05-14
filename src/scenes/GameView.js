@@ -124,7 +124,7 @@ const HeroSection = ({ accent, projects }) => {
           transition={{ delay: 0.9 }}
         >
           <span className="gv-pulse-dot gv-pulse-sm" style={{ background: accent }} />
-          Available for hire · Starting Q3 2026 · Colombia (UTC-5)
+          Available for hire · Now · Colombia (UTC-5)
         </motion.div>
       </div>
 
@@ -367,7 +367,7 @@ const ContactSection = ({ accent }) => (
       transition={{ delay: 0.88 }}
     >
       <span className="gv-pulse-dot" style={{ background: accent }} />
-      Available · Starting Q3 2026
+      Available Now
     </motion.div>
   </motion.div>
 );

@@ -255,8 +255,8 @@ function InspectorIntro() {
         <InspField label="Experience" value="8+ years" accent />
       </InspGroup>
       <InspGroup icon="✉" iconColor="#0a66c2" title="Engagement">
-        <InspField label="Status"  value="Available" accent />
-        <InspField label="Start"   value="Q3 2026" />
+        <InspField label="Status"  value="Available Now" accent />
+        <InspField label="Start"   value="Immediately" />
         <InspField label="Email"   value="vanegasdanilo7@…" copyValue="vanegasdanilo7@gmail.com" href="mailto:vanegasdanilo7@gmail.com" />
         <InspField label="GitHub"  value="danilovanegas" href="https://github.com/danilovanegas" />
         <InspField label="LinkedIn" value="danilovanegas" href="https://linkedin.com/in/danilovanegas" />
@@ -363,7 +363,7 @@ function InspectorContact() {
     <div>
       <InspGroup icon="⏰" iconColor="var(--pb-accent)" title="Availability">
         <InspField label="Status"     value="Open" accent />
-        <InspField label="Start date" value="Q3 2026" />
+        <InspField label="Start date" value="Immediately" />
       </InspGroup>
       <InspGroup icon="📞" iconColor="#0a66c2" title="Channels">
         <InspField label="Email"    value="vanegasdanilo7@…" copyValue="vanegasdanilo7@gmail.com" href="mailto:vanegasdanilo7@gmail.com" />
@@ -622,7 +622,7 @@ function PortfolioShell({ children, projects = [], experience = [], selectedProj
           ))}
         </div>
         <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center", fontSize: 11 }}>
-          <span style={{ color: "var(--pb-accent)" }}>● available · Q3 '26</span>
+          <span style={{ color: "var(--pb-accent)" }}>● available now</span>
           <div style={{ position: "relative" }} data-pb-menu>
             <button
               onClick={() => setOpenMenu(openMenu === "settings" ? null : "settings")}
