@@ -375,42 +375,108 @@ function InspectorExperience({ experience }) {
   );
 }
 
+function SkillBar({ name, level }) {
+  return (
+    <div style={{
+      display: "grid", gridTemplateColumns: "90px 1fr 28px",
+      padding: "4px 10px", borderBottom: "1px solid var(--pb-line)",
+      fontFamily: "var(--pb-mono)", fontSize: 10, gap: 8, alignItems: "center",
+    }}>
+      <span style={{ color: "var(--pb-dim)" }}>{name}</span>
+      <div style={{ background: "var(--pb-line)", height: 3, borderRadius: 2 }}>
+        <div style={{ width: `${level}%`, height: "100%", background: "var(--pb-accent)", borderRadius: 2 }} />
+      </div>
+      <span style={{ color: "var(--pb-accent)", textAlign: "right", fontSize: 9, fontWeight: 700 }}>{level}</span>
+    </div>
+  );
+}
+
+function deriveSkills(role, highlights) {
+  const r = role.toLowerCase();
+  const h = highlights.join(' ').toLowerCase();
+  const skills = [];
+  if (r.includes('unity'))                                     skills.push({ name: 'C# / .NET',       level: 92 });
+  if (r.includes('unity'))                                     skills.push({ name: 'Unity Engine',     level: 95 });
+  if (r.includes('unreal'))                                    skills.push({ name: 'Unreal Engine',    level: 80 });
+  if (r.includes('unreal'))                                    skills.push({ name: 'C++',              level: 62 });
+  if (r.includes('ar') || r.includes('hololens'))             skills.push({ name: 'AR / XR',          level: 85 });
+  if (h.includes('sports') || h.includes('fsx') || h.includes('calibration')) skills.push({ name: 'Physics / Sim', level: 78 });
+  if (h.includes('vial') || h.includes('logistica'))          skills.push({ name: '3D Visualization', level: 72 });
+  if (h.includes('arena') || h.includes('stardust'))          skills.push({ name: 'Multiplayer / Net', level: 68 });
+  return skills;
+}
+
 function InspectorExperienceItem({ item }) {
-  const duration = calcInspDuration(item.period);
-  const engines  = inferInspEngines(item.role);
+  const duration  = calcInspDuration(item.period);
+  const engines   = inferInspEngines(item.role);
   const isCurrent = item.period.toLowerCase().includes('present');
-  const isWork = item.type === 'Work';
-  const iconColor = isWork ? 'var(--pb-accent)' : '#3b82f6';
+  const isWork    = item.type === 'Work';
+  const skills    = isWork ? deriveSkills(item.role, item.highlights) : [];
+
+  const sep = item.period.indexOf(' - ');
+  const startStr = sep !== -1 ? item.period.slice(0, sep) : item.period;
+  const endStr   = sep !== -1 ? item.period.slice(sep + 3) : '';
 
   return (
     <div>
-      <InspGroup icon={isWork ? '◆' : '▣'} iconColor={iconColor} title={item.company}>
+      {/* GameObject header */}
+      <div style={{
+        padding: "10px 10px 8px", borderBottom: "1px solid var(--pb-line)",
+        fontFamily: "var(--pb-mono)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+          <span style={{
+            width: 14, height: 14, borderRadius: 2, background: isWork ? "var(--pb-accent)" : "#3b82f6",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 8, color: "#000", flexShrink: 0,
+          }}>{isWork ? "W" : "E"}</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--pb-fg)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.company}</span>
+        </div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 9, padding: "1px 6px", background: "var(--pb-line)", color: "var(--pb-dim)" }}>{item.type}</span>
+          {isCurrent && <span style={{ fontSize: 9, padding: "1px 6px", background: "color-mix(in srgb,var(--pb-accent) 15%,transparent)", color: "var(--pb-accent)", fontWeight: 700 }}>ACTIVE</span>}
+          {engines.map((e, i) => <span key={i} style={{ fontSize: 9, padding: "1px 6px", background: "var(--pb-line)", color: "var(--pb-dim)" }}>{e}</span>)}
+        </div>
+      </div>
+
+      {/* Transform component */}
+      <InspGroup icon="⊕" iconColor="#888" title="Transform" defaultOpen={false}>
+        <InspField label="Start"    value={startStr} />
+        <InspField label="End"      value={endStr || 'Present'} />
+        <InspField label="Duration" value={duration || '—'} accent />
         <InspField label="Role"     value={item.role} />
-        <InspField label="Type"     value={item.type} />
-        <InspField label="Period"   value={item.period} />
-        {duration && <InspField label="Duration" value={duration} accent />}
-        {isCurrent && <InspField label="Status" value="Active" accent />}
       </InspGroup>
 
+      {/* Skills component - only for work */}
+      {isWork && skills.length > 0 && (
+        <InspGroup icon="*" iconColor="var(--pb-accent)" title="Skills.cs">
+          {skills.map((s, i) => <SkillBar key={i} name={s.name} level={s.level} />)}
+        </InspGroup>
+      )}
+
+      {/* Shipped titles - richer than the scene chips */}
       {isWork && item.highlights.length > 0 && (
-        <InspGroup icon="◈" iconColor="var(--pb-accent)" title="Shipped Titles">
+        <InspGroup icon="◈" iconColor="var(--pb-accent)" title="Shipped Prefabs">
           {item.highlights.map((h, i) => (
-            <InspField key={i} label={`Title ${i + 1}`} value={h} />
+            <div key={i} style={{
+              padding: "5px 10px", borderBottom: "1px solid var(--pb-line)",
+              fontFamily: "var(--pb-mono)", fontSize: 10,
+              display: "flex", alignItems: "center", gap: 8,
+            }}>
+              <span style={{ width: 8, height: 8, borderRadius: 1, background: "var(--pb-accent)", flexShrink: 0, opacity: 0.7 }} />
+              <span style={{ color: "var(--pb-fg)", flex: 1 }}>{h}</span>
+              <span style={{ color: "var(--pb-dim)", fontSize: 9 }}>.prefab</span>
+            </div>
           ))}
         </InspGroup>
       )}
 
-      {isWork && engines.length > 0 && (
-        <InspGroup icon="!" iconColor="#f59e0b" title="Engines" defaultOpen={false}>
-          {engines.map((e, i) => (
-            <InspField key={i} label={`Engine ${i + 1}`} value={e} />
-          ))}
-        </InspGroup>
-      )}
-
+      {/* Education details */}
       {!isWork && (
-        <InspGroup icon="@" iconColor="#3b82f6" title="Details" defaultOpen={false}>
+        <InspGroup icon="▣" iconColor="#3b82f6" title="Degree Component">
+          <InspField label="Program"     value={item.company} />
           <InspField label="Institution" value={item.role} />
+          <InspField label="Period"      value={item.period} />
           {item.highlights[0] && <InspField label="Location" value={item.highlights[0]} />}
         </InspGroup>
       )}

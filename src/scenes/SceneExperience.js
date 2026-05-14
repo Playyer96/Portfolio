@@ -43,13 +43,6 @@ function inferEngines(role) {
   return tags;
 }
 
-const WORK_COLORS = [
-  'var(--pb-accent)',
-  '#10b981',
-  '#f59e0b',
-  '#06b6d4',
-  '#8b5cf6',
-];
 
 const SceneExperience = ({ selectedExperience = null, setSelectedExperience = () => {} }) => {
   const [items, setItems] = useState([]);
@@ -116,11 +109,10 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
 
             <div className="work-list">
               {workItems.map((item, idx) => {
-                const color    = WORK_COLORS[idx % WORK_COLORS.length];
-                const duration = calcDuration(item.period);
-                const engines  = inferEngines(item.role);
+                const duration  = calcDuration(item.period);
+                const engines   = inferEngines(item.role);
                 const isCurrent = item.period.toLowerCase().includes('present');
-                const isLast   = idx === workItems.length - 1;
+                const isLast    = idx === workItems.length - 1;
                 const isVisible = visibleItems.has(String(item.id));
 
                 return (
@@ -130,7 +122,7 @@ const SceneExperience = ({ selectedExperience = null, setSelectedExperience = ()
                     data-id={item.id}
                     ref={el => (itemRefs.current[item.id] = el)}
                     onClick={() => setSelectedExperience(item)}
-                    style={{ '--entry-color': color, '--entry-delay': `${idx * 0.07}s` }}
+                    style={{ '--entry-delay': `${idx * 0.07}s` }}
                   >
                     <div className="work-entry__track">
                       <div className="work-entry__dot" />
