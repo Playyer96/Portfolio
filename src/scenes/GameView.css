@@ -180,8 +180,8 @@
   bottom: 18px;
   right: 42px;
   background: transparent;
-  border: 1px solid #1c1c1c;
-  color: #333;
+  border: 1px solid #444;
+  color: #999;
   font-family: inherit;
   font-size: 9px;
   letter-spacing: 0.1em;
@@ -190,7 +190,8 @@
   z-index: 10;
   transition: all 0.2s;
 }
-.gv-exit:hover { border-color: #3a3a3a; color: #666; }
+.gv-exit:hover { background: rgba(255,255,255,0.04); border-color: var(--ca, #888); color: var(--ca, #ccc); }
+.gv-exit:active { background: rgba(255,255,255,0.08); }
 
 /* ── Shared pulse dot ── */
 .gv-pulse-dot {

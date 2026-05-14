@@ -49,8 +49,9 @@ const BootScreen = ({ accent }) => (
 );
 
 // ─── Hero ────────────────────────────────────────────────────────────────────
-const HeroSection = ({ accent, projects, about }) => {
+const HeroSection = ({ accent, projects, about, technologies }) => {
   const projectCount = projects.length || 8;
+  const techCount    = technologies.length || 0;
   const careerStart = about?.careerStartDate || '2019-03-01';
   const yearsActive  = Math.floor((Date.now() - new Date(careerStart).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
   const heroName = (about?.heroText || about?.name || 'Danilo Vanegas').split(' ');
@@ -95,7 +96,7 @@ const HeroSection = ({ accent, projects, about }) => {
           {[
             { v: `${projectCount}+`, l: 'Projects shipped' },
             { v: `${yearsActive}+`, l: 'Years active' },
-            { v: '40+',             l: 'Technologies' },
+            { v: `${techCount}+`,    l: 'Technologies' },
           ].map((s, i) => (
             <motion.div
               key={i}
@@ -485,7 +486,7 @@ const GameView = ({ projects = [], experience = [], technologies = [], about = n
 
           {/* Section content */}
           <AnimatePresence mode="wait">
-            {section === 0 && <HeroSection     key="hero"     accent={accent} projects={projects} about={about} />}
+            {section === 0 && <HeroSection     key="hero"     accent={accent} projects={projects} about={about} technologies={technologies} />}
             {section === 1 && <ProjectsSection key="projects" accent={accent} projects={projects} />}
             {section === 2 && <StackSection    key="stack"    accent={accent} technologies={technologies} />}
             {section === 3 && <ContactSection  key="contact"  accent={accent} about={about} />}
