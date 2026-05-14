@@ -7,6 +7,15 @@ import { FiGlobe, FiZap, FiTool, FiRefreshCw, FiBarChart2 } from 'react-icons/fi
 
 const SceneAbout = () => {
   const [stats, setStats] = useState({ projects: 0, years: 0, tech: 0 });
+  const [colTime, setColTime] = useState(() =>
+    new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' })
+  );
+  useEffect(() => {
+    const id = setInterval(() => {
+      setColTime(new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' }));
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
   const { emit } = useConsoleLog();
 
   useEffect(() => {
@@ -80,7 +89,8 @@ const SceneAbout = () => {
           </div>
           <div className="stat-card">
             <div className="stat-big"><FiGlobe /></div>
-            <div className="stat-label">Colombia, UTC-5</div>
+            <div className="stat-label">Medellín, Antioquia - Colombia</div>
+            <div className="stat-label" style={{ fontVariantNumeric: 'tabular-nums', letterSpacing: '0.05em' }}>{colTime}</div>
           </div>
         </div>
 

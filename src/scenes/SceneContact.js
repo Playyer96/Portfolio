@@ -8,6 +8,15 @@ import { FiDownload, FiCopy, FiCheck } from 'react-icons/fi';
 const yearsExp = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
 
 const SceneContact = () => {
+  const [colTime, setColTime] = useState(() =>
+    new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' })
+  );
+  useEffect(() => {
+    const id = setInterval(() => {
+      setColTime(new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' }));
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
   const [copied, setCopied] = useState(false);
   const emailRef = useRef(null);
   const { emit } = useConsoleLog();
@@ -107,7 +116,8 @@ const SceneContact = () => {
           </div>
 
           <div className="contact-footer">
-            <p>Based in Colombia, UTC-5. Open to remote work and collaboration.</p>
+            <p>Based in Medellín, Antioquia - Colombia. Open to remote work and collaboration.</p>
+            <p style={{ fontVariantNumeric: 'tabular-nums' }}>Local time: {colTime}</p>
           </div>
         </div>
       </div>

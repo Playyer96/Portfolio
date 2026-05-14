@@ -247,12 +247,22 @@ function BottomAssets({ projects, navigate, setSelectedProject }) {
 
 function InspectorIntro() {
   const yearsActive = Math.floor((Date.now() - new Date('2019-03-01').getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const [colTime, setColTime] = React.useState(() =>
+    new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' })
+  );
+  React.useEffect(() => {
+    const id = setInterval(() => {
+      setColTime(new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' }));
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
   return (
     <div>
       <InspGroup icon="i" iconColor="var(--pb-accent)" title="Identity">
         <InspField label="Name"       value="Danilo Vanegas" />
         <InspField label="Role"       value="Engineer" />
-        <InspField label="Location"   value="Colombia, UTC-5" />
+        <InspField label="Location"   value="Medellín, Antioquia - Colombia" />
+        <InspField label="Local Time" value={colTime} />
         <InspField label="Experience" value={`${yearsActive}+ years`} accent />
       </InspGroup>
       <InspGroup icon="@" iconColor="#0a66c2" title="Engagement">
