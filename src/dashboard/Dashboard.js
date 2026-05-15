@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiLogOut, FiSettings, FiFileText, FiPackage, FiSmartphone, FiGrid, FiHome, FiCpu } from 'react-icons/fi';
+import { FiLogOut, FiSettings, FiFileText, FiPackage, FiSmartphone, FiGrid, FiHome, FiCpu, FiServer } from 'react-icons/fi';
 import { login, authFetch } from '../data/api';
 import PanelAbout from './panels/PanelAbout';
 import PanelProjects from './panels/PanelProjects';
@@ -10,6 +10,7 @@ import PanelTechnologies from './panels/PanelTechnologies';
 import PanelBlog from './panels/PanelBlog';
 import PanelPlugins from './panels/PanelPlugins';
 import PanelApps from './panels/PanelApps';
+import PanelHomelab from './panels/PanelHomelab';
 import './Dashboard.css';
 
 const NAV_ITEMS = [
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { id: 'blog',         label: 'Blog',          icon: FiFileText },
   { id: 'plugins',      label: 'Plugins',       icon: FiPackage },
   { id: 'apps',         label: 'Apps',          icon: FiSmartphone },
+  { id: 'homelab',      label: 'Homelab',       icon: FiServer },
 ];
 
 function LoginScreen({ onLogin }) {
@@ -186,6 +188,7 @@ export default function Dashboard() {
           case 'blog':         return <PanelBlog />;
           case 'plugins':      return <PanelPlugins />;
           case 'apps':         return <PanelApps />;
+          case 'homelab':      return <PanelHomelab />;
           default:             return <Overview user={user} />;
         }
       }}

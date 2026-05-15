@@ -11,6 +11,10 @@ import SceneExperience from './scenes/SceneExperience';
 import SceneCV from './scenes/SceneCV';
 import SceneStack from './scenes/SceneStack';
 import SceneContact from './scenes/SceneContact';
+import SceneServer from './scenes/SceneServer';
+import SceneBlog from './scenes/SceneBlog';
+import SceneApps from './scenes/SceneApps';
+import ScenePlugins from './scenes/ScenePlugins';
 import Dashboard from './dashboard/Dashboard';
 import ResetPassword from './dashboard/ResetPassword';
 import { fetchAbout, fetchProjects, fetchExperience, fetchTechnologies } from './data/api';
@@ -63,6 +67,10 @@ const AppContent = () => {
             <Route path="/stack"      element={<SceneStack />} />
             <Route path="/contact"    element={<SceneContact about={about} />} />
             <Route path="/cv"         element={<SceneCV about={about} />} />
+            <Route path="/server"     element={<SceneServer />} />
+            <Route path="/blog"       element={<SceneBlog />} />
+            <Route path="/apps"       element={<SceneApps />} />
+            <Route path="/plugins"    element={<ScenePlugins />} />
           </Routes>
         </motion.div>
       </AnimatePresence>

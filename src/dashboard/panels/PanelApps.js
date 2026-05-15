@@ -123,6 +123,20 @@ export default function PanelApps() {
     }
   };
 
+  const [syncing, setSyncing] = useState(null);
+  const handleSync = async (item) => {
+    setSyncing(item._id);
+    try {
+      const result = await authFetch(`apps/${item._id}/sync`, { method: 'POST' });
+      if (result?.app) setItems(prev => prev.map(p => p._id === item._id ? result.app : p));
+      alert(`Synced "${item.name}" from store!`);
+    } catch (err) {
+      alert(`Sync failed: ${err.message}`);
+    } finally {
+      setSyncing(null);
+    }
+  };
+
   return (
     <>
       <CrudPanel
@@ -147,11 +161,26 @@ export default function PanelApps() {
                   {item.rating > 0 && `★ ${item.rating.toFixed(1)}`}
                 </div>
               </div>
-              <ItemActions
-                onEdit={() => setModal({ ...item })}
-                onDelete={() => handleDelete(item)}
-                isDeleting={deleting === item._id}
-              />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                {(item.googlePlayUrl || item.appStoreUrl) && (
+                  <button
+                    onClick={() => handleSync(item)}
+                    disabled={syncing === item._id}
+                    style={{
+                      padding: '4px 10px', fontSize: 11, fontFamily: 'monospace',
+                      background: 'transparent', border: '1px solid #10b981', color: '#10b981',
+                      cursor: syncing === item._id ? 'wait' : 'pointer', borderRadius: 2,
+                    }}
+                  >
+                    {syncing === item._id ? '...' : 'Sync'}
+                  </button>
+                )}
+                <ItemActions
+                  onEdit={() => setModal({ ...item })}
+                  onDelete={() => handleDelete(item)}
+                  isDeleting={deleting === item._id}
+                />
+              </div>
             </div>
           </ItemCard>
         )}

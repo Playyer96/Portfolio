@@ -569,6 +569,95 @@ function InspectorContact({ about }) {
   );
 }
 
+function InspectorServer() {
+  const [stats, setStats] = React.useState(null);
+  React.useEffect(() => {
+    const base = process.env.REACT_APP_API_URL || '/api';
+    fetch(`${base}/homelab`)
+      .then(r => r.ok ? r.json() : [])
+      .then(data => {
+        if (!Array.isArray(data)) return;
+        setStats({
+          total:  data.length,
+          online: data.filter(s => s.status === 'online').length,
+          local:  data.filter(s => s.status === 'local').length,
+          cats:   new Set(data.map(s => s.category).filter(Boolean)).size,
+        });
+      })
+      .catch(() => {});
+  }, []);
+
+  return (
+    <div>
+      <InspGroup icon="⬡" iconColor="var(--pb-accent)" title="Network · Homelab">
+        <InspField label="Services"    value={stats ? String(stats.total)  : '…'} />
+        <InspField label="Online"      value={stats ? String(stats.online) : '…'} accent />
+        <InspField label="Local only"  value={stats ? String(stats.local)  : '…'} />
+        <InspField label="Categories"  value={stats ? String(stats.cats)   : '…'} />
+      </InspGroup>
+      <InspGroup icon="◎" iconColor="#0a66c2" title="Infrastructure" defaultOpen={false}>
+        <InspField label="Runtime"  value="Docker + systemd" />
+        <InspField label="Access"   value="Caddy + Tailscale" />
+        <InspField label="Uptime"   value="24 / 7" accent />
+      </InspGroup>
+      <InspGroup icon="~" iconColor="#10b981" title="Self-Hosted" defaultOpen={false}>
+        <InspField label="Git"    value="Gitea" />
+        <InspField label="Media"  value="Jellyfin" />
+        <InspField label="Arr"    value="Sonarr / Radarr" />
+      </InspGroup>
+    </div>
+  );
+}
+
+function InspectorBlog() {
+  return (
+    <div>
+      <InspGroup icon="//" iconColor="#06b6d4" title="Blog · Dev Log">
+        <InspField label="Sources"  value="Medium RSS + Custom" />
+        <InspField label="Feed"     value="Auto-synced · 30 min" />
+        <InspField label="Config"   value="MEDIUM_USERNAME env" accent />
+      </InspGroup>
+      <InspGroup icon="~" iconColor="var(--pb-accent)" title="Custom Posts" defaultOpen={false}>
+        <InspField label="Manage"   value="/dashboard → Blog" />
+        <InspField label="Formats"  value="Markdown / Rich Text" />
+      </InspGroup>
+    </div>
+  );
+}
+
+function InspectorApps() {
+  return (
+    <div>
+      <InspGroup icon="[]" iconColor="#8b5cf6" title="Apps · Distribution">
+        <InspField label="Stores"   value="Google Play + App Store" />
+        <InspField label="Sync"     value="On demand from dashboard" accent />
+        <InspField label="Data"     value="Rating, installs, screenshots" />
+      </InspGroup>
+      <InspGroup icon="*" iconColor="#10b981" title="Auto-Sync" defaultOpen={false}>
+        <InspField label="Play Store" value="google-play-scraper" />
+        <InspField label="App Store"  value="iTunes Lookup API" />
+        <InspField label="Trigger"    value="Dashboard → Sync button" />
+      </InspGroup>
+    </div>
+  );
+}
+
+function InspectorPlugins() {
+  return (
+    <div>
+      <InspGroup icon="<>" iconColor="#f59e0b" title="Plugins · Asset Store">
+        <InspField label="Stores"   value="Unity + Unreal" />
+        <InspField label="Manage"   value="/dashboard → Plugins" />
+        <InspField label="Data"     value="Price, rating, screenshots" accent />
+      </InspGroup>
+      <InspGroup icon="%" iconColor="#3b82f6" title="Platforms" defaultOpen={false}>
+        <InspField label="Unity"    value="C# · Asset Store" />
+        <InspField label="Unreal"   value="C++ · Marketplace" />
+      </InspGroup>
+    </div>
+  );
+}
+
 function InspectorCV({ about }) {
   const cv = about?.cv || {};
   return (
@@ -603,6 +692,13 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
   const [playing, setPlaying] = React.useState(false);
   const [hSearch, setHSearch] = React.useState("");
   const [openMenu, setOpenMenu] = React.useState(null);
+  const [windowWidth, setWindowWidth] = React.useState(() => window.innerWidth);
+  React.useEffect(() => {
+    const onResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const isMobile = windowWidth < 900;
   const ts = () => new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' });
   const [logs, setLogs] = React.useState(() => [
     { id: 'boot-1', type: 'ok',   msg: '> portfolio_main  Awake ()', timestamp: ts() },
@@ -624,6 +720,10 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
     '/stack': 'stack',
     '/contact': 'contact',
     '/cv': 'cv',
+    '/server': 'server',
+    '/blog': 'blog',
+    '/apps': 'apps',
+    '/plugins': 'plugins',
   };
   const scene = routeMap[routePath] || 'intro';
 
@@ -650,7 +750,8 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
   React.useEffect(() => {
     shellEmit('info', `> SceneManager    LoadScene("${
       { intro:'01_intro', about:'02_about', projects:'03_projects',
-        experience:'04_trajectory', stack:'05_stack', contact:'06_contact', cv:'07_cv' }[scene] || scene
+        experience:'04_trajectory', stack:'05_stack', contact:'06_contact', cv:'07_cv',
+        server:'08_server', blog:'09_blog', apps:'10_apps', plugins:'11_plugins' }[scene] || scene
     }")`);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene]);
@@ -719,6 +820,10 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
     stack: "05_stack.scene",
     contact: "06_contact.scene",
     cv: "07_cv.scene",
+    server: "08_server.scene",
+    blog: "09_blog.scene",
+    apps: "10_apps.scene",
+    plugins: "11_plugins.scene",
   }[scene] || "untitled.scene";
 
   return (
@@ -741,8 +846,8 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
             <span key={c} style={{ width: 10, height: 10, borderRadius: "50%", background: c }} />
           ))}
         </div>
-        <span style={{ color: "var(--pb-dim)" }}>{about?.projectFilename || 'portfolio.unityproj'}</span>
-        <div style={{ display: "flex", gap: 0, marginLeft: 16, color: "var(--pb-dim)", fontSize: 11, position: "relative" }} data-pb-menu>
+        <span style={{ color: "var(--pb-dim)" }}>{isMobile ? (about?.name || 'portfolio') : (about?.projectFilename || 'portfolio.unityproj')}</span>
+        {!isMobile && <div style={{ display: "flex", gap: 0, marginLeft: 16, color: "var(--pb-dim)", fontSize: 11, position: "relative" }} data-pb-menu>
           {[
             { l: "File", items: [
               { l: "Open CV (PDF)", a: () => window.open(about?.cv?.path || '/CV-Danilo-Vanegas-2025.pdf', "_blank") },
@@ -769,6 +874,8 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
               { l: "Animator", a: () => setSceneTab("Animator") },
               { l: "Profiler", a: () => setSceneTab("Profiler") },
               { l: "Console",  a: () => setBottomTab("console") },
+              { l: "—" },
+              { l: "Server ↗",  a: () => navigate('/server') },
             ]},
             { l: "Help", items: about?.socials?.map(s => ({
                 l: `${s.name} ↗`, a: () => window.open(s.url, "_blank"),
@@ -811,9 +918,9 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
               )}
             </div>
           ))}
-        </div>
+        </div>}
         <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center", fontSize: 11 }}>
-          <span style={{ color: "var(--pb-accent)" }}>● {about?.availability?.toLowerCase() || 'available now'}</span>
+          {!isMobile && <span style={{ color: "var(--pb-accent)" }}>● {about?.availability?.toLowerCase() || 'available now'}</span>}
           <div style={{ position: "relative" }} data-pb-menu>
             <button
               onClick={() => setOpenMenu(openMenu === "settings" ? null : "settings")}
@@ -882,25 +989,27 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
         height: 38, background: "var(--pb-panel)", borderBottom: "1px solid var(--pb-line)",
         display: "flex", alignItems: "center", padding: "0 12px", gap: 8, fontSize: 11, flexShrink: 0,
       }}>
+        {!isMobile && <>
+          <button
+            onClick={() => {
+              if (playing) { setPlaying(false); setSceneTab("Scene"); }
+              else { setPlaying(true); setSceneTab("Game"); }
+            }}
+            style={{
+              padding: "4px 12px", background: playing ? "var(--pb-line)" : "var(--pb-accent)",
+              color: playing ? "var(--pb-fg)" : "#000",
+              border: "none", cursor: "pointer", fontFamily: "var(--pb-mono)", fontSize: 11, fontWeight: 700,
+            }}>{playing ? "■ STOP" : "▶ PLAY"}</button>
+          <button
+            onClick={() => setPlaying(false)}
+            style={{
+              padding: "4px 10px", background: "transparent", color: "var(--pb-fg)",
+              border: "1px solid var(--pb-line)", cursor: "pointer", fontFamily: "var(--pb-mono)", fontSize: 11,
+            }}>||</button>
+        </>}
         <button
           onClick={() => {
-            if (playing) { setPlaying(false); setSceneTab("Scene"); }
-            else { setPlaying(true); setSceneTab("Game"); }
-          }}
-          style={{
-            padding: "4px 12px", background: playing ? "var(--pb-line)" : "var(--pb-accent)",
-            color: playing ? "var(--pb-fg)" : "#000",
-            border: "none", cursor: "pointer", fontFamily: "var(--pb-mono)", fontSize: 11, fontWeight: 700,
-          }}>{playing ? "■ STOP" : "▶ PLAY"}</button>
-        <button
-          onClick={() => setPlaying(false)}
-          style={{
-            padding: "4px 10px", background: "transparent", color: "var(--pb-fg)",
-            border: "1px solid var(--pb-line)", cursor: "pointer", fontFamily: "var(--pb-mono)", fontSize: 11,
-          }}>||</button>
-        <button
-          onClick={() => {
-            const order = ["intro","about","projects","experience","stack","contact","cv"];
+            const order = ["intro","about","projects","experience","stack","blog","apps","plugins","contact","cv","server"];
             const i = order.indexOf(scene);
             navigate('/' + (order[(i + 1) % order.length] === 'intro' ? '' : order[(i + 1) % order.length]));
           }}
@@ -910,16 +1019,16 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
             border: "1px solid var(--pb-line)", cursor: "pointer", fontFamily: "var(--pb-mono)", fontSize: 11,
           }}>›</button>
         <div style={{ flex: 1 }} />
-        <span style={{ color: "var(--pb-dim)", fontSize: 10 }}>scene</span>
-        <span style={{ color: "var(--pb-fg)", padding: "2px 10px", background: "var(--pb-line)", fontSize: 11 }}>
+        <span style={{ color: "var(--pb-dim)", fontSize: 10 }}>{isMobile ? '' : 'scene'}</span>
+        <span style={{ color: "var(--pb-fg)", padding: "2px 10px", background: "var(--pb-line)", fontSize: isMobile ? 10 : 11, maxWidth: isMobile ? 160 : 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {sceneLabel}
         </span>
       </div>
 
       {/* Body */}
       <div style={{ flex: 1, display: "flex", overflow: "hidden", minHeight: 0 }}>
-        {/* Hierarchy */}
-        <div style={{
+        {/* Hierarchy — hidden on mobile */}
+        {!isMobile && <div style={{
           width: 240, borderRight: "1px solid var(--pb-line)",
           background: "var(--pb-panel)", display: "flex", flexDirection: "column", flexShrink: 0,
         }}>
@@ -973,6 +1082,18 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
             <HItem icon="◆" label="06_contact" depth={1}
               active={scene === "contact"}
               onClick={() => navigate('/contact')} />
+            <HItem icon="⬡" label="08_server" depth={1}
+              active={scene === "server"}
+              onClick={() => navigate('/server')} />
+            <HItem icon="◆" label="09_blog" depth={1}
+              active={scene === "blog"}
+              onClick={() => navigate('/blog')} />
+            <HItem icon="◆" label="10_apps" depth={1}
+              active={scene === "apps"}
+              onClick={() => navigate('/apps')} />
+            <HItem icon="◆" label="11_plugins" depth={1}
+              active={scene === "plugins"}
+              onClick={() => navigate('/plugins')} />
 
             <div style={{ height: 14 }} />
             <div style={{ padding: "4px 10px", fontSize: 9, color: "var(--pb-dim)", letterSpacing: "0.1em" }}>LIGHTING</div>
@@ -984,12 +1105,12 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
             <div style={{ padding: "4px 10px", fontSize: 9, color: "var(--pb-dim)", letterSpacing: "0.1em" }}>CAMERAS</div>
             <HItem icon="◎" label="main_camera" depth={1} />
           </div>
-        </div>
+        </div>}
 
         {/* Center column: scene tabs + viewport + bottom panel */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-          {/* Scene tabs */}
-          <div style={{
+          {/* Scene tabs — hidden on mobile */}
+          {!isMobile && <div style={{
             height: 26, display: "flex", borderBottom: "1px solid var(--pb-line)",
             background: "var(--pb-panel)", fontSize: 10, flexShrink: 0,
           }}>
@@ -1018,13 +1139,14 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
                 }}>{m}</button>
               ))}
             </div>
-          </div>
+          </div>}
 
           {/* Viewport */}
           <div style={{
             flex: 1, position: "relative", minHeight: 0, background: "var(--pb-bg)",
-            filter: renderMode === "wire" ? "invert(0.04) contrast(1.4) saturate(0)" :
-                    renderMode === "uv" ? "hue-rotate(60deg) saturate(2)" : "none",
+            filter: !isMobile && renderMode === "wire" ? "invert(0.04) contrast(1.4) saturate(0)" :
+                    !isMobile && renderMode === "uv" ? "hue-rotate(60deg) saturate(2)" : "none",
+            paddingBottom: isMobile ? 56 : 0,
           }}>
             {renderMode === "wire" && (
               <div style={{
@@ -1087,8 +1209,8 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
             )}
           </div>
 
-          {/* Bottom dock */}
-          <div style={{
+          {/* Bottom dock — hidden on mobile */}
+          {!isMobile && <div style={{
             height: 200, borderTop: "1px solid var(--pb-line)",
             display: "flex", flexDirection: "column", background: "var(--pb-panel)", flexShrink: 0,
           }}>
@@ -1141,11 +1263,11 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
               {bottomTab === "profiler" && <BottomProfiler />}
               {bottomTab === "assets" && <BottomAssets projects={projects} navigate={navigate} setSelectedProject={setSelectedProject} />}
             </div>
-          </div>
+          </div>}
         </div>
 
-        {/* Inspector */}
-        <div style={{
+        {/* Inspector — hidden on mobile */}
+        {!isMobile && <div style={{
           width: 340, borderLeft: "1px solid var(--pb-line)",
           background: "var(--pb-panel)", display: "flex", flexDirection: "column", flexShrink: 0,
         }}>
@@ -1166,6 +1288,10 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
             {scene === "stack"       && <InspectorStack technologies={technologies} />}
             {scene === "contact"     && <InspectorContact about={about} />}
             {scene === "cv"          && <InspectorCV about={about} />}
+            {scene === "server"      && <InspectorServer />}
+            {scene === "blog"        && <InspectorBlog />}
+            {scene === "apps"        && <InspectorApps />}
+            {scene === "plugins"     && <InspectorPlugins />}
           </div>
           <div style={{ borderTop: "1px solid var(--pb-line)", background: "var(--pb-panel)", padding: 16, textAlign: "center" }}>
             <div style={{ color: "var(--pb-dim)", fontFamily: "var(--pb-mono)", fontSize: 11 }}>Drag a brief here, or</div>
@@ -1175,11 +1301,11 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
               + start a conversation
             </a>
           </div>
-        </div>
+        </div>}
       </div>
 
-      {/* Status bar */}
-      <div style={{
+      {/* Status bar — hidden on mobile */}
+      {!isMobile && <div style={{
         height: 22, background: "var(--pb-panel)", borderTop: "1px solid var(--pb-line)",
         display: "flex", alignItems: "center", padding: "0 12px", fontSize: 10, gap: 16, flexShrink: 0,
       }}>
@@ -1192,7 +1318,52 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
         <span style={{ color: "var(--pb-dim)" }}>· main · 0 conflicts</span>
         <a href={about?.socials?.find(s => s.name === 'GitHub')?.url || 'https://github.com/Playyer96'} target="_blank" rel="noreferrer"
           style={{ color: "var(--pb-fg)", textDecoration: "none" }}>Unity 6 / Next 15 ↗</a>
-      </div>
+      </div>}
+
+      {/* ── Mobile bottom navigation ──────────────────────────────────────── */}
+      {isMobile && (
+        <div style={{
+          position: "fixed", bottom: 0, left: 0, right: 0, height: 56,
+          background: "var(--pb-panel)", borderTop: "1px solid var(--pb-line)",
+          display: "flex", alignItems: "stretch", zIndex: 50,
+          fontFamily: "var(--pb-mono)",
+          overflowX: "auto", overflowY: "hidden",
+          scrollbarWidth: "none",
+        }}>
+          {[
+            { path: '/',           label: 'Home',     icon: '⌂' },
+            { path: '/about',      label: 'About',    icon: '○' },
+            { path: '/projects',   label: 'Projects', icon: '◆' },
+            { path: '/experience', label: 'Work',     icon: '↑' },
+            { path: '/stack',      label: 'Stack',    icon: '≡' },
+            { path: '/blog',       label: 'Blog',     icon: '//' },
+            { path: '/apps',       label: 'Apps',     icon: '[]' },
+            { path: '/plugins',    label: 'Plugins',  icon: '<>' },
+            { path: '/contact',    label: 'Contact',  icon: '~' },
+            { path: '/server',     label: 'Server',   icon: '⬡' },
+          ].map(({ path, label, icon }) => {
+            const isActive = location.pathname === path;
+            return (
+              <button
+                key={path}
+                onClick={() => navigate(path)}
+                style={{
+                  flex: "0 0 auto", minWidth: 52, display: "flex", flexDirection: "column", alignItems: "center",
+                  justifyContent: "center", gap: 2, border: "none", cursor: "pointer",
+                  background: "transparent",
+                  color: isActive ? "var(--pb-accent)" : "var(--pb-dim)",
+                  borderTop: isActive ? "2px solid var(--pb-accent)" : "2px solid transparent",
+                  transition: "color 0.15s, border-color 0.15s",
+                  padding: "4px 4px 0",
+                }}
+              >
+                <span style={{ fontSize: 15, lineHeight: 1 }}>{icon}</span>
+                <span style={{ fontSize: 8, letterSpacing: "0.04em", marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "100%" }}>{label}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* ── Game View full-screen overlay ─────────────────────────────────── */}
       <AnimatePresence>

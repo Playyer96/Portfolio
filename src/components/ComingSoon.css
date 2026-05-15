@@ -1,0 +1,110 @@
+.cs-block {
+  border: 1px solid var(--pb-line);
+  max-width: 560px;
+  font-family: var(--pb-mono);
+  overflow: hidden;
+  animation: csIn 0.4s ease both;
+}
+
+@keyframes csIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Terminal chrome */
+.cs-terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 12px;
+  background: var(--pb-panel-h);
+  border-bottom: 1px solid var(--pb-line);
+}
+
+.cs-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cs-dot--r { background: #ff5f56; }
+.cs-dot--y { background: #ffbd2e; }
+.cs-dot--g { background: #27c93f; }
+
+.cs-terminal-title {
+  font-size: 10px;
+  color: var(--pb-dim);
+  letter-spacing: 0.06em;
+  margin-left: 6px;
+}
+
+/* Body */
+.cs-body {
+  padding: 20px 22px;
+  background: var(--pb-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cs-spacer { height: 10px; }
+
+.cs-line {
+  font-size: 11px;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+
+.cs-line--comment  { color: color-mix(in srgb, var(--pb-accent) 60%, var(--pb-dim) 40%); }
+.cs-line--ok       { color: #10b981; }
+.cs-line--pending  { color: #f59e0b; animation: csBlink 1.4s ease-in-out infinite; }
+.cs-line--dim      { color: var(--pb-dim); font-size: 10px; font-style: italic; }
+
+@keyframes csBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* Progress bar */
+.cs-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0;
+}
+
+.cs-progress-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--pb-dim);
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.cs-progress-track {
+  flex: 1;
+  height: 6px;
+  background: var(--pb-line);
+  position: relative;
+  overflow: hidden;
+}
+
+.cs-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--pb-accent);
+  transition: width 0.06s linear;
+}
+
+.cs-progress-pct {
+  font-size: 10px;
+  color: var(--pb-accent);
+  font-weight: 700;
+  width: 34px;
+  text-align: right;
+  flex-shrink: 0;
+}

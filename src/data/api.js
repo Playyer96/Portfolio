@@ -172,6 +172,34 @@ export const fetchApps        = (filters) =>
 export const fetchApp         = (slug) =>
   apiFetch(`apps/${slug}`, r => Array.isArray(r) ? transformApps(r)[0] : r, 'App');
 
+// ── Homelab ──────────────────────────────────────────────────────────────────
+const transformHomelab = (raw) => {
+  if (!Array.isArray(raw)) return [];
+  return raw.map(s => ({
+    id:          s._id?.toString() || String(Math.random()),
+    name:        s.name        || '',
+    slug:        s.slug        || '',
+    subdomain:   s.subdomain   || '',
+    isPublic:    s.isPublic    !== false,
+    url:         s.url         || null,
+    localUrl:    s.localUrl    || null,
+    icon:        s.icon        || '🖥',
+    color:       s.color       || '#888888',
+    status:      s.status      || 'online',
+    description: s.description || '',
+    category:    s.category    || 'Infrastructure',
+    images:      s.images      || [],
+    learned:     s.learned     || [],
+    tags:        s.tags        || [],
+    uptime:      s.uptime      || null,
+    since:       s.since       || null,
+    order:       s.order       || 0,
+    featured:    s.featured    || false,
+  }));
+};
+
+export const fetchHomelab = () => apiFetch('homelab', transformHomelab, 'Homelab');
+
 // ── Auth ─────────────────────────────────────────────────────────────────────
 export const login = async (email, password) => {
   const res = await fetch(`${baseUrl()}/auth/login`, {
@@ -262,4 +290,9 @@ export const dashboardApi = {
     return authFetch(`apps/${id}`, { method: 'PUT', body: fd });
   },
   deleteApp: (id) => authFetch(`apps/${id}`, { method: 'DELETE' }),
+
+  // Homelab
+  createHomelabService: (data) => authFetch('homelab', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }),
+  updateHomelabService: (id, data) => authFetch(`homelab/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }),
+  deleteHomelabService: (id) => authFetch(`homelab/${id}`, { method: 'DELETE' }),
 };
