@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import useTheme from './hooks/useTheme';
 import GameView from './scenes/GameView';
+import MiniGame from './scenes/MiniGame';
+import AnimatorCanvas from './scenes/AnimatorCanvas';
 import TweaksPanel from './ui/TweaksPanel';
 
 function HItem({ icon, label, depth = 0, active, onClick, badge, color }) {
@@ -135,57 +137,354 @@ function AnimatorView({ experience }) {
   );
 }
 
+const ASSET_CATS = ['All', 'Game', 'XR / AR', 'Web', 'Tool'];
+function guessCategory(p) {
+  const t = ((p.technologies || []).join(' ') + ' ' + (p.description || '')).toLowerCase();
+  if (t.includes('hololens') || t.includes('ar') || t.includes('xr') || t.includes('vr') || t.includes('openxr') || t.includes('mrtk')) return 'XR / AR';
+  if (t.includes('react') || t.includes('node') || t.includes('web') || t.includes('next')) return 'Web';
+  if (t.includes('unity') || t.includes('unreal') || t.includes('game') || t.includes('c#') || t.includes('c++')) return 'Game';
+  return 'Tool';
+}
+
 function AssetStoreView({ projects, onSelect }) {
+  const [cat, setCat] = React.useState('All');
+  const [hovered, setHovered] = React.useState(null);
+  const filtered = cat === 'All' ? projects : projects.filter(p => guessCategory(p) === cat);
+  const counts = React.useMemo(() => {
+    const m = {};
+    projects.forEach(p => { const c = guessCategory(p); m[c] = (m[c] || 0) + 1; });
+    return m;
+  }, [projects]);
+
   return (
-    <div style={{ padding: 20, height: "100%", overflow: "auto" }}>
-      <div style={{ fontSize: 10, color: "var(--pb-dim)", letterSpacing: "0.1em", marginBottom: 14, fontFamily: "var(--pb-mono)" }}>ASSET STORE · PROJECT PREFABS</div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: 12 }}>
-        {projects.map((p, i) => (
-          <button key={i} onClick={() => onSelect(p)} style={{
-            background: "var(--pb-panel)", border: "1px solid var(--pb-line)",
-            cursor: "pointer", padding: 0, overflow: "hidden", display: "flex", flexDirection: "column",
-            transition: "border-color 0.15s",
-          }}
-          onMouseEnter={e => e.currentTarget.style.borderColor = p.color || "var(--pb-accent)"}
-          onMouseLeave={e => e.currentTarget.style.borderColor = "var(--pb-line)"}
-          >
-            <div style={{ aspectRatio: "1", background: p.color || "var(--pb-accent)", position: "relative" }}>
-              <div style={{ position: "absolute", top: 4, left: 6, fontSize: 8, color: "rgba(0,0,0,.5)", fontFamily: "var(--pb-mono)", letterSpacing: "0.05em" }}>
-                {(p.id || '').toUpperCase()}
-              </div>
-            </div>
-            <div style={{ padding: "6px 8px" }}>
-              <div style={{ fontFamily: "var(--pb-mono)", fontSize: 10, color: "var(--pb-fg)", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name || p.title}</div>
-              <div style={{ fontFamily: "var(--pb-mono)", fontSize: 9, color: "var(--pb-dim)", marginTop: 1 }}>.prefab</div>
-            </div>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", fontFamily: "var(--pb-mono)" }}>
+      {/* Category filter */}
+      <div style={{ display: "flex", borderBottom: "1px solid var(--pb-line)", flexShrink: 0 }}>
+        {ASSET_CATS.map(c => (
+          <button key={c} onClick={() => setCat(c)} style={{
+            padding: "7px 14px", background: cat === c ? "var(--pb-bg)" : "transparent",
+            border: "none", borderBottom: cat === c ? "2px solid var(--pb-accent)" : "2px solid transparent",
+            color: cat === c ? "var(--pb-fg)" : "var(--pb-dim)",
+            fontFamily: "var(--pb-mono)", fontSize: 9, cursor: "pointer", letterSpacing: "0.06em",
+            display: "flex", alignItems: "center", gap: 5,
+          }}>
+            {c.toUpperCase()}
+            {c !== 'All' && counts[c] && (
+              <span style={{ fontSize: 8, background: "var(--pb-line)", padding: "0 4px", color: "var(--pb-dim)" }}>{counts[c]}</span>
+            )}
           </button>
         ))}
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", padding: "0 14px", fontSize: 9, color: "var(--pb-dim)" }}>
+          {filtered.length} prefab{filtered.length !== 1 ? 's' : ''}
+        </div>
+      </div>
+
+      {/* Grid */}
+      <div style={{ flex: 1, overflow: "auto", padding: 16 }}>
+        {filtered.length === 0 ? (
+          <div style={{ color: "var(--pb-dim)", fontSize: 10, padding: 20, textAlign: "center" }}>No assets in this category.</div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))", gap: 10 }}>
+            {filtered.map((p, i) => {
+              const isHov = hovered === i;
+              const c = guessCategory(p);
+              const catColor = { 'Game': '#3b82f6', 'XR / AR': '#8b5cf6', 'Web': '#10b981', 'Tool': '#f59e0b' }[c] || 'var(--pb-accent)';
+              return (
+                <button key={i} onClick={() => onSelect(p)}
+                  onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)}
+                  style={{
+                    background: "var(--pb-panel)", border: `1px solid ${isHov ? (p.color || "var(--pb-accent)") : "var(--pb-line)"}`,
+                    cursor: "pointer", padding: 0, overflow: "hidden", display: "flex", flexDirection: "column",
+                    transition: "border-color 0.15s, transform 0.12s",
+                    transform: isHov ? "translateY(-2px)" : "none",
+                    textAlign: "left",
+                  }}
+                >
+                  {/* Thumbnail */}
+                  <div style={{ position: "relative", background: p.color || "var(--pb-accent)", paddingTop: "60%" }}>
+                    {p.images?.[0] ? (
+                      <img src={p.images[0]} alt={p.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <span style={{ fontSize: 20, fontWeight: 800, color: "rgba(0,0,0,0.3)", fontFamily: "var(--pb-mono)" }}>
+                          {(p.name || p.title || '?').slice(0, 2).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                    <span style={{
+                      position: "absolute", top: 4, right: 4, fontSize: 7, padding: "1px 5px",
+                      background: catColor, color: "#000", fontFamily: "var(--pb-mono)", fontWeight: 700, letterSpacing: "0.05em",
+                    }}>{c.toUpperCase()}</span>
+                  </div>
+                  {/* Info */}
+                  <div style={{ padding: "7px 9px" }}>
+                    <div style={{ fontSize: 10, color: "var(--pb-fg)", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name || p.title}</div>
+                    <div style={{ fontSize: 8, color: "var(--pb-dim)", marginTop: 2 }}>{p.year || '—'} · .prefab</div>
+                    <div style={{ display: "flex", gap: 3, marginTop: 5, flexWrap: "wrap" }}>
+                      {(p.technologies || []).slice(0, 3).map((t, ti) => (
+                        <span key={ti} style={{ fontSize: 7, padding: "1px 4px", background: "var(--pb-line)", color: "var(--pb-dim)" }}>{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-function ProfilerView() {
-  const metrics = [
-    { label: "CPU · main thread", value: 2.1, max: 16, unit: "ms", color: "#10b981" },
-    { label: "GPU · render",       value: 4.8, max: 16, unit: "ms", color: "#06b6d4" },
-    { label: "Memory · runtime",   value: 142, max: 512, unit: "MB", color: "#f59e0b" },
-    { label: "Audio · mixer",      value: 0.2, max: 4,  unit: "ms", color: "#8b5cf6" },
-    { label: "Physics · step",     value: 0.9, max: 8,  unit: "ms", color: "#ec4899" },
-    { label: "Network · ping",     value: 0.0, max: 4,  unit: "ms", color: "#ef4444" },
-  ];
+const fmtBytes = b => {
+  if (!b) return '0 B';
+  if (b >= 1048576) return `${(b / 1048576).toFixed(1)} MB`;
+  if (b >= 1024)    return `${(b / 1024).toFixed(0)} KB`;
+  return `${b} B`;
+};
+const fmtMs = ms => ms >= 1000 ? `${(ms / 1000).toFixed(2)} s` : `${Math.round(ms)} ms`;
+
+function PRow({ label, value, sub, accent }) {
   return (
-    <div style={{ padding: "20px 28px", height: "100%", overflow: "auto", fontFamily: "var(--pb-mono)" }}>
-      <div style={{ fontSize: 10, color: "var(--pb-dim)", letterSpacing: "0.1em", marginBottom: 14 }}>PROFILER · RUNTIME METRICS</div>
-      {metrics.map((m, i) => (
-        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-          <div style={{ width: 140, fontSize: 10, color: "var(--pb-dim)", flexShrink: 0 }}>{m.label}</div>
-          <div style={{ flex: 1, height: 10, background: "var(--pb-panel)", position: "relative" }}>
-            <div style={{ position: "absolute", left: 0, top: 0, height: "100%", width: `${(m.value / m.max) * 100}%`, background: m.color, opacity: 0.8 }} />
-          </div>
-          <div style={{ width: 56, fontSize: 10, color: "var(--pb-fg)", textAlign: "right", flexShrink: 0 }}>{m.value} {m.unit}</div>
-        </div>
+    <div style={{ display: 'grid', gridTemplateColumns: '148px 1fr', padding: '4px 0', borderBottom: '1px solid var(--pb-line)', fontSize: 10, gap: 8, alignItems: 'center' }}>
+      <span style={{ color: 'var(--pb-dim)' }}>{label}</span>
+      <div style={{ textAlign: 'right' }}>
+        <span style={{ color: accent ? 'var(--pb-accent)' : 'var(--pb-fg)' }}>{value}</span>
+        {sub && <span style={{ color: 'var(--pb-dim)', marginLeft: 6, fontSize: 9 }}>{sub}</span>}
+      </div>
+    </div>
+  );
+}
+
+function PSection({ title, color, children }) {
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <div style={{ fontSize: 9, color: color || 'var(--pb-dim)', letterSpacing: '0.12em', fontWeight: 700, borderBottom: `1px solid ${color || 'var(--pb-line)'}`, paddingBottom: 4, marginBottom: 6, opacity: 0.8 }}>{title}</div>
+      {children}
+    </div>
+  );
+}
+
+function Spark({ data, color, height = 32 }) {
+  const max = Math.max(...data, 0.001);
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1, height, background: 'var(--pb-panel)', padding: '2px 3px' }}>
+      {data.map((v, i) => (
+        <div key={i} style={{ flex: 1, height: `${Math.max((v / max) * 100, 2)}%`, background: color, opacity: 0.75 }} />
       ))}
+    </div>
+  );
+}
+
+function ProfilerView() {
+  const rafRef2 = React.useRef(null);
+  const [live, setLive] = React.useState({ fps: 0, heapUsed: 0, heapTotal: 0, heapLimit: 0 });
+  const [memHist, setMemHist] = React.useState(() => Array(60).fill(0));
+  const [fpsHist, setFpsHist] = React.useState(() => Array(60).fill(0));
+  const [storage, setStorage] = React.useState(null);
+
+  const pageLoad = React.useMemo(() => {
+    try {
+      const nav = performance.getEntriesByType('navigation')[0];
+      if (!nav) return null;
+      return {
+        ttfb:  Math.round(nav.responseStart - nav.fetchStart),
+        dns:   Math.round(nav.domainLookupEnd - nav.domainLookupStart),
+        tcp:   Math.round(nav.connectEnd - nav.connectStart),
+        dcl:   Math.round(nav.domContentLoadedEventEnd - nav.startTime),
+        load:  Math.round(nav.loadEventEnd - nav.startTime),
+      };
+    } catch { return null; }
+  }, []);
+
+  const assets = React.useMemo(() => {
+    try {
+      const resources = performance.getEntriesByType('resource');
+      const typeMap = {
+        script:         { label: 'Scripts', color: '#06b6d4' },
+        link:           { label: 'CSS',     color: '#8b5cf6' },
+        img:            { label: 'Images',  color: '#10b981' },
+        font:           { label: 'Fonts',   color: '#f59e0b' },
+        fetch:          { label: 'API',     color: '#ec4899' },
+        xmlhttprequest: { label: 'API',     color: '#ec4899' },
+      };
+      const groups = {};
+      let totalTransfer = 0, totalDecoded = 0;
+      resources.forEach(r => {
+        const key  = typeMap[r.initiatorType] ? r.initiatorType : 'other';
+        const meta = typeMap[key] || { label: 'Other', color: '#888' };
+        if (!groups[key]) groups[key] = { ...meta, count: 0, transfer: 0, decoded: 0 };
+        groups[key].count++;
+        groups[key].transfer += r.transferSize    || 0;
+        groups[key].decoded  += r.decodedBodySize || 0;
+        totalTransfer += r.transferSize    || 0;
+        totalDecoded  += r.decodedBodySize || 0;
+      });
+      // Effective download speed from largest non-cached resource
+      const nonCached = resources.filter(r => r.transferSize > 10000 && r.duration > 10);
+      const top = nonCached.sort((a, b) => b.transferSize - a.transferSize)[0];
+      const effectiveMbps = top ? (top.transferSize * 8 / top.duration / 1000).toFixed(2) : null;
+      return { groups: Object.values(groups), totalTransfer, totalDecoded, count: resources.length, effectiveMbps };
+    } catch { return null; }
+  }, []);
+
+  const paints = React.useMemo(() => {
+    try {
+      const entries = performance.getEntriesByType('paint');
+      return {
+        fp:  entries.find(e => e.name === 'first-paint')?.startTime,
+        fcp: entries.find(e => e.name === 'first-contentful-paint')?.startTime,
+      };
+    } catch { return {}; }
+  }, []);
+
+  const conn = React.useMemo(() => ({
+    type:     navigator.connection?.effectiveType || null,
+    downlink: navigator.connection?.downlink      ?? null,
+    rtt:      navigator.connection?.rtt           ?? null,
+    save:     navigator.connection?.saveData      || false,
+  }), []);
+
+  const device = React.useMemo(() => {
+    const ua = navigator.userAgent;
+    const browser = /Edg\//.test(ua) ? 'Edge' : /Chrome\//.test(ua) ? 'Chrome' : /Firefox\//.test(ua) ? 'Firefox' : /Safari\//.test(ua) ? 'Safari' : 'Other';
+    return {
+      cores:   navigator.hardwareConcurrency || '—',
+      ram:     navigator.deviceMemory ? `≥ ${navigator.deviceMemory} GB` : '—',
+      screen:  `${window.screen.width} × ${window.screen.height}`,
+      dpr:     window.devicePixelRatio || 1,
+      lang:    navigator.language || '—',
+      browser,
+      online:  navigator.onLine,
+    };
+  }, []);
+
+  React.useEffect(() => {
+    navigator.storage?.estimate?.()
+      .then(est => { if (est) setStorage({ used: est.usage || 0, quota: est.quota || 0 }); })
+      .catch(() => {});
+  }, []);
+
+  React.useEffect(() => {
+    let frames = 0, accum = 0, last = performance.now();
+    const tick = (now) => {
+      const delta = now - last; last = now;
+      frames++; accum += delta;
+      if (accum >= 500) {
+        const fps       = Math.min(Math.round(frames / accum * 1000), 144);
+        const heapUsed  = performance.memory?.usedJSHeapSize  || 0;
+        const heapTotal = performance.memory?.totalJSHeapSize || 0;
+        const heapLimit = performance.memory?.jsHeapSizeLimit  || 0;
+        setLive({ fps, heapUsed, heapTotal, heapLimit });
+        setMemHist(p => [...p.slice(1), heapLimit > 0 ? heapUsed / heapLimit : 0]);
+        setFpsHist(p => [...p.slice(1), fps]);
+        frames = 0; accum = 0;
+      }
+      rafRef2.current = requestAnimationFrame(tick);
+    };
+    rafRef2.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef2.current);
+  }, []);
+
+  const compression = assets && assets.totalDecoded > 0
+    ? Math.round((1 - assets.totalTransfer / assets.totalDecoded) * 100) : 0;
+  const memPct = live.heapLimit > 0 ? (live.heapUsed / live.heapLimit * 100).toFixed(1) : null;
+  const fpsColor = live.fps < 30 ? '#ef4444' : live.fps < 50 ? '#f59e0b' : 'var(--pb-accent)';
+
+  return (
+    <div style={{ padding: '16px 20px', height: '100%', overflow: 'auto', fontFamily: 'var(--pb-mono)' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 12 }}>
+        <div style={{ fontSize: 10, color: 'var(--pb-dim)', letterSpacing: '0.1em' }}>PROFILER · LIVE DIAGNOSTICS</div>
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 14, alignItems: 'center' }}>
+          <span style={{ fontSize: 11, color: fpsColor, fontWeight: 700 }}>{live.fps || '—'} FPS</span>
+          {memPct && <span style={{ fontSize: 10, color: parseFloat(memPct) > 70 ? '#f59e0b' : 'var(--pb-fg)' }}>HEAP {memPct}%</span>}
+        </div>
+      </div>
+
+      {/* Live sparklines */}
+      <div style={{ display: 'grid', gridTemplateColumns: live.heapLimit > 0 ? '1fr 1fr' : '1fr', gap: 8, marginBottom: 20 }}>
+        <div>
+          <div style={{ fontSize: 8, color: 'var(--pb-dim)', marginBottom: 3, letterSpacing: '0.1em' }}>FPS HISTORY</div>
+          <Spark data={fpsHist} color={fpsColor} />
+        </div>
+        {live.heapLimit > 0 && (
+          <div>
+            <div style={{ fontSize: 8, color: 'var(--pb-dim)', marginBottom: 3, letterSpacing: '0.1em' }}>HEAP HISTORY</div>
+            <Spark data={memHist} color="#06b6d4" />
+          </div>
+        )}
+      </div>
+
+      {/* JS Memory (Chrome only) */}
+      {live.heapLimit > 0 && (
+        <PSection title="MEMORY · JS RUNTIME" color="#06b6d4">
+          <PRow label="Heap Used"    value={fmtBytes(live.heapUsed)} accent />
+          <PRow label="Heap Allocated" value={fmtBytes(live.heapTotal)} />
+          <PRow label="Heap Limit"   value={fmtBytes(live.heapLimit)} />
+          {storage && <PRow label="Site Storage" value={fmtBytes(storage.used)} sub={`quota ${fmtBytes(storage.quota)}`} />}
+          <div style={{ marginTop: 8, height: 5, background: 'var(--pb-panel)' }}>
+            <div style={{ height: '100%', width: `${live.heapUsed / live.heapLimit * 100}%`, background: '#06b6d4', transition: 'width 0.5s' }} />
+          </div>
+        </PSection>
+      )}
+
+      {/* Page Load */}
+      {pageLoad && (
+        <PSection title="PAGE LOAD · TIMING" color="#10b981">
+          {paints?.fcp != null && <PRow label="First Contentful" value={fmtMs(paints.fcp)} accent />}
+          {paints?.fp  != null && <PRow label="First Paint"      value={fmtMs(paints.fp)} />}
+          <PRow label="TTFB"       value={fmtMs(pageLoad.ttfb)} accent={pageLoad.ttfb < 200} />
+          <PRow label="DNS Lookup" value={fmtMs(pageLoad.dns)} />
+          <PRow label="TCP Connect" value={fmtMs(pageLoad.tcp)} />
+          <PRow label="DOM Ready"  value={fmtMs(pageLoad.dcl)} />
+          <PRow label="Full Load"  value={fmtMs(pageLoad.load)} />
+        </PSection>
+      )}
+
+      {/* Asset Weight */}
+      {assets && (
+        <PSection title="ASSET WEIGHT · TRANSFER" color="#f59e0b">
+          <PRow label="Total Resources" value={`${assets.count} files`} />
+          <PRow label="Transferred"     value={fmtBytes(assets.totalTransfer)} accent />
+          <PRow label="Decoded Size"    value={fmtBytes(assets.totalDecoded)} />
+          <PRow label="Compression"     value={`${compression}% saved`} accent={compression > 20} />
+          {assets.effectiveMbps && <PRow label="Load Speed" value={`${assets.effectiveMbps} Mbps`} sub="at page load" />}
+          <div style={{ marginTop: 10 }}>
+            {assets.groups.map((g, i) => {
+              const pct = assets.totalTransfer > 0 ? g.transfer / assets.totalTransfer * 100 : 0;
+              return (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
+                  <div style={{ width: 44, fontSize: 9, color: g.color, flexShrink: 0 }}>{g.label}</div>
+                  <div style={{ flex: 1, height: 5, background: 'var(--pb-panel)', position: 'relative' }}>
+                    <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: g.color, opacity: 0.8 }} />
+                  </div>
+                  <div style={{ fontSize: 9, color: 'var(--pb-fg)', width: 52, textAlign: 'right', flexShrink: 0 }}>{fmtBytes(g.transfer)}</div>
+                  <div style={{ fontSize: 9, color: 'var(--pb-dim)', width: 24, textAlign: 'right', flexShrink: 0 }}>{g.count}f</div>
+                </div>
+              );
+            })}
+          </div>
+        </PSection>
+      )}
+
+      {/* Network */}
+      <PSection title="NETWORK · CONNECTION" color="#ec4899">
+        {conn.type     && <PRow label="Type"      value={conn.type.toUpperCase()} accent />}
+        {conn.downlink != null && <PRow label="Est. Download" value={`${conn.downlink} Mbps`} accent />}
+        {conn.rtt      != null && <PRow label="Round Trip"   value={`${conn.rtt} ms`} />}
+        <PRow label="Data Saver" value={conn.save ? 'ON' : 'OFF'} accent={conn.save} />
+        <PRow label="Status"     value={device.online ? 'Online' : 'Offline'} accent={device.online} />
+      </PSection>
+
+      {/* Device */}
+      <PSection title="DEVICE · ENVIRONMENT" color="#8b5cf6">
+        <PRow label="CPU Threads" value={String(device.cores)} />
+        <PRow label="Device RAM"  value={device.ram} />
+        <PRow label="Screen"      value={device.screen} sub={`@${device.dpr}x DPR`} />
+        <PRow label="Browser"     value={device.browser} />
+        <PRow label="Language"    value={device.lang} />
+      </PSection>
     </div>
   );
 }
@@ -686,7 +985,9 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
   const navigate = useNavigate();
   const { theme, accent, toggleTheme, setAccent } = useTheme();
   const [bottomTab, setBottomTab] = React.useState("console");
-  const [sceneTab, setSceneTab] = React.useState("Scene");
+  const [sceneTab, setSceneTabRaw] = React.useState("Scene");
+  const sceneTabRef = React.useRef("Scene");
+  const setSceneTab = React.useCallback((v) => { sceneTabRef.current = v; setSceneTabRaw(v); }, []);
   const [hier, setHier] = React.useState({ projects: true, experience: false, lighting: false });
   const [renderMode, setRenderMode] = React.useState("shaded");
   const [playing, setPlaying] = React.useState(false);
@@ -818,8 +1119,9 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
         toggleFullscreen();
         return;
       }
-      // Space = toggle play (only when not typing in an input)
+      // Space = toggle play — disabled when the mini-game tab is active (Space shoots there)
       if (e.key === " " && !e.target.closest("input, button, textarea, [contenteditable]")) {
+        if (sceneTabRef.current === "Game") return;
         e.preventDefault();
         setPlaying(p => {
           if (!p) setSceneTab("Game");
@@ -1195,15 +1497,10 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
             {sceneTab === "Scene" && children}
 
             {sceneTab === "Game" && (
-              <div style={{ position: "relative", width: "100%", height: "100%" }}>
-                {children}
-                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", border: "2px solid var(--pb-accent)", zIndex: 20 }} />
-                <div style={{ position: "absolute", top: 8, left: 10, zIndex: 21, fontFamily: "var(--pb-mono)", fontSize: 10, color: "var(--pb-accent)", letterSpacing: "0.1em" }}>GAME VIEW</div>
-                <div style={{ position: "absolute", top: 8, right: 10, zIndex: 21, fontFamily: "var(--pb-mono)", fontSize: 10, color: "var(--pb-dim)" }}>1920×1080</div>
-              </div>
+              <MiniGame accent={dark ? accentDark : accentLight} />
             )}
 
-            {sceneTab === "Animator" && <AnimatorView experience={experience} />}
+            {sceneTab === "Animator" && <AnimatorCanvas accent={dark ? accentDark : accentLight} />}
 
             {sceneTab === "Asset Store" && (
               <AssetStoreView
