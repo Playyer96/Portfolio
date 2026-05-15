@@ -692,6 +692,8 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
   const [playing, setPlaying] = React.useState(false);
   const [hSearch, setHSearch] = React.useState("");
   const [openMenu, setOpenMenu] = React.useState(null);
+  const [showExitModal, setShowExitModal] = React.useState(false);
+  const [isFullscreen, setIsFullscreen] = React.useState(false);
   const [windowWidth, setWindowWidth] = React.useState(() => window.innerWidth);
   React.useEffect(() => {
     const onResize = () => setWindowWidth(window.innerWidth);
@@ -699,6 +701,22 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
     return () => window.removeEventListener('resize', onResize);
   }, []);
   const isMobile = windowWidth < 900;
+
+  // Fullscreen API
+  React.useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+
+  const toggleFullscreen = React.useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    } else {
+      document.exitFullscreen?.().catch(() => {});
+    }
+  }, []);
+
   const ts = () => new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' });
   const [logs, setLogs] = React.useState(() => [
     { id: 'boot-1', type: 'ok',   msg: '> portfolio_main  Awake ()', timestamp: ts() },
@@ -793,7 +811,13 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
         document.getElementById("pb-hier-search")?.focus();
         return;
       }
-      if (e.key === "Escape") { setOpenMenu(null); return; }
+      if (e.key === "Escape") { setOpenMenu(null); setShowExitModal(false); return; }
+      // F = toggle fullscreen (only when not typing)
+      if (e.key === "f" && !e.target.closest("input, button, textarea, [contenteditable]")) {
+        e.preventDefault();
+        toggleFullscreen();
+        return;
+      }
       // Space = toggle play (only when not typing in an input)
       if (e.key === " " && !e.target.closest("input, button, textarea, [contenteditable]")) {
         e.preventDefault();
@@ -842,8 +866,23 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
         flexShrink: 0,
       }}>
         <div style={{ display: "flex", gap: 6 }}>
-          {["#ff5f56", "#ffbd2e", "#27c93f"].map((c) => (
-            <span key={c} style={{ width: 10, height: 10, borderRadius: "50%", background: c }} />
+          {[
+            { c: "#ff5f56", title: "Quit",       action: () => setShowExitModal(true) },
+            { c: "#ffbd2e", title: "Minimize",   action: () => {} },
+            { c: "#27c93f", title: "Fullscreen", action: toggleFullscreen },
+          ].map(({ c, title, action }) => (
+            <button
+              key={c}
+              title={title}
+              onClick={action}
+              style={{
+                width: 12, height: 12, borderRadius: "50%", background: c,
+                border: "none", cursor: "pointer", padding: 0, flexShrink: 0,
+                transition: "filter 0.12s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.filter = "brightness(1.25)"}
+              onMouseLeave={e => e.currentTarget.style.filter = "none"}
+            />
           ))}
         </div>
         <span style={{ color: "var(--pb-dim)" }}>{isMobile ? (about?.name || 'portfolio') : (about?.projectFilename || 'portfolio.unityproj')}</span>
@@ -1095,15 +1134,6 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
               active={scene === "plugins"}
               onClick={() => navigate('/plugins')} />
 
-            <div style={{ height: 14 }} />
-            <div style={{ padding: "4px 10px", fontSize: 9, color: "var(--pb-dim)", letterSpacing: "0.1em" }}>LIGHTING</div>
-            <HItem icon="○" label="directional_light" depth={1} />
-            <HItem icon="○" label="ambient_fill" depth={1} />
-            <HItem icon="○" label="post_process_volume" depth={1} />
-
-            <div style={{ height: 14 }} />
-            <div style={{ padding: "4px 10px", fontSize: 9, color: "var(--pb-dim)", letterSpacing: "0.1em" }}>CAMERAS</div>
-            <HItem icon="◎" label="main_camera" depth={1} />
           </div>
         </div>}
 
@@ -1362,6 +1392,79 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
               </button>
             );
           })}
+        </div>
+      )}
+
+      {/* ── Exit confirmation modal ───────────────────────────────────────── */}
+      {showExitModal && (
+        <div
+          onClick={() => setShowExitModal(false)}
+          style={{
+            position: "fixed", inset: 0, zIndex: 600,
+            background: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: "var(--pb-panel)", border: "1px solid var(--pb-line)",
+              width: 340, fontFamily: "var(--pb-mono)",
+              boxShadow: "0 32px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)",
+            }}
+          >
+            {/* Modal title bar */}
+            <div style={{
+              height: 28, background: "var(--pb-panel-h)", borderBottom: "1px solid var(--pb-line)",
+              display: "flex", alignItems: "center", padding: "0 12px", gap: 8,
+            }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f56", flexShrink: 0 }} />
+              <span style={{ fontSize: 10, color: "var(--pb-dim)", letterSpacing: "0.06em" }}>
+                portfolio.exe — confirm quit
+              </span>
+            </div>
+
+            {/* Modal body */}
+            <div style={{ padding: "22px 20px 18px" }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "var(--pb-fg)", marginBottom: 8, fontFamily: "var(--pb-display)", letterSpacing: "-0.01em" }}>
+                Quit Portfolio?
+              </div>
+              <div style={{ fontSize: 11, color: "var(--pb-dim)", lineHeight: 1.65, marginBottom: 22 }}>
+                Any unsaved changes will be lost.<br />
+                Are you sure you want to exit?
+              </div>
+              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                <button
+                  onClick={() => setShowExitModal(false)}
+                  style={{
+                    padding: "6px 18px", background: "var(--pb-panel-h)", color: "var(--pb-fg)",
+                    border: "1px solid var(--pb-line)", cursor: "pointer",
+                    fontFamily: "var(--pb-mono)", fontSize: 11, letterSpacing: "0.04em",
+                  }}
+                  autoFocus
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowExitModal(false);
+                    // Try closing the tab; fall back to opening GitHub profile
+                    const closed = window.close();
+                    if (closed === undefined) {
+                      window.location.href = about?.socials?.find(s => s.name === 'GitHub')?.url || 'https://github.com/Playyer96';
+                    }
+                  }}
+                  style={{
+                    padding: "6px 18px", background: "#ff5f56", color: "#fff",
+                    border: "none", cursor: "pointer",
+                    fontFamily: "var(--pb-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "0.04em",
+                  }}
+                >
+                  Quit
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
