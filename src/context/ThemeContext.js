@@ -1,21 +1,20 @@
 import React, { createContext, useContext, useState } from 'react';
+import { VALID_ACCENTS } from '../constants';
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState('dark');
-  const [accent, setAccent] = useState(() => {
-    const colors = ['lime', 'cyan', 'amber', 'magenta'];
-    return colors[Math.floor(Math.random() * colors.length)];
-  });
+  const [accent, setAccent] = useState(() =>
+    VALID_ACCENTS[Math.floor(Math.random() * VALID_ACCENTS.length)]
+  );
 
   const toggleTheme = () => {
     setTheme(t => t === 'dark' ? 'light' : 'dark');
   };
 
   const updateAccent = (newAccent) => {
-    const valid = ['lime', 'cyan', 'amber', 'magenta'];
-    if (valid.includes(newAccent)) {
+    if (VALID_ACCENTS.includes(newAccent)) {
       setAccent(newAccent);
     }
   };

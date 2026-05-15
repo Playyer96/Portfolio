@@ -4,11 +4,9 @@ import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
 import LazyImage from '../components/LazyImage';
 import ComingSoon from '../components/ComingSoon';
-import { fetchBlogPosts } from '../data/api';
+import { fetchBlogPosts, fetchMediumPosts } from '../data/api';
 
 const COMING_SOON = true;
-
-const baseUrl = () => process.env.REACT_APP_API_URL || '/api';
 
 function formatDate(d) {
   if (!d) return '—';
@@ -48,7 +46,7 @@ const SceneBlog = () => {
       try {
         const [customData, mediumRes] = await Promise.allSettled([
           fetchBlogPosts(true),
-          fetch(`${baseUrl()}/blog/medium`).then(r => r.json()),
+          fetchMediumPosts(),
         ]);
 
         const c = customData.status === 'fulfilled' ? customData.value : [];

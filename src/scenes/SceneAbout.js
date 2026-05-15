@@ -4,17 +4,18 @@ import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
 import { fetchProjects, fetchExperience, fetchTechnologies } from '../data/api';
 import { FiGlobe, FiZap, FiTool, FiRefreshCw, FiBarChart2 } from 'react-icons/fi';
+import { YEARS_MS, CAREER_START_FALLBACK, TIMEZONE_FALLBACK, FALLBACK_PROJECT_COUNT, FALLBACK_TECH_COUNT } from '../constants';
 
 const ICON_MAP = { FiZap, FiTool, FiRefreshCw, FiBarChart2 };
 
 const SceneAbout = ({ about = null }) => {
   const [stats, setStats] = useState({ projects: 0, years: 0, tech: 0 });
-  const [colTime, setColTime] = useState(() =>
-    new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: about?.timezone || 'America/Bogota' })
-  );
+  const tz        = about?.timezone       || TIMEZONE_FALLBACK;
+  const startDate = about?.careerStartDate || CAREER_START_FALLBACK;
 
-  const tz        = about?.timezone      || 'America/Bogota';
-  const startDate = about?.careerStartDate || '2019-03-01';
+  const [colTime, setColTime] = useState(() =>
+    new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: tz })
+  );
   const bio       = about?.bio           || [];
   const values    = about?.values        || [];
 
@@ -32,8 +33,8 @@ const SceneAbout = ({ about = null }) => {
 
     Promise.all([fetchProjects(), fetchExperience(), fetchTechnologies()])
       .then(([projects, experience, tech]) => {
-        const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-        const targets = { projects: projects.length || 8, years: yearsActive, tech: tech.length || 16 };
+        const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / YEARS_MS);
+        const targets = { projects: projects.length || FALLBACK_PROJECT_COUNT, years: yearsActive, tech: tech.length || FALLBACK_TECH_COUNT };
 
         const duration = 1200;
         const start    = Date.now();
@@ -49,8 +50,8 @@ const SceneAbout = ({ about = null }) => {
         requestAnimationFrame(step);
       })
       .catch(() => {
-        const fallbackYears = Math.floor((Date.now() - new Date(startDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-        setStats({ projects: 8, years: fallbackYears, tech: 16 });
+        const fallbackYears = Math.floor((Date.now() - new Date(startDate).getTime()) / YEARS_MS);
+        setStats({ projects: FALLBACK_PROJECT_COUNT, years: fallbackYears, tech: FALLBACK_TECH_COUNT });
       });
   }, [emit, startDate]);
 

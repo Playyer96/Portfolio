@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiLogOut, FiSettings, FiFileText, FiPackage, FiSmartphone, FiGrid, FiHome, FiCpu, FiServer } from 'react-icons/fi';
 import { login, authFetch } from '../data/api';
+import { AUTH_TOKEN_KEY } from '../constants';
 import PanelAbout from './panels/PanelAbout';
 import PanelProjects from './panels/PanelProjects';
 import PanelExperience from './panels/PanelExperience';
@@ -39,7 +40,7 @@ function LoginScreen({ onLogin }) {
     try {
       const result = await login(email, password);
       if (result?.token) {
-        localStorage.setItem('auth_token', result.token);
+        localStorage.setItem(AUTH_TOKEN_KEY, result.token);
         onLogin(result.user);
       }
     } catch (err) {
@@ -154,14 +155,14 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('auth_token');
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
     if (token) {
       authFetch('auth/me')
         .then(data => {
           if (data?.email) setUser(data);
-          else localStorage.removeItem('auth_token');
+          else localStorage.removeItem(AUTH_TOKEN_KEY);
         })
-        .catch(() => localStorage.removeItem('auth_token'))
+        .catch(() => localStorage.removeItem(AUTH_TOKEN_KEY))
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
@@ -169,7 +170,7 @@ export default function Dashboard() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem(AUTH_TOKEN_KEY);
     setUser(null);
   };
 

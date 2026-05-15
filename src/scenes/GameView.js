@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './GameView.css';
+import { YEARS_MS, CAREER_START_FALLBACK, FALLBACK_PROJECT_COUNT } from '../constants';
 
 const SECTIONS = [
   { id: 'hero',     label: '00 / HERO' },
@@ -50,10 +51,10 @@ const BootScreen = ({ accent }) => (
 
 // ─── Hero ────────────────────────────────────────────────────────────────────
 const HeroSection = ({ accent, projects, about, technologies }) => {
-  const projectCount = projects.length || 8;
+  const projectCount = projects.length || FALLBACK_PROJECT_COUNT;
   const techCount    = technologies.length || 0;
-  const careerStart = about?.careerStartDate || '2019-03-01';
-  const yearsActive  = Math.floor((Date.now() - new Date(careerStart).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const careerStart  = about?.careerStartDate || CAREER_START_FALLBACK;
+  const yearsActive  = Math.floor((Date.now() - new Date(careerStart).getTime()) / YEARS_MS);
   const heroName = (about?.heroText || about?.name || 'Danilo Vanegas').split(' ');
   const nameLine1 = heroName[0] || 'DANILO';
   const nameLine2 = heroName.slice(1).join(' ') || 'VANEGAS';

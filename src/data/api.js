@@ -1,3 +1,5 @@
+import { AUTH_TOKEN_KEY } from '../constants';
+
 const PROJECT_COLORS = [
   'oklch(72% 0.18 35)',
   'oklch(72% 0.18 200)',
@@ -9,7 +11,8 @@ const PROJECT_COLORS = [
   'oklch(72% 0.18 240)',
 ];
 
-const baseUrl = () => process.env.REACT_APP_API_URL || '/api';
+export const getApiBase = () => process.env.REACT_APP_API_URL || '/api';
+const baseUrl = getApiBase;
 
 const transformAbout = (raw) => {
   if (!Array.isArray(raw) || !raw[0]) return null;
@@ -123,6 +126,8 @@ export const fetchBlogPosts   = (published) =>
   apiFetch(`blog${published === false ? '?published=false' : ''}`, transformBlog, 'Blog');
 export const fetchBlogPost    = (slug) =>
   apiFetch(`blog/${slug}`, r => Array.isArray(r) ? transformBlog(r)[0] : r, 'Blog');
+export const fetchMediumPosts = () =>
+  apiFetch('blog/medium', r => (Array.isArray(r) ? r : []), 'Medium');
 
 // ── New: Plugins / Packages ─────────────────────────────────────────────────
 const transformPlugins = (raw) => {
@@ -216,14 +221,14 @@ export const login = async (email, password) => {
 };
 
 export const authFetch = async (endpoint, options = {}) => {
-  const token = localStorage.getItem('auth_token');
+  const token = localStorage.getItem(AUTH_TOKEN_KEY);
   const headers = { ...options.headers };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
   try {
     const res = await fetch(`${baseUrl()}/${endpoint}`, { ...options, headers });
     if (res.status === 401) {
-      localStorage.removeItem('auth_token');
+      localStorage.removeItem(AUTH_TOKEN_KEY);
       throw new Error('Unauthorized');
     }
     return await res.json();

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
-
-const baseUrl = () => process.env.REACT_APP_API_URL || '/api';
+import { getApiBase } from '../data/api';
+import { PASSWORD_MIN_LENGTH } from '../constants';
 
 export default function ResetPassword() {
   const [params] = useSearchParams();
@@ -25,7 +25,7 @@ export default function ResetPassword() {
     setLoading(true);
     setStatus(null);
     try {
-      const res = await fetch(`${baseUrl()}/auth/forgot-password`, {
+      const res = await fetch(`${getApiBase()}/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -45,14 +45,14 @@ export default function ResetPassword() {
       setStatus({ type: 'error', message: 'Passwords do not match.' });
       return;
     }
-    if (password.length < 8) {
-      setStatus({ type: 'error', message: 'Password must be at least 8 characters.' });
+    if (password.length < PASSWORD_MIN_LENGTH) {
+      setStatus({ type: 'error', message: `Password must be at least ${PASSWORD_MIN_LENGTH} characters.` });
       return;
     }
     setLoading(true);
     setStatus(null);
     try {
-      const res = await fetch(`${baseUrl()}/auth/reset-password`, {
+      const res = await fetch(`${getApiBase()}/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, password }),

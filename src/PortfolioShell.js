@@ -6,6 +6,7 @@ import GameView from './scenes/GameView';
 import MiniGame from './scenes/MiniGame';
 import AnimatorCanvas from './scenes/AnimatorCanvas';
 import TweaksPanel from './ui/TweaksPanel';
+import { YEARS_MS, CAREER_START_FALLBACK, TIMEZONE_FALLBACK } from './constants';
 
 function HItem({ icon, label, depth = 0, active, onClick, badge, color }) {
   return (
@@ -101,10 +102,11 @@ function AnimatorView({ experience }) {
   if (!experience || experience.length === 0)
     return <div style={{ padding: 40, color: "var(--pb-dim)", fontFamily: "var(--pb-mono)", fontSize: 11 }}>No timeline data.</div>;
   const colors = ["var(--pb-accent)", "#10b981", "#f59e0b", "#06b6d4", "#8b5cf6", "#ec4899"];
+  const currentYear = new Date().getFullYear();
   const allStart = experience.map(e => e.startYear || 2017).filter(Boolean);
-  const allEnd = experience.map(e => e.endYear || 2026).filter(Boolean);
+  const allEnd = experience.map(e => e.endYear || currentYear).filter(Boolean);
   const minY = Math.min(...allStart, 2017);
-  const maxY = Math.max(...allEnd, 2026);
+  const maxY = Math.max(...allEnd, currentYear);
   const range = maxY - minY || 1;
   const years = Array.from({ length: range + 1 }, (_, i) => minY + i);
   return (
@@ -495,9 +497,9 @@ function BottomAssets({ projects, navigate, setSelectedProject }) {
 }
 
 function InspectorIntro({ about }) {
-  const tz = about?.timezone || 'America/Bogota';
-  const startDate = about?.careerStartDate || '2019-03-01';
-  const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const tz = about?.timezone || TIMEZONE_FALLBACK;
+  const startDate = about?.careerStartDate || CAREER_START_FALLBACK;
+  const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / YEARS_MS);
   const [colTime, setColTime] = React.useState(() =>
     new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: tz })
   );
@@ -593,7 +595,7 @@ function calcInspDuration(period) {
   const monthMap = { jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11 };
   const parseDate = (s) => {
     s = s.trim().toLowerCase();
-    if (s === 'present') return new Date(2026, 4);
+    if (s === 'present') { const now = new Date(); return new Date(now.getFullYear(), now.getMonth()); }
     const year = parseInt(s.match(/\d{4}/)?.[0]);
     if (!year) return null;
     for (const [a, mo] of Object.entries(monthMap)) { if (s.includes(a)) return new Date(year, mo); }
@@ -967,7 +969,7 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
     }
   }, []);
 
-  const ts = () => new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Bogota' });
+  const ts = () => new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: about?.timezone || TIMEZONE_FALLBACK });
   const [logs, setLogs] = React.useState(() => [
     { id: 'boot-1', type: 'ok',   msg: '> portfolio_main  Awake ()', timestamp: ts() },
     { id: 'boot-2', type: 'info', msg: '> SceneManager    LoadScene("01_intro")', timestamp: ts() },

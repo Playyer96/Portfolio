@@ -4,6 +4,7 @@ import GridBackground from '../ui/GridBackground';
 import useMouseRotation from '../hooks/useMouseRotation';
 import useConsoleLog from '../hooks/useConsoleLog';
 import { fetchProjects, fetchExperience, fetchTechnologies } from '../data/api';
+import { YEARS_MS, CAREER_START_FALLBACK, FALLBACK_PROJECT_COUNT, FALLBACK_TECH_COUNT } from '../constants';
 
 const SceneHome = ({ about = null }) => {
   const containerRef = useRef(null);
@@ -15,21 +16,21 @@ const SceneHome = ({ about = null }) => {
   const heroText = about?.heroText || 'Danilo Vanegas';
   const subtitle = about?.subtitle || 'Software Engineer / Creative Developer';
   const marquee  = about?.marqueeItems || ['React', 'TypeScript', 'Three.js', 'WebGL', 'Node.js', 'Game Dev', 'Creative Coding', 'UI/UX'];
-  const startDate = about?.careerStartDate || '2019-03-01';
+  const startDate = about?.careerStartDate || CAREER_START_FALLBACK;
 
   useEffect(() => {
     emit('info', '> Scene loaded: Home');
 
     Promise.all([fetchProjects(), fetchExperience(), fetchTechnologies()])
       .then(([projects, experience, tech]) => {
-        const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-        setStats({ projects: projects.length || 8, years: yearsActive, tech: tech.length || 16 });
+        const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / YEARS_MS);
+        setStats({ projects: projects.length || FALLBACK_PROJECT_COUNT, years: yearsActive, tech: tech.length || FALLBACK_TECH_COUNT });
         setStatsLoaded(true);
         emit('ok', '✓ Portfolio stats loaded');
       })
       .catch(() => {
-        const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-        setStats({ projects: 8, years: yearsActive, tech: 16 });
+        const yearsActive = Math.floor((Date.now() - new Date(startDate).getTime()) / YEARS_MS);
+        setStats({ projects: FALLBACK_PROJECT_COUNT, years: yearsActive, tech: FALLBACK_TECH_COUNT });
         setStatsLoaded(true);
         emit('warn', '! Using fallback stats');
       });

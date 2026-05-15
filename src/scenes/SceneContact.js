@@ -4,6 +4,7 @@ import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
 import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { FiDownload, FiCopy, FiCheck } from 'react-icons/fi';
+import { YEARS_MS, CAREER_START_FALLBACK, TIMEZONE_FALLBACK, COPY_RESET_MS } from '../constants';
 
 const SOCIAL_ICONS = {
   GitHub:    { icon: <FaGithub />,    color: 'var(--pb-fg)' },
@@ -12,11 +13,11 @@ const SOCIAL_ICONS = {
 };
 
 const SceneContact = ({ about = null }) => {
-  const tz        = about?.timezone      || 'America/Bogota';
-  const startDate = about?.careerStartDate || '2019-03-01';
+  const tz        = about?.timezone       || TIMEZONE_FALLBACK;
+  const startDate = about?.careerStartDate || CAREER_START_FALLBACK;
   const email     = about?.email         || 'vanegasdanilo7@gmail.com';
   const cv        = about?.cv            || {};
-  const yearsExp  = Math.floor((Date.now() - new Date(startDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const yearsExp  = Math.floor((Date.now() - new Date(startDate).getTime()) / YEARS_MS);
 
   const [colTime, setColTime] = useState(() =>
     new Date().toLocaleTimeString('en-US', { hour12: false, timeZone: tz })
@@ -41,7 +42,7 @@ const SceneContact = ({ about = null }) => {
       await navigator.clipboard.writeText(email);
       setCopied(true);
       emit('ok', '✓ Email copied to clipboard');
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), COPY_RESET_MS);
     } catch {
       emit('error', '✗ Failed to copy email');
     }
@@ -69,9 +70,9 @@ const SceneContact = ({ about = null }) => {
         { name: 'CV', url: cv.path || '/CV-Danilo-Vanegas-2025.pdf', icon: <FiDownload />, color: 'var(--pb-accent)', download: true },
       ]
     : [
-        { name: 'GitHub',    url: 'https://github.com/Playyer96',   icon: <FaGithub />,    color: 'var(--pb-fg)' },
-        { name: 'LinkedIn',  url: 'https://linkedin.com/in/danisvs', icon: <FaLinkedin />,  color: '#0a66c2' },
-        { name: 'Instagram', url: 'https://instagram.com/_dani.svs', icon: <FaInstagram />, color: '#e1306c' },
+        { name: 'GitHub',    url: 'https://github.com/Playyer96',    ...SOCIAL_ICONS.GitHub },
+        { name: 'LinkedIn',  url: 'https://linkedin.com/in/danisvs', ...SOCIAL_ICONS.LinkedIn },
+        { name: 'Instagram', url: 'https://instagram.com/_dani.svs', ...SOCIAL_ICONS.Instagram },
         { name: 'CV',        url: '/CV-Danilo-Vanegas-2025.pdf',     icon: <FiDownload />,  color: 'var(--pb-accent)', download: true },
       ];
 

@@ -4,6 +4,7 @@ import GridBackground from '../ui/GridBackground';
 import useConsoleLog from '../hooks/useConsoleLog';
 import { fetchExperience as fetchExperienceFromApi } from '../data/api';
 import { FiMapPin, FiBriefcase, FiBook } from 'react-icons/fi';
+import { YEARS_MS, CAREER_START_FALLBACK } from '../constants';
 
 function calcDuration(period) {
   if (!period) return '';
@@ -121,8 +122,8 @@ const SceneExperience = ({ about = null, selectedExperience = null, setSelectedE
 
   const workItems = items.filter(i => i.type === 'Work');
   const eduItems  = items.filter(i => i.type === 'Education');
-  const careerStart = about?.careerStartDate || '2019-03-01';
-  const yearsActive = Math.floor((Date.now() - new Date(careerStart).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const careerStart = about?.careerStartDate || CAREER_START_FALLBACK;
+  const yearsActive = Math.floor((Date.now() - new Date(careerStart).getTime()) / YEARS_MS);
 
   return (
     <div className="scene-experience">
