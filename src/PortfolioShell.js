@@ -242,57 +242,36 @@ const fmtBytes = b => {
   if (b >= 1024)    return `${(b / 1024).toFixed(0)} KB`;
   return `${b} B`;
 };
-const fmtMs = ms => ms >= 1000 ? `${(ms / 1000).toFixed(2)} s` : `${Math.round(ms)} ms`;
+const fmtMs = ms => ms >= 1000 ? `${(ms / 1000).toFixed(2)}s` : `${Math.round(ms)}ms`;
 
-function PRow({ label, value, sub, accent }) {
+function StatCard({ value, label, color, sub }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '148px 1fr', padding: '4px 0', borderBottom: '1px solid var(--pb-line)', fontSize: 10, gap: 8, alignItems: 'center' }}>
-      <span style={{ color: 'var(--pb-dim)' }}>{label}</span>
-      <div style={{ textAlign: 'right' }}>
-        <span style={{ color: accent ? 'var(--pb-accent)' : 'var(--pb-fg)' }}>{value}</span>
-        {sub && <span style={{ color: 'var(--pb-dim)', marginLeft: 6, fontSize: 9 }}>{sub}</span>}
-      </div>
-    </div>
-  );
-}
-
-function PSection({ title, color, children }) {
-  return (
-    <div style={{ marginBottom: 20 }}>
-      <div style={{ fontSize: 9, color: color || 'var(--pb-dim)', letterSpacing: '0.12em', fontWeight: 700, borderBottom: `1px solid ${color || 'var(--pb-line)'}`, paddingBottom: 4, marginBottom: 6, opacity: 0.8 }}>{title}</div>
-      {children}
-    </div>
-  );
-}
-
-function Spark({ data, color, height = 32 }) {
-  const max = Math.max(...data, 0.001);
-  return (
-    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1, height, background: 'var(--pb-panel)', padding: '2px 3px' }}>
-      {data.map((v, i) => (
-        <div key={i} style={{ flex: 1, height: `${Math.max((v / max) * 100, 2)}%`, background: color, opacity: 0.75 }} />
-      ))}
+    <div style={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      background: 'var(--pb-panel)', padding: '14px 8px', gap: 3,
+      borderTop: `2px solid ${color}`,
+    }}>
+      <div style={{ fontSize: 26, fontWeight: 800, color, letterSpacing: '-0.02em', lineHeight: 1 }}>{value}</div>
+      {sub && <div style={{ fontSize: 8, color, opacity: 0.55, letterSpacing: '0.05em' }}>{sub}</div>}
+      <div style={{ fontSize: 8, color: 'var(--pb-dim)', letterSpacing: '0.12em', marginTop: 1 }}>{label}</div>
     </div>
   );
 }
 
 function ProfilerView() {
-  const rafRef2 = React.useRef(null);
-  const [live, setLive] = React.useState({ fps: 0, heapUsed: 0, heapTotal: 0, heapLimit: 0 });
-  const [memHist, setMemHist] = React.useState(() => Array(60).fill(0));
-  const [fpsHist, setFpsHist] = React.useState(() => Array(60).fill(0));
-  const [storage, setStorage] = React.useState(null);
+  const canvasRef = React.useRef(null);
+  const rafRef    = React.useRef(null);
+  const histRef   = React.useRef({ fps: Array(80).fill(0), heap: Array(80).fill(0), hl: 0 });
+  const [live, setLive] = React.useState({ fps: 0, heapUsed: 0, hl: 0 });
 
   const pageLoad = React.useMemo(() => {
     try {
       const nav = performance.getEntriesByType('navigation')[0];
       if (!nav) return null;
       return {
-        ttfb:  Math.round(nav.responseStart - nav.fetchStart),
-        dns:   Math.round(nav.domainLookupEnd - nav.domainLookupStart),
-        tcp:   Math.round(nav.connectEnd - nav.connectStart),
-        dcl:   Math.round(nav.domContentLoadedEventEnd - nav.startTime),
-        load:  Math.round(nav.loadEventEnd - nav.startTime),
+        fcp:  performance.getEntriesByType('paint').find(e => e.name === 'first-contentful-paint')?.startTime,
+        ttfb: Math.round(nav.responseStart - nav.fetchStart),
+        load: Math.round(nav.loadEventEnd - nav.startTime),
       };
     } catch { return null; }
   }, []);
@@ -300,191 +279,161 @@ function ProfilerView() {
   const assets = React.useMemo(() => {
     try {
       const resources = performance.getEntriesByType('resource');
-      const typeMap = {
-        script:         { label: 'Scripts', color: '#06b6d4' },
-        link:           { label: 'CSS',     color: '#8b5cf6' },
-        img:            { label: 'Images',  color: '#10b981' },
-        font:           { label: 'Fonts',   color: '#f59e0b' },
-        fetch:          { label: 'API',     color: '#ec4899' },
-        xmlhttprequest: { label: 'API',     color: '#ec4899' },
+      const META = {
+        script: { label: 'JS',   color: '#06b6d4' },
+        link:   { label: 'CSS',  color: '#8b5cf6' },
+        img:    { label: 'IMG',  color: '#10b981' },
+        font:   { label: 'FONT', color: '#f59e0b' },
+        fetch:  { label: 'API',  color: '#ec4899' },
+        xmlhttprequest: { label: 'API', color: '#ec4899' },
       };
       const groups = {};
-      let totalTransfer = 0, totalDecoded = 0;
+      let total = 0;
       resources.forEach(r => {
-        const key  = typeMap[r.initiatorType] ? r.initiatorType : 'other';
-        const meta = typeMap[key] || { label: 'Other', color: '#888' };
-        if (!groups[key]) groups[key] = { ...meta, count: 0, transfer: 0, decoded: 0 };
+        const key  = META[r.initiatorType] ? r.initiatorType : 'other';
+        const meta = META[key] || { label: 'OTHER', color: '#555' };
+        if (!groups[key]) groups[key] = { ...meta, transfer: 0, count: 0 };
+        groups[key].transfer += r.transferSize || 0;
         groups[key].count++;
-        groups[key].transfer += r.transferSize    || 0;
-        groups[key].decoded  += r.decodedBodySize || 0;
-        totalTransfer += r.transferSize    || 0;
-        totalDecoded  += r.decodedBodySize || 0;
+        total += r.transferSize || 0;
       });
-      // Effective download speed from largest non-cached resource
-      const nonCached = resources.filter(r => r.transferSize > 10000 && r.duration > 10);
-      const top = nonCached.sort((a, b) => b.transferSize - a.transferSize)[0];
-      const effectiveMbps = top ? (top.transferSize * 8 / top.duration / 1000).toFixed(2) : null;
-      return { groups: Object.values(groups), totalTransfer, totalDecoded, count: resources.length, effectiveMbps };
+      return { groups: Object.values(groups), total, count: resources.length };
     } catch { return null; }
   }, []);
 
-  const paints = React.useMemo(() => {
-    try {
-      const entries = performance.getEntriesByType('paint');
-      return {
-        fp:  entries.find(e => e.name === 'first-paint')?.startTime,
-        fcp: entries.find(e => e.name === 'first-contentful-paint')?.startTime,
-      };
-    } catch { return {}; }
-  }, []);
-
   const conn = React.useMemo(() => ({
+    downlink: navigator.connection?.downlink ?? null,
     type:     navigator.connection?.effectiveType || null,
-    downlink: navigator.connection?.downlink      ?? null,
-    rtt:      navigator.connection?.rtt           ?? null,
-    save:     navigator.connection?.saveData      || false,
   }), []);
 
-  const device = React.useMemo(() => {
-    const ua = navigator.userAgent;
-    const browser = /Edg\//.test(ua) ? 'Edge' : /Chrome\//.test(ua) ? 'Chrome' : /Firefox\//.test(ua) ? 'Firefox' : /Safari\//.test(ua) ? 'Safari' : 'Other';
-    return {
-      cores:   navigator.hardwareConcurrency || '—',
-      ram:     navigator.deviceMemory ? `≥ ${navigator.deviceMemory} GB` : '—',
-      screen:  `${window.screen.width} × ${window.screen.height}`,
-      dpr:     window.devicePixelRatio || 1,
-      lang:    navigator.language || '—',
-      browser,
-      online:  navigator.onLine,
-    };
-  }, []);
-
   React.useEffect(() => {
-    navigator.storage?.estimate?.()
-      .then(est => { if (est) setStorage({ used: est.usage || 0, quota: est.quota || 0 }); })
-      .catch(() => {});
-  }, []);
-
-  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     let frames = 0, accum = 0, last = performance.now();
-    const tick = (now) => {
-      const delta = now - last; last = now;
-      frames++; accum += delta;
+
+    const draw = () => {
+      const W = canvas.offsetWidth, H = canvas.offsetHeight;
+      if (!W || !H) return;
+      canvas.width = W; canvas.height = H;
+
+      const cs  = getComputedStyle(canvas);
+      const bg  = cs.getPropertyValue('--pb-bg').trim()   || '#1a1a1c';
+      const ln  = cs.getPropertyValue('--pb-line').trim() || '#34343a';
+      const dim = cs.getPropertyValue('--pb-dim').trim()  || '#888880';
+
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.strokeStyle = ln; ctx.lineWidth = 1;
+      for (let i = 1; i <= 3; i++) {
+        const y = Math.round(H * i / 4) + 0.5;
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      }
+
+      const drawArea = (data, hex, maxVal) => {
+        const n = data.length;
+        const step = W / (n - 1);
+        const pts = data.map((v, i) => ({ x: i * step, y: H - Math.max(v / maxVal, 0) * (H - 8) - 4 }));
+        ctx.beginPath();
+        pts.forEach(({ x, y }, i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)));
+        ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+        const g = ctx.createLinearGradient(0, 0, 0, H);
+        g.addColorStop(0, hex + '50'); g.addColorStop(1, hex + '08');
+        ctx.fillStyle = g; ctx.fill();
+        ctx.beginPath();
+        pts.forEach(({ x, y }, i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)));
+        ctx.strokeStyle = hex; ctx.lineWidth = 1.5; ctx.lineJoin = 'round'; ctx.stroke();
+      };
+
+      drawArea(histRef.current.fps, '#7fff50', 120);
+      if (histRef.current.hl > 0) drawArea(histRef.current.heap, '#06b6d4', 1);
+
+      ctx.font = '8px monospace'; ctx.fillStyle = dim;
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText('FPS', 6, 5);
+      if (histRef.current.hl > 0) {
+        ctx.textAlign = 'right'; ctx.fillStyle = '#06b6d4aa';
+        ctx.fillText('HEAP', W - 6, 5);
+      }
+    };
+
+    const loop = (now) => {
+      const dt = now - last; last = now;
+      frames++; accum += dt;
       if (accum >= 500) {
-        const fps       = Math.min(Math.round(frames / accum * 1000), 144);
-        const heapUsed  = performance.memory?.usedJSHeapSize  || 0;
-        const heapTotal = performance.memory?.totalJSHeapSize || 0;
-        const heapLimit = performance.memory?.jsHeapSizeLimit  || 0;
-        setLive({ fps, heapUsed, heapTotal, heapLimit });
-        setMemHist(p => [...p.slice(1), heapLimit > 0 ? heapUsed / heapLimit : 0]);
-        setFpsHist(p => [...p.slice(1), fps]);
+        const fps = Math.min(Math.round(frames / accum * 1000), 120);
+        const hu  = performance.memory?.usedJSHeapSize  || 0;
+        const hl  = performance.memory?.jsHeapSizeLimit  || 0;
+        histRef.current.fps.push(fps); histRef.current.fps.shift();
+        if (hl > 0) { histRef.current.heap.push(hu / hl); histRef.current.heap.shift(); histRef.current.hl = hl; }
+        setLive({ fps, heapUsed: hu, hl });
         frames = 0; accum = 0;
       }
-      rafRef2.current = requestAnimationFrame(tick);
+      draw();
+      rafRef.current = requestAnimationFrame(loop);
     };
-    rafRef2.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef2.current);
+
+    rafRef.current = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
-  const compression = assets && assets.totalDecoded > 0
-    ? Math.round((1 - assets.totalTransfer / assets.totalDecoded) * 100) : 0;
-  const memPct = live.heapLimit > 0 ? (live.heapUsed / live.heapLimit * 100).toFixed(1) : null;
-  const fpsColor = live.fps < 30 ? '#ef4444' : live.fps < 50 ? '#f59e0b' : 'var(--pb-accent)';
+  const fpsCol = live.fps < 30 ? '#ef4444' : live.fps < 55 ? '#f59e0b' : '#7fff50';
+
+  const cards = [
+    { value: live.fps || '—', label: 'FPS', color: fpsCol },
+    live.hl > 0 && { value: (live.heapUsed / 1048576).toFixed(0), label: 'HEAP MB', color: '#06b6d4', sub: `/ ${(live.hl / 1048576).toFixed(0)} max` },
+    pageLoad?.load > 0 && { value: fmtMs(pageLoad.load), label: 'LOAD TIME', color: '#10b981' },
+    assets?.count > 0  && { value: assets.count, label: 'RESOURCES', color: '#f59e0b', sub: assets.total > 0 ? fmtBytes(assets.total) : null },
+    conn.downlink != null && { value: conn.downlink, label: 'MBPS', color: '#ec4899', sub: conn.type?.toUpperCase() },
+  ].filter(Boolean);
 
   return (
-    <div style={{ padding: '16px 20px', height: '100%', overflow: 'auto', fontFamily: 'var(--pb-mono)' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 12 }}>
-        <div style={{ fontSize: 10, color: 'var(--pb-dim)', letterSpacing: '0.1em' }}>PROFILER · LIVE DIAGNOSTICS</div>
-        <div style={{ marginLeft: 'auto', display: 'flex', gap: 14, alignItems: 'center' }}>
-          <span style={{ fontSize: 11, color: fpsColor, fontWeight: 700 }}>{live.fps || '—'} FPS</span>
-          {memPct && <span style={{ fontSize: 10, color: parseFloat(memPct) > 70 ? '#f59e0b' : 'var(--pb-fg)' }}>HEAP {memPct}%</span>}
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontFamily: 'var(--pb-mono)', overflow: 'hidden', background: 'var(--pb-bg)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', padding: '7px 14px', borderBottom: '1px solid var(--pb-line)', flexShrink: 0 }}>
+        <span style={{ fontSize: 9, color: 'var(--pb-dim)', letterSpacing: '0.15em' }}>PROFILER · LIVE DIAGNOSTICS</span>
+        <span style={{ marginLeft: 'auto', fontSize: 13, fontWeight: 700, color: fpsCol }}>{live.fps || '—'} FPS</span>
+        {live.hl > 0 && <span style={{ marginLeft: 12, fontSize: 10, color: '#06b6d4' }}>HEAP {(live.heapUsed / 1048576).toFixed(0)} MB</span>}
       </div>
 
-      {/* Live sparklines */}
-      <div style={{ display: 'grid', gridTemplateColumns: live.heapLimit > 0 ? '1fr 1fr' : '1fr', gap: 8, marginBottom: 20 }}>
-        <div>
-          <div style={{ fontSize: 8, color: 'var(--pb-dim)', marginBottom: 3, letterSpacing: '0.1em' }}>FPS HISTORY</div>
-          <Spark data={fpsHist} color={fpsColor} />
-        </div>
-        {live.heapLimit > 0 && (
-          <div>
-            <div style={{ fontSize: 8, color: 'var(--pb-dim)', marginBottom: 3, letterSpacing: '0.1em' }}>HEAP HISTORY</div>
-            <Spark data={memHist} color="#06b6d4" />
-          </div>
-        )}
+      <canvas ref={canvasRef} style={{ width: '100%', height: 130, flexShrink: 0, display: 'block' }} />
+
+      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.max(cards.length, 1)}, 1fr)`, gap: 1, flexShrink: 0 }}>
+        {cards.map((c, i) => <StatCard key={i} {...c} />)}
       </div>
 
-      {/* JS Memory (Chrome only) */}
-      {live.heapLimit > 0 && (
-        <PSection title="MEMORY · JS RUNTIME" color="#06b6d4">
-          <PRow label="Heap Used"    value={fmtBytes(live.heapUsed)} accent />
-          <PRow label="Heap Allocated" value={fmtBytes(live.heapTotal)} />
-          <PRow label="Heap Limit"   value={fmtBytes(live.heapLimit)} />
-          {storage && <PRow label="Site Storage" value={fmtBytes(storage.used)} sub={`quota ${fmtBytes(storage.quota)}`} />}
-          <div style={{ marginTop: 8, height: 5, background: 'var(--pb-panel)' }}>
-            <div style={{ height: '100%', width: `${live.heapUsed / live.heapLimit * 100}%`, background: '#06b6d4', transition: 'width 0.5s' }} />
+      {assets && assets.total > 0 && (
+        <div style={{ padding: '12px 16px', flexShrink: 0 }}>
+          <div style={{ fontSize: 8, color: 'var(--pb-dim)', letterSpacing: '0.14em', marginBottom: 8 }}>ASSET WEIGHT</div>
+          <div style={{ display: 'flex', height: 12, borderRadius: 2, overflow: 'hidden', gap: 1 }}>
+            {assets.groups.filter(g => g.transfer > 0).map((g, i) => (
+              <div key={i} style={{ width: `${g.transfer / assets.total * 100}%`, background: g.color, opacity: 0.8, minWidth: 2 }} />
+            ))}
           </div>
-        </PSection>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 14px', marginTop: 8 }}>
+            {assets.groups.filter(g => g.transfer > 0).map((g, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                <div style={{ width: 7, height: 7, background: g.color, borderRadius: 1, opacity: 0.8, flexShrink: 0 }} />
+                <span style={{ fontSize: 8, color: 'var(--pb-dim)' }}>{g.label}</span>
+                <span style={{ fontSize: 8, color: g.color, opacity: 0.75 }}>{fmtBytes(g.transfer)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
 
-      {/* Page Load */}
       {pageLoad && (
-        <PSection title="PAGE LOAD · TIMING" color="#10b981">
-          {paints?.fcp != null && <PRow label="First Contentful" value={fmtMs(paints.fcp)} accent />}
-          {paints?.fp  != null && <PRow label="First Paint"      value={fmtMs(paints.fp)} />}
-          <PRow label="TTFB"       value={fmtMs(pageLoad.ttfb)} accent={pageLoad.ttfb < 200} />
-          <PRow label="DNS Lookup" value={fmtMs(pageLoad.dns)} />
-          <PRow label="TCP Connect" value={fmtMs(pageLoad.tcp)} />
-          <PRow label="DOM Ready"  value={fmtMs(pageLoad.dcl)} />
-          <PRow label="Full Load"  value={fmtMs(pageLoad.load)} />
-        </PSection>
+        <div style={{ padding: '0 16px 12px', display: 'flex', gap: 6, flexWrap: 'wrap', flexShrink: 0 }}>
+          {[
+            pageLoad.fcp != null && { label: 'FCP', value: fmtMs(pageLoad.fcp), color: '#10b981' },
+            pageLoad.ttfb != null && { label: 'TTFB', value: fmtMs(pageLoad.ttfb), color: pageLoad.ttfb < 200 ? '#10b981' : '#f59e0b' },
+          ].filter(Boolean).map((p, i) => (
+            <div key={i} style={{ display: 'flex', gap: 6, alignItems: 'center', background: 'var(--pb-panel)', padding: '3px 10px' }}>
+              <span style={{ fontSize: 8, color: 'var(--pb-dim)', letterSpacing: '0.1em' }}>{p.label}</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: p.color }}>{p.value}</span>
+            </div>
+          ))}
+        </div>
       )}
-
-      {/* Asset Weight */}
-      {assets && (
-        <PSection title="ASSET WEIGHT · TRANSFER" color="#f59e0b">
-          <PRow label="Total Resources" value={`${assets.count} files`} />
-          <PRow label="Transferred"     value={fmtBytes(assets.totalTransfer)} accent />
-          <PRow label="Decoded Size"    value={fmtBytes(assets.totalDecoded)} />
-          <PRow label="Compression"     value={`${compression}% saved`} accent={compression > 20} />
-          {assets.effectiveMbps && <PRow label="Load Speed" value={`${assets.effectiveMbps} Mbps`} sub="at page load" />}
-          <div style={{ marginTop: 10 }}>
-            {assets.groups.map((g, i) => {
-              const pct = assets.totalTransfer > 0 ? g.transfer / assets.totalTransfer * 100 : 0;
-              return (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
-                  <div style={{ width: 44, fontSize: 9, color: g.color, flexShrink: 0 }}>{g.label}</div>
-                  <div style={{ flex: 1, height: 5, background: 'var(--pb-panel)', position: 'relative' }}>
-                    <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: g.color, opacity: 0.8 }} />
-                  </div>
-                  <div style={{ fontSize: 9, color: 'var(--pb-fg)', width: 52, textAlign: 'right', flexShrink: 0 }}>{fmtBytes(g.transfer)}</div>
-                  <div style={{ fontSize: 9, color: 'var(--pb-dim)', width: 24, textAlign: 'right', flexShrink: 0 }}>{g.count}f</div>
-                </div>
-              );
-            })}
-          </div>
-        </PSection>
-      )}
-
-      {/* Network */}
-      <PSection title="NETWORK · CONNECTION" color="#ec4899">
-        {conn.type     && <PRow label="Type"      value={conn.type.toUpperCase()} accent />}
-        {conn.downlink != null && <PRow label="Est. Download" value={`${conn.downlink} Mbps`} accent />}
-        {conn.rtt      != null && <PRow label="Round Trip"   value={`${conn.rtt} ms`} />}
-        <PRow label="Data Saver" value={conn.save ? 'ON' : 'OFF'} accent={conn.save} />
-        <PRow label="Status"     value={device.online ? 'Online' : 'Offline'} accent={device.online} />
-      </PSection>
-
-      {/* Device */}
-      <PSection title="DEVICE · ENVIRONMENT" color="#8b5cf6">
-        <PRow label="CPU Threads" value={String(device.cores)} />
-        <PRow label="Device RAM"  value={device.ram} />
-        <PRow label="Screen"      value={device.screen} sub={`@${device.dpr}x DPR`} />
-        <PRow label="Browser"     value={device.browser} />
-        <PRow label="Language"    value={device.lang} />
-      </PSection>
     </div>
   );
 }

@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { authFetch } from '../../data/api';
-import FormModal, { FormField, Input, Checkbox, ArrayInput, displayValue } from '../components/FormModal';
+import FormModal, { FormField, Input, Checkbox, ArrayInput, TechPicker, displayValue } from '../components/FormModal';
 import CrudPanel, { ItemCard, ItemActions } from '../components/CrudPanel';
 import './panels.css';
 
+const normTechs = (arr) =>
+  (arr || []).map(t => typeof t === 'string' ? t : t?.name || '').filter(Boolean);
+
 function ProjectForm({ item, onSave, onCancel }) {
-  const [form, setForm] = useState(item || { name: '', year: new Date().getFullYear(), role: '', descriptions: [], technologies: [], responsibilities: [], link: '', githubLink: '', liveLink: '', videoUrl: '', featured: false });
+  const [form, setForm] = useState(item
+    ? { ...item, technologies: normTechs(item.technologies) }
+    : { name: '', year: new Date().getFullYear(), role: '', descriptions: [], technologies: [], responsibilities: [], link: '', githubLink: '', liveLink: '', videoUrl: '', featured: false });
   const [saving, setSaving] = useState(false);
 
   const update = (f, v) => setForm(p => ({ ...p, [f]: v }));
@@ -13,7 +18,7 @@ function ProjectForm({ item, onSave, onCancel }) {
   const handleSubmit = async (e) => {
     e.preventDefault(); setSaving(true);
     try {
-      await onSave(form);
+      await onSave({ ...form, technologies: (form.technologies || []).map(n => ({ name: n })) });
     } catch (err) {
       alert('Failed to save: ' + err.message);
     } finally {
@@ -37,8 +42,8 @@ function ProjectForm({ item, onSave, onCancel }) {
       <FormField label="Descriptions" helper="Each paragraph is a separate entry.">
         <ArrayInput values={form.descriptions || []} onChange={v => update('descriptions', v)} />
       </FormField>
-      <FormField label="Technologies">
-        <ArrayInput values={form.technologies || []} onChange={v => update('technologies', v)} />
+      <FormField label="Technologies" helper="Pick from your master technologies list.">
+        <TechPicker values={form.technologies || []} onChange={v => update('technologies', v)} />
       </FormField>
       <FormField label="Responsibilities">
         <ArrayInput values={form.responsibilities || []} onChange={v => update('responsibilities', v)} />

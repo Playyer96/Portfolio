@@ -80,6 +80,81 @@ export function ArrayInput({ values, onChange, placeholder }) {
   );
 }
 
+export function TechPicker({ values = [], onChange }) {
+  const [allTechs, setAllTechs] = React.useState([]);
+  const [filter, setFilter] = React.useState('');
+
+  React.useEffect(() => {
+    const base = process.env.REACT_APP_API_URL || '/api';
+    fetch(`${base}/technologies`)
+      .then(r => r.ok ? r.json() : [])
+      .then(raw => {
+        const techs = Array.isArray(raw) && raw[0]?.technologies ? raw[0].technologies : [];
+        setAllTechs(techs.filter(t => t.name));
+      })
+      .catch(() => {});
+  }, []);
+
+  const toggle = (name) =>
+    onChange(values.includes(name) ? values.filter(v => v !== name) : [...values, name]);
+
+  const CATEGORY_ORDER = ['engines', 'languages', 'web', 'xr3d', 'tools', 'hardware'];
+  const CATEGORY_LABELS = {
+    engines: 'Engines', languages: 'Languages', web: 'Web',
+    xr3d: 'XR/3D', tools: 'Tools', hardware: 'Hardware',
+  };
+
+  const lf = filter.toLowerCase();
+  const visible = lf ? allTechs.filter(t => t.name.toLowerCase().includes(lf)) : allTechs;
+
+  const grouped = {};
+  visible.forEach(t => {
+    const c = t.category || 'tools';
+    (grouped[c] = grouped[c] || []).push(t);
+  });
+
+  return (
+    <div className="tp__container">
+      <input
+        value={filter}
+        onChange={e => setFilter(e.target.value)}
+        placeholder="Search technologies..."
+        className="ff__input"
+        style={{ marginBottom: 8 }}
+      />
+      {allTechs.length === 0 ? (
+        <div className="tp__empty">Loading technologies...</div>
+      ) : (
+        <div className="tp__groups">
+          {CATEGORY_ORDER.filter(c => grouped[c]?.length).map(c => (
+            <div key={c} className="tp__group">
+              <div className="tp__group-label">{CATEGORY_LABELS[c]}</div>
+              <div className="tp__chips">
+                {grouped[c].map(t => (
+                  <button
+                    key={t.name}
+                    type="button"
+                    onClick={() => toggle(t.name)}
+                    className={`tp__chip${values.includes(t.name) ? ' tp__chip--on' : ''}`}
+                  >
+                    {t.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {values.length > 0 && (
+        <div className="tp__count">
+          {values.length} selected &middot;&nbsp;
+          <button type="button" className="tp__clear" onClick={() => onChange([])}>clear all</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function FormModal({ isOpen, onClose, title, onSubmit, submitLabel, loading, children, wide }) {
   useEffect(() => {
     const handler = e => { if (e.key === 'Escape') onClose(); };

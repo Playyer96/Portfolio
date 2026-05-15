@@ -27,7 +27,7 @@ const transformProjects = (raw) => {
     summary:          p.descriptions?.join(' ') || '',
     color:            PROJECT_COLORS[idx % PROJECT_COLORS.length],
     featured:         p.featured ?? false,
-    technologies:     p.technologies?.map(t => t.name) || [],
+    technologies:     p.technologies?.map(t => typeof t === 'string' ? t : t?.name || '').filter(Boolean) || [],
     responsibilities: p.responsibilities || [],
     images:           p.images?.map(img => typeof img === 'string' ? img : img?.image).filter(Boolean) || [],
     imageUrl:         (() => { const imgs = p.images || []; return imgs.length ? (typeof imgs[0] === 'string' ? imgs[0] : imgs[0]?.image) : null; })(),
@@ -56,7 +56,8 @@ const transformExperience = (raw) => {
       type:       e.icon === 'SchoolIcon' ? 'Education' : 'Work',
       blurb:      '',
       highlights: e.responsibilities || [],
-      iconBg:     e.iconBackground || '#f9004d',
+      iconBg:       e.iconBackground || '#f9004d',
+      technologies: (e.technologies || []).map(t => typeof t === 'string' ? t : t?.name || '').filter(Boolean),
     };
   });
 };

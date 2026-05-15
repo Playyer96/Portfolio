@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { authFetch } from '../../data/api';
-import FormModal, { FormField, Input, Select, ArrayInput, displayValue } from '../components/FormModal';
+import FormModal, { FormField, Input, Select, ArrayInput, TechPicker, displayValue } from '../components/FormModal';
 import CrudPanel, { ItemCard, ItemActions } from '../components/CrudPanel';
 import './panels.css';
+
+const normTechs = (arr) =>
+  (arr || []).map(t => typeof t === 'string' ? t : t?.name || '').filter(Boolean);
 
 const ITEM_COLORS = ['#f9004d', '#10b981', '#f59e0b', '#06b6d4', '#8b5cf6', '#ec4899', '#3b82f6'];
 
 function ExperienceForm({ item, onSave, onCancel }) {
-  const [form, setForm] = useState(item || { title: '', subtitle: '', date: '', icon: 'WorkIcon', iconBackground: ITEM_COLORS[Math.floor(Math.random() * ITEM_COLORS.length)], responsibilities: [] });
+  const [form, setForm] = useState(item
+    ? { ...item, technologies: normTechs(item.technologies) }
+    : { title: '', subtitle: '', date: '', icon: 'WorkIcon', iconBackground: ITEM_COLORS[Math.floor(Math.random() * ITEM_COLORS.length)], responsibilities: [], technologies: [] });
   const [saving, setSaving] = useState(false);
 
   const update = (f, v) => setForm(p => ({ ...p, [f]: v }));
@@ -15,7 +20,7 @@ function ExperienceForm({ item, onSave, onCancel }) {
   const handleSubmit = async (e) => {
     e.preventDefault(); setSaving(true);
     try {
-      await onSave(form);
+      await onSave({ ...form, technologies: (form.technologies || []).map(n => ({ name: n })) });
     } catch (err) {
       alert('Failed to save: ' + err.message);
     } finally {
@@ -24,7 +29,7 @@ function ExperienceForm({ item, onSave, onCancel }) {
   };
 
   return (
-    <FormModal isOpen onClose={onCancel} title={item ? 'Edit Experience' : 'New Experience'} onSubmit={handleSubmit} loading={saving}>
+    <FormModal isOpen onClose={onCancel} title={item ? 'Edit Experience' : 'New Experience'} onSubmit={handleSubmit} loading={saving} wide>
       <FormField label="Title" helper="Company or institution name">
         <Input value={form.title || ''} onChange={e => update('title', e.target.value)} required />
       </FormField>
@@ -55,6 +60,9 @@ function ExperienceForm({ item, onSave, onCancel }) {
       </div>
       <FormField label="Responsibilities" helper="List key responsibilities or achievements.">
         <ArrayInput values={form.responsibilities || []} onChange={v => update('responsibilities', v)} />
+      </FormField>
+      <FormField label="Technologies" helper="Pick technologies used in this role.">
+        <TechPicker values={form.technologies || []} onChange={v => update('technologies', v)} />
       </FormField>
     </FormModal>
   );

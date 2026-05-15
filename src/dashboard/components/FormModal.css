@@ -219,6 +219,97 @@
   margin-bottom: 6px;
 }
 
+/* ─── Tech Picker ─── */
+.tp__container {
+  border: 1px solid var(--pb-line);
+  border-radius: 6px;
+  padding: 8px;
+  background: var(--pb-bg);
+}
+
+.tp__empty {
+  font-size: 12px;
+  color: var(--pb-dim);
+  padding: 4px 0;
+  font-family: var(--pb-mono);
+}
+
+.tp__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.tp__group-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--pb-dim);
+  margin-bottom: 4px;
+  font-family: var(--pb-mono);
+  opacity: 0.7;
+}
+
+.tp__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tp__chip {
+  padding: 2px 8px;
+  font-size: 11px;
+  background: var(--pb-panel-h);
+  border: 1px solid var(--pb-line);
+  border-radius: 4px;
+  color: var(--pb-dim);
+  cursor: pointer;
+  font-family: var(--pb-mono);
+  transition: background 0.1s, color 0.1s;
+}
+
+.tp__chip:hover {
+  background: var(--pb-panel);
+  color: var(--pb-fg);
+  border-color: var(--pb-dim);
+}
+
+.tp__chip--on {
+  background: var(--pb-accent);
+  border-color: var(--pb-accent);
+  color: var(--pb-bg);
+}
+
+.tp__chip--on:hover {
+  opacity: 0.85;
+  color: var(--pb-bg);
+}
+
+.tp__count {
+  font-size: 11px;
+  color: var(--pb-dim);
+  margin-top: 8px;
+  font-family: var(--pb-mono);
+}
+
+.tp__clear {
+  background: none;
+  border: none;
+  color: var(--pb-dim);
+  cursor: pointer;
+  font-size: 11px;
+  font-family: var(--pb-mono);
+  padding: 0;
+  text-decoration: underline;
+}
+
+.tp__clear:hover {
+  color: var(--pb-fg);
+}
+
 /* ─── File inputs ─── */
 .ff__file-input {
   font-size: 12px;
