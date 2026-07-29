@@ -30,6 +30,13 @@
   gap: 40px;
 }
 
+.cv-intro { max-width: 62ch; margin: -38px 0 32px; color: var(--pb-dim); font-family: var(--pb-display); font-size: 16px; line-height: 1.55; }
+
+.cv-tabs { display: flex; gap: 8px; }
+.cv-tabs button { min-height: 40px; padding: 0 16px; border: 1px solid var(--pb-line); color: var(--pb-fg); font-family: var(--pb-display); font-size: 14px; }
+.cv-tabs button.is-active, .cv-tabs button:hover { background: var(--pb-accent); border-color: var(--pb-accent); color: #000; }
+.cv-tabs button:focus-visible, .magnetic-btn:focus-visible { outline: 3px solid var(--pb-fg); outline-offset: 3px; }
+
 .cv-preview {
   background: var(--pb-panel);
   border: 1px solid var(--pb-line);
@@ -42,12 +49,12 @@
   justify-content: center;
 }
 
-.pdf-viewer {
-  width: 100%;
-  height: 100%;
-  border: none;
-  border-radius: 4px;
-}
+.visual-cv { width: min(100%, 760px); min-height: 100%; padding: 48px; background: #faf8f2; color: #171714; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; }
+.visual-cv header { padding-bottom: 20px; border-bottom: 3px solid #0b6b68; }.visual-cv h2 { margin: 0; font-size: 32px; letter-spacing: -.04em; }.visual-cv h3 { margin: 26px 0 9px; color: #0b6b68; font-size: 14px; text-transform: uppercase; letter-spacing: .08em; }.visual-cv h4 { margin: 0; font-size: 16px; }.visual-cv p { margin: 4px 0; }.visual-cv a { color: #0b6b68; }.cv-work { padding: 13px 0; border-bottom: 1px solid #d4d1c7; }.cv-work small { color: #53524c; font-weight: 700; }
+
+.latex-viewer { width: 100%; height: 100%; margin: 0; padding: 28px; overflow: auto; white-space: pre; color: var(--pb-fg); background: #141416; font-family: var(--pb-mono); font-size: 12px; line-height: 1.65; text-align: left; }
+
+@media print { body * { visibility: hidden; } .visual-cv, .visual-cv * { visibility: visible; } .visual-cv { position: absolute; inset: 0; width: 100%; min-height: auto; padding: 0; font-size: 10.5pt; } .visual-cv h2 { font-size: 25pt; }.visual-cv h3 { margin-top: 16pt; } }
 
 .cv-pdf-skeleton {
   position: absolute;
