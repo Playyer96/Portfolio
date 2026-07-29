@@ -191,7 +191,7 @@ const SceneProjects = ({ selectedProject = null, setSelectedProject = () => {} }
                     {(project.livePreview || project.images?.[0]) && (
                       <div className="project-card-media" aria-hidden="true">
                         {project.livePreview ? (
-                          <iframe src={project.livePreview} title="" tabIndex="-1" loading="lazy" />
+                          <iframe src={project.livePreview} title={`${project.name} live preview`} tabIndex="-1" loading="lazy" />
                         ) : (
                           <LazyImage src={project.images[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         )}
