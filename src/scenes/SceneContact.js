@@ -16,7 +16,6 @@ const SceneContact = ({ about = null }) => {
   const tz        = about?.timezone       || TIMEZONE_FALLBACK;
   const startDate = about?.careerStartDate || CAREER_START_FALLBACK;
   const email     = about?.email         || 'vanegasdanilo7@gmail.com';
-  const cv        = about?.cv            || {};
   const yearsExp  = Math.floor((Date.now() - new Date(startDate).getTime()) / YEARS_MS);
 
   const [colTime, setColTime] = useState(() =>
