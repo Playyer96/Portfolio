@@ -6,7 +6,7 @@ import LazyImage from '../components/LazyImage';
 import ComingSoon from '../components/ComingSoon';
 import { fetchApps } from '../data/api';
 
-const COMING_SOON = true;
+const COMING_SOON = false;
 
 const PLATFORM_COLORS = {
   android: '#10b981',
@@ -196,11 +196,15 @@ const SceneApps = () => {
                         Google Play &#8599;
                       </a>
                     )}
-                    {selected.appStoreUrl && (
-                      <a href={selected.appStoreUrl} target="_blank" rel="noreferrer" className="app-store-link">
-                        App Store &#8599;
+                    {selected.platform === 'ios' && (selected.appStoreUrl ? (
+                      <a href={selected.appStoreUrl} target="_blank" rel="noreferrer" className="app-store-link app-store-link--apple">
+                        <span>Download on the</span><b>App Store</b>
                       </a>
-                    )}
+                    ) : (
+                      <span className="app-store-link app-store-link--apple app-store-link--disabled" aria-label="App Store link pending">
+                        <span>Coming soon on the</span><b>App Store</b>
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
