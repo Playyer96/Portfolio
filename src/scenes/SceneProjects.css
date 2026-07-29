@@ -77,6 +77,10 @@
   transition: all 0.2s ease;
 }
 
+.project-card-media { height: 148px; margin: -24px -24px 16px; overflow: hidden; background: var(--pb-bg); border-bottom: 1px solid var(--pb-line); }
+.project-card-media iframe { width: 200%; height: 200%; border: 0; transform: scale(.5); transform-origin: top left; pointer-events: none; background: #fff; }
+.project-card-media img { display: block; }
+
 .project-card:hover .card-front {
   border-color: var(--project-color);
   box-shadow: 0 8px 24px rgba(168, 255, 96, 0.1);

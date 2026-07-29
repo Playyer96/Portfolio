@@ -32,6 +32,7 @@ const transformProjects = (raw) => {
     visual:           p.visual || '',
     challenge:        p.challenge || '',
     solution:         p.solution || '',
+    livePreview:      p.livePreview || '',
     featured:         p.featured ?? false,
     technologies:     p.technologies?.map(t => typeof t === 'string' ? t : t?.name || '').filter(Boolean) || [],
     responsibilities: p.responsibilities || [],
