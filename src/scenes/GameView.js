@@ -120,7 +120,7 @@ const HeroSection = ({ accent, projects, about, technologies }) => {
         >
           <a href="/projects" className="gv-cta gv-cta-primary" style={{ '--ca': accent }}>View Projects</a>
           <a href={`mailto:${about?.email || 'vanegasdanilo7@gmail.com'}`} className="gv-cta gv-cta-secondary">Contact</a>
-          <a href={about?.cv?.path || '/CV-Danilo-Vanegas-2025.pdf'} download className="gv-cta gv-cta-ghost">Download CV</a>
+          <a href="/cv" className="gv-cta gv-cta-ghost">View CV</a>
         </motion.div>
 
         <motion.div

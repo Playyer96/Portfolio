@@ -67,13 +67,13 @@ const SceneContact = ({ about = null }) => {
           icon:  SOCIAL_ICONS[s.name]?.icon  || <FaGithub />,
           color: SOCIAL_ICONS[s.name]?.color || 'var(--pb-fg)',
         })),
-        { name: 'CV', url: cv.path || '/CV-Danilo-Vanegas-2025.pdf', icon: <FiDownload />, color: 'var(--pb-accent)', download: true },
+        { name: 'CV', url: '/cv', icon: <FiDownload />, color: 'var(--pb-accent)' },
       ]
     : [
         { name: 'GitHub',    url: 'https://github.com/Playyer96',    ...SOCIAL_ICONS.GitHub },
         { name: 'LinkedIn',  url: 'https://linkedin.com/in/danisvs', ...SOCIAL_ICONS.LinkedIn },
         { name: 'Instagram', url: 'https://instagram.com/_dani.svs', ...SOCIAL_ICONS.Instagram },
-        { name: 'CV',        url: '/CV-Danilo-Vanegas-2025.pdf',     icon: <FiDownload />,  color: 'var(--pb-accent)', download: true },
+        { name: 'CV',        url: '/cv',     icon: <FiDownload />,  color: 'var(--pb-accent)' },
       ];
 
   return (

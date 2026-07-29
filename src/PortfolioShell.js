@@ -919,7 +919,7 @@ function InspectorCV({ about }) {
       </InspGroup>
       <InspGroup icon="✓" iconColor="#10b981" title="Download">
         <div style={{ padding: "10px", textAlign: "center" }}>
-          <a href={cv.path || '/CV-Danilo-Vanegas-2025.pdf'} download style={{
+          <a href="/cv" style={{
             background: "var(--pb-accent)", color: "#000", padding: "8px 16px",
             fontFamily: "var(--pb-mono)", fontSize: 10, fontWeight: 600,
             textDecoration: "none", display: "inline-block", borderRadius: 2,
@@ -1142,7 +1142,7 @@ function PortfolioShell({ children, about = null, projects = [], experience = []
         {!isMobile && <div style={{ display: "flex", gap: 0, marginLeft: 16, color: "var(--pb-dim)", fontSize: 11, position: "relative" }} data-pb-menu>
           {[
             { l: "File", items: [
-              { l: "Open CV (PDF)", a: () => window.open(about?.cv?.path || '/CV-Danilo-Vanegas-2025.pdf', "_blank") },
+              { l: "Open CV", a: () => window.open('/cv', "_blank") },
               { l: "Email me",   a: () => { window.location.href = `mailto:${about?.email || ''}`; } },
               { l: "Copy email", a: () => navigator.clipboard?.writeText(about?.email || '') },
               { l: "—" },

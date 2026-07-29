@@ -62,15 +62,19 @@ const SceneCV = () => {
           <div className="cv-preview">
             {view === 'visual' ? (
               <article className="visual-cv" aria-label="Danilo Vanegas resume">
-                <header><h2>Danilo Vanegas</h2><p>Software developer · Medellín, Colombia</p><a href="mailto:vanegasdanilo7@gmail.com">vanegasdanilo7@gmail.com</a> · <a href="https://github.com/Playyer96">github.com/Playyer96</a></header>
-                <section><h3>Profile</h3><p>I turn complex technical systems into clear, dependable experiences across web products, real-time applications, and developer tools.</p></section>
-                <section><h3>Selected work</h3>
+                <header><h2>Danilo Santiago Vanegas</h2><p>Senior Unity Game Developer · Unreal Developer</p><a href="mailto:vanegasdanilo7@gmail.com">vanegasdanilo7@gmail.com</a> · <a href="https://danilovanegas.xyz">danilovanegas.xyz</a> · <a href="https://linkedin.com/in/danisvs">linkedin.com/in/danisvs</a></header>
+                <section><h3>Profile</h3><p>Senior game developer with 6+ years building immersive, performance-optimized experiences for PC and mobile. Specialized in Unity and Unreal Engine, gameplay mechanics, UI/UX, and game optimization.</p></section>
+                <section><h3>Key skills</h3><p><b>Game engines:</b> Unity (6+ years), Unreal Engine (3+ years)</p><p><b>Programming:</b> C#, C++, Blueprints, JavaScript, React, Node.js</p><p><b>Tools:</b> Git, Perforce, Unreal Game Sync, Jira, Miro, AWS</p></section>
+                <section><h3>Professional experience</h3>
+                  <div className="cv-work"><div><h4>Senior Unity Game Developer</h4><p>Life is the Game · April 2023–Present</p></div><p>Lead developer for a high-performance golf simulator, focusing on gameplay mechanics, wining and ball physics. Optimized gameplay performance for smooth multi-platform experiences and collaborated across teams to deliver milestones.</p></div>
+                  <div className="cv-work"><div><h4>Mid-Level Unity | Unreal Software Engineer</h4><p>Optic Power · 2021–2023</p></div><p>Built scalable interactive systems with Unity and Unreal, focusing on reliable gameplay and efficient delivery.</p></div>
+                </section>
+                <section><h3>Selected projects</h3>
                   <div className="cv-work"><div><h4>Off The Shelf Studio</h4><p>Full-stack developer · 2026</p></div><p>Built a clear studio website and inquiry flow. Used Resend for branded visitor confirmation and team-notification templates.</p><small>Next.js · React · TypeScript · Resend · CSS</small></div>
                   <div className="cv-work"><div><h4>WisprTasks</h4><p>Product & app developer · 2026</p></div><p>Designed quick capture, priorities, and next actions to make task management easier to start and use.</p><small>React · TypeScript · Firebase · Cloud Functions · Resend</small></div>
                   <div className="cv-work"><div><h4>Foresight Sports</h4><p>Software / Unity developer · 2021–2025</p></div><p>Developed golf-simulation and calibration tooling, including computer-vision-supported alignment workflows.</p><small>Unity · C# · AR Foundation · Simulator hardware</small></div>
                 </section>
-                <section><h3>Technical toolkit</h3><p><b>Web:</b> React, Next.js, TypeScript, Node.js, Firebase, Resend</p><p><b>Real-time:</b> Unity, Unreal Engine, C#, C++, AR Foundation</p></section>
-                <section><h3>Education</h3><p><b>Institución Universitaria ITM</b> — Systems Engineering, 2017–2022</p><p><b>SENA</b> — Software Analysis and Development, 2017–2018</p></section>
+                <section><h3>Development expertise</h3><p>Gameplay mechanics · AI systems · Physics · Optimization · Shader programming</p></section>
               </article>
             ) : (
               <pre className="latex-viewer" aria-label="Read-only LaTeX source"><code>{latex}</code></pre>
